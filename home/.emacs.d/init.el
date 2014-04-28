@@ -1,5 +1,3 @@
-(add-to-list 'load-path "~/.emacs.d/")
-(load "package")
 ;; Require Emacs' package functionality
 (require 'package)
 
@@ -11,12 +9,17 @@
 ;; Initialise the package system.
 (package-initialize)
 
+(unless (package-installed-p 'graphene)
+  (package-refresh-contents)
+  (package-install 'graphene))
+
 (require 'graphene)
 
+(require 'project-persist)
+(project-persist-mode t)
 
-
-
-
+(unless (package-installed-p 'cider)
+  (package-install 'cider))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -33,3 +36,4 @@
  )
 
 (setq visible-bell t)
+(setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
