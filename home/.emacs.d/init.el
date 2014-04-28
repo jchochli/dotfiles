@@ -38,6 +38,12 @@
 (add-hook 'nrepl-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
+(eval-after-load 'clojure-mode
+  '(define-key clojure-mode-map (kbd "C-M-<up>") 'cider-repl-backward-input))
+
+(eval-after-load 'clojure-mode
+  '(define-key clojure-mode-map (kbd "C-M-<down>") 'cider-repl-forward-input))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
