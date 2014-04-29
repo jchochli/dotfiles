@@ -12,7 +12,6 @@
 (unless (package-installed-p 'graphene)
   (package-refresh-contents)
   (package-install 'graphene))
-
 (require 'graphene)
 
 (require 'project-persist)
@@ -27,23 +26,12 @@
 
 (unless (package-installed-p 'rainbow-delimiters)
   (package-install 'rainbow-delimiters))
-
-;; rainbow delimiters
 (require 'rainbow-delimiters)
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
 (global-rainbow-delimiters-mode)
-
-;; paredit
 (add-hook 'clojure-mode-hook 'paredit-mode)
-(add-hook 'nrepl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-
-(eval-after-load 'clojure-mode
-  '(define-key clojure-mode-map (kbd "C-M-<up>") 'cider-repl-backward-input))
-
-(eval-after-load 'clojure-mode
-  '(define-key clojure-mode-map (kbd "C-M-<down>") 'cider-repl-forward-input))
-
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
