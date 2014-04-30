@@ -9,28 +9,31 @@
 ;; Initialise the package system.
 (package-initialize)
 
-(unless (package-installed-p 'graphene)
-  (package-refresh-contents)
-  (package-install 'graphene))
+(defvar my-packages '(graphene
+		      paredit
+		      rainbow-delimiters
+		      clojure-mode
+		      clojure-test-mode
+		      cider))
+
+(dolist (p my-packages)
+  (when (not (package-installed-p p))
+    (package-install p)))
+
 (require 'graphene)
 
 (require 'project-persist)
 (project-persist-mode t)
 
-(unless (package-installed-p 'cider)
-  (package-install 'cider))
-
-(unless (package-installed-p 'paredit)
-  (package-install 'paredit))
 (require 'paredit)
 
-(unless (package-installed-p 'rainbow-delimiters)
-  (package-install 'rainbow-delimiters))
+;; rainbow delimiters
 (require 'rainbow-delimiters)
 
 (global-rainbow-delimiters-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (custom-set-variables
