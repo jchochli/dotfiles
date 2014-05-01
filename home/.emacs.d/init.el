@@ -12,6 +12,7 @@
 (defvar my-packages '(graphene
                       paredit
                       rainbow-delimiters
+                      projectile
                       clj-refactor
                       clojure-mode
                       clojure-test-mode
@@ -30,10 +31,12 @@
 (require 'rainbow-delimiters)
 
 (require 'paredit)
-(global-rainbow-delimiters-mode)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+(projectile-global-mode)
+(global-rainbow-delimiters-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
