@@ -12,9 +12,11 @@
 (defvar my-packages '(graphene
                       paredit
                       rainbow-delimiters
+                      clj-refactor
                       clojure-mode
                       clojure-test-mode
                       cider))
+;; multiple-cursors and expand-region?
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
