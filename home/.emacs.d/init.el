@@ -3,8 +3,8 @@
 
 ;; Add the Melpa repository to the list of package sources
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa" . "http://melpa.milkbox.net/packages/")))
+			 ("marmalade" . "http://marmalade-repo.org/packages/")
+			 ("melpa" . "http://melpa.milkbox.net/packages/")))
 
 ;; Initialise the package system.
 (package-initialize)
@@ -12,9 +12,12 @@
 (defvar my-packages '(graphene
 		      paredit
 		      rainbow-delimiters
+		      projectile
+		      clj-refactor
 		      clojure-mode
 		      clojure-test-mode
 		      cider))
+;; multiple-cursors and expand-region?
 
 (dolist (p my-packages)
   (when (not (package-installed-p p))
@@ -25,16 +28,15 @@
 (require 'project-persist)
 (project-persist-mode t)
 
-(require 'paredit)
-
-;; rainbow delimiters
 (require 'rainbow-delimiters)
 
-(global-rainbow-delimiters-mode)
+(require 'paredit)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
-(add-hook 'lisp-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+
+(projectile-global-mode)
+(global-rainbow-delimiters-mode)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
