@@ -1,0 +1,10 @@
+#/bin/sh
+
+## Run Emacs 24 emacsclient to open one or more files in an existing
+## Emacs 24 running instance
+
+# -t : Display file in terminal window
+# -a "" : Launch emacs if not started
+# $* : pass all arguments, eg. one or more filenames
+
+exec /Applications/Emacs.app/Contents/MacOS/bin/emacsclient -t -a "" $*
