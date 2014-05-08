@@ -60,4 +60,6 @@
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
 
 (load "server")
-(unless (server-running-p) (start-server))
+(unless (server-running-p) (server-start))
+
+
