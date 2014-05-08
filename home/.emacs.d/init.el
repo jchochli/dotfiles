@@ -16,7 +16,8 @@
 		      clj-refactor
 		      clojure-mode
 		      clojure-test-mode
-		      cider))
+		      cider
+          ahg))
 ;; multiple-cursors and expand-region?
 
 (dolist (p my-packages)
@@ -24,6 +25,8 @@
     (package-install p)))
 
 (require 'graphene)
+
+(require 'ahg)
 
 (require 'project-persist)
 (project-persist-mode t)
