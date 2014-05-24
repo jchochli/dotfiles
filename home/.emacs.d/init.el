@@ -17,7 +17,8 @@
 		      clojure-mode
 		      clojure-test-mode
 		      cider
-          ahg))
+          ahg
+          emacs-eclim))
 ;; multiple-cursors and expand-region?
 
 (dolist (p my-packages)
