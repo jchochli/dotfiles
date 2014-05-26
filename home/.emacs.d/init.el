@@ -50,8 +50,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-enabled-themes (quote (wombat)))
- '(custom-safe-themes (quote ("5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
- '(desktop-save-mode t))
+ '(custom-safe-themes
+   (quote
+    ("5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
+ '(desktop-save-mode t)
+ '(erc-email-userid "jchochli@xpzen.com")
+ '(erc-nick "jchochli")
+ '(erc-nick-uniquifier "_"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
