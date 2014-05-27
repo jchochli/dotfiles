@@ -49,10 +49,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (wombat)))
+ '(custom-enabled-themes (quote (graphene wombat)))
  '(custom-safe-themes
    (quote
-    ("5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
+    ("27b7d32fa83dc83ce3034e2a1fe31174c9abff70c1121e4a42b2ce08cc791aec" "5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
  '(desktop-save-mode t)
  '(erc-email-userid "jchochli@xpzen.com")
  '(erc-nick "jchochli")
