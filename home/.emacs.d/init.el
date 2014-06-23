@@ -16,11 +16,11 @@
 		      clojure-mode
 		      clojure-test-mode
 		      cider
-          magit
-          magit-file-notify
-          ahg
-          emacs-eclim
-          4clojure))
+		      magit
+		      magit-filenotify
+		      ahg
+		      emacs-eclim
+		      4clojure))
 
 ;; multiple-cursors and expand-region?
 
