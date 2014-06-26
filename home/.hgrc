@@ -1,5 +1,9 @@
 [ui]
 username = James Chochlinski <jchochlinski@payveris.com>
+merge = emacs
 
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
+
+[merge-tools]
+emacs.args = -q --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
