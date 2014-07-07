@@ -16,6 +16,8 @@
 		      clojure-mode
 		      clojure-test-mode
 		      cider
+          company
+          company-cider
 		      magit
 		      magit-filenotify
 		      ahg
@@ -45,11 +47,40 @@
 (projectile-global-mode)
 (global-rainbow-delimiters-mode)
 
+(require 'eclim)
+(global-eclim-mode)
+(require 'eclimd)
+
+(custom-set-variables
+  '(eclim-eclipse-dirs '("~/Development/bin/eclipse-luna"))
+  '(eclim-executable "~/Development/bin/eclipse-luna/eclim"))
+
+;; regular auto-complete initialization
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; add the emacs-eclim source
+(require 'ac-emacs-eclim-source)
+(ac-emacs-eclim-config)
+
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
+
 ;; keyboard bindings for lookup
 (define-key 'help-command (kbd "C-l") 'find-library)
 (define-key 'help-command (kbd "C-f") 'find-function)
 (define-key 'help-command (kbd "C-k") 'find-function-on-key)
 (define-key 'help-command (kbd "C-v") 'find-variable)
+
+(defun other-window-backward (&optional n)
+  "Select Nth previous window."
+  (interactive "P")
+  (other-window (- (prefix-numeric-value n))))
+
+(global-set-key "\C-x\C-p" 'other-window-backward)
+(global-set-key "\C-x\C-n" 'other-window)
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)
   "Start a cider/nREPL connection if one hasn't already been started when
@@ -57,6 +88,18 @@ opening 4clojure questions"
   ad-do-it
   (unless cider-current-clojure-buffer
     (cider-jack-in)))
+
+;;
+;; ace jump mode major function
+;; 
+(add-to-list 'load-path "/full/path/where/ace-jump-mode.el/in/")
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Emacs quick move minor mode"
+  t)
+;; you can select the key you prefer to
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
 (defun 4clojure-login (user pwd)
   "Login to 4clojure"
