@@ -21,7 +21,7 @@
 		      magit
 		      magit-filenotify
 		      ahg
-		      emacs-eclim
+		      emacs-eclim     
 		      4clojure))
 
 ;; multiple-cursors and expand-region?
@@ -55,6 +55,10 @@
   '(eclim-eclipse-dirs '("~/Development/bin/eclipse-luna"))
   '(eclim-executable "~/Development/bin/eclipse-luna/eclim"))
 
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+
 ;; regular auto-complete initialization
 (require 'auto-complete-config)
 (ac-config-default)
@@ -67,6 +71,7 @@
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
 (global-company-mode t)
+(define-key eclim-mode-map (kbd "C-c C-SPC") 'company-complete)
 
 ;; keyboard bindings for lookup
 (define-key 'help-command (kbd "C-l") 'find-library)
