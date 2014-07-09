@@ -1,3 +1,4 @@
+;;; init.el --- init file
 ;; Require Emacs' package functionality
 (require 'package)
 
@@ -30,6 +31,15 @@
   (when (not (package-installed-p p))
     (package-install p)))
 
+(defun ad-advised-definition-p (definition)
+  "Return non-nil if DEFINITION was generated from advice information."
+  (if (or (ad-lambda-p definition)
+	  (macrop definition)
+	  (ad-compiled-p definition))
+      (let ((docstring (ad-docstring definition)))
+	(and (stringp docstring)
+	     (get-text-property 0 'dynamic-docstring-function docstring)))))
+
 (require 'graphene)
 
 (require 'ahg)
@@ -52,8 +62,21 @@
 (require 'eclimd)
 
 (custom-set-variables
-  '(eclim-eclipse-dirs '("~/Development/bin/eclipse-luna"))
-  '(eclim-executable "~/Development/bin/eclipse-luna/eclim"))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode t)
+ '(custom-enabled-themes (quote (graphene wombat)))
+ '(custom-safe-themes
+   (quote
+    ("f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" "27b7d32fa83dc83ce3034e2a1fe31174c9abff70c1121e4a42b2ce08cc791aec" "5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
+ '(desktop-save-mode t)
+ '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse-luna")))
+ '(eclim-executable "~/Development/bin/eclipse-luna/eclim")
+ '(erc-email-userid "jchochli@xpzen.com")
+ '(erc-nick "jchochli")
+ '(erc-nick-uniquifier "_"))
 
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
@@ -78,11 +101,11 @@
 (define-key 'help-command (kbd "C-f") 'find-function)
 (define-key 'help-command (kbd "C-k") 'find-function-on-key)
 (define-key 'help-command (kbd "C-v") 'find-variable)
-
+                                       
 (defun other-window-backward (&optional n)
-  "Select Nth previous window."
-  (interactive "P")
-  (other-window (- (prefix-numeric-value n))))
+    "Select Nth previous window."
+    (interactive "P")    
+    (other-window (- (prefix-numeric-value n))))
 
 (global-set-key "\C-x\C-p" 'other-window-backward)
 (global-set-key "\C-x\C-n" 'other-window)
@@ -130,20 +153,7 @@ opening 4clojure questions"
    )
   )
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode t)
- '(custom-enabled-themes (quote (graphene wombat)))
- '(custom-safe-themes
-   (quote
-    ("27b7d32fa83dc83ce3034e2a1fe31174c9abff70c1121e4a42b2ce08cc791aec" "5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
- '(desktop-save-mode t)
- '(erc-email-userid "jchochli@xpzen.com")
- '(erc-nick "jchochli")
- '(erc-nick-uniquifier "_"))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
