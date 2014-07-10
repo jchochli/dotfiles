@@ -1,5 +1,6 @@
 ;;; init.el --- init file
 ;; Require Emacs' package functionality
+(setq debug-on-error t)
 (require 'package)
 
 ;; Add the Melpa repository to the list of package sources
@@ -109,6 +110,8 @@
 
 (global-set-key "\C-x\C-p" 'other-window-backward)
 (global-set-key "\C-x\C-n" 'other-window)
+(global-set-key (kbd "C-+") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)
   "Start a cider/nREPL connection if one hasn't already been started when
