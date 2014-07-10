@@ -82,6 +82,8 @@
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
+(setq visible-bell t)
+(setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
 
 ;; regular auto-complete initialization
 (require 'auto-complete-config)
@@ -108,8 +110,8 @@
     (interactive "P")    
     (other-window (- (prefix-numeric-value n))))
 
-(global-set-key "\C-x\C-p" 'other-window-backward)
-(global-set-key "\C-x\C-n" 'other-window)
+(global-set-key (kbd "C-x C-p") 'other-window-backward)
+(global-set-key (kbd "C-x C-n") 'other-window)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
@@ -163,9 +165,6 @@ opening 4clojure questions"
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
-(setq visible-bell t)
-(setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
 
 (load "server")
 (unless (server-running-p) (server-start))
