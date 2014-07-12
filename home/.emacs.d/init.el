@@ -1,5 +1,6 @@
 ;;; init.el --- init file
 ;; Require Emacs' package functionality
+(setq debug-on-error t)
 (require 'package)
 
 ;; Add the Melpa repository to the list of package sources
