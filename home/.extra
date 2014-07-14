@@ -22,7 +22,7 @@ export M2_HOME=~/Development/bin/apache-maven-3.0.5
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 export EC2_HOME=~/Development/bin/ec2-api-tools-1.6.8.0
-export PATH=$M2:~/Development/bin/sbt/bin:/usr/local/share/npm/bin:/usr/local/bin:/usr/local/heroku/bin:$PATH
+export PATH=/usr/local/bin:$M2:~/Development/bin/sbt/bin:/usr/local/heroku/bin:$PATH
 source ~/.bash_prompt
 #export TERM="xterm-16color"
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
