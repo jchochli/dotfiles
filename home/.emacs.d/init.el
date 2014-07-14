@@ -14,6 +14,9 @@
 		      paredit
 		      rainbow-delimiters
 		      projectile
+          ace-jump-mode
+          ace-window
+          undo-tree
 		      clj-refactor
 		      clojure-mode
 		      clojure-test-mode
