@@ -14,6 +14,7 @@
 		      paredit
 		      rainbow-delimiters
 		      projectile
+          buffer-move
 		      clj-refactor
 		      clojure-mode
 		      clojure-test-mode
@@ -114,6 +115,13 @@
 (global-set-key (kbd "C-x C-n") 'other-window)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+
+(require 'buffer-move)
+(global-set-key (kbd "<C-S-up>")     'buf-move-up)
+(global-set-key (kbd "<C-S-down>")   'buf-move-down)
+(global-set-key (kbd "<C-S-left>")   'buf-move-left)
+(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)
   "Start a cider/nREPL connection if one hasn't already been started when
