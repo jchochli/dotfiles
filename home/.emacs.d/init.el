@@ -10,25 +10,26 @@
 ;; Initialise the package system.
 (package-initialize)
 
-(defvar my-packages '(graphene
-		      paredit
-		      rainbow-delimiters
-		      projectile
-          buffer-move
-          ace-jump-mode
-          ace-window
-          undo-tree
-		      clj-refactor
-		      clojure-mode
-		      clojure-test-mode
-		      cider
-          company
-          company-cider
-		      magit
-		      magit-filenotify
-		      ahg
-		      emacs-eclim     
-		      4clojure))
+(defvar my-packages
+  '(graphene
+    paredit
+    rainbow-delimiters
+    projectile
+    buffer-move
+    ace-jump-mode
+    ace-window
+    undo-tree
+    clj-refactor
+    clojure-mode
+    clojure-test-mode
+    cider
+    company
+    company-cider
+    magit
+    magit-filenotify
+    ahg
+    emacs-eclim     
+    4clojure))
 
 ;; multiple-cursors and expand-region?
 
