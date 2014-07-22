@@ -2,6 +2,8 @@ tmp
 libs/js2-mode-compiled
 libs/magit
 #custom.el
+.graphene-geometry
+ac-comphist.dat
 
 # -*- mode: gitignore; -*-
 *~
