@@ -192,16 +192,16 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-;; (add-hook 'ido-setup-hook
-;;  (lambda ()
-;;    ;; Go straight home
-;;    (define-key ido-file-completion-map
-;;      (kbd "~")
-;;      (lambda ()
-;;        (interactive)
-;;        (if (looking-back "/")
-;;            (insert "~/")
-;;          (call-interactively 'self-insert-command))))))
+(add-hook 'ido-setup-hook
+ (lambda ()
+   ;; Go straight home
+   (define-key ido-file-completion-map
+     (kbd "~")
+     (lambda ()
+       (interactive)
+       (if (looking-back "/")
+           (insert "~/")
+         (call-interactively 'self-insert-command))))))
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)
   "Start a cider/nREPL connection if one hasn't already been started when
