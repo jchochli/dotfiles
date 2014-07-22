@@ -136,7 +136,6 @@ opening 4clojure questions"
 ;;
 ;; ace jump mode major function
 ;; 
-(add-to-list 'load-path "/full/path/where/ace-jump-mode.el/in/")
 (autoload
   'ace-jump-mode
   "ace-jump-mode"
@@ -144,6 +143,34 @@ opening 4clojure questions"
   t)
 ;; you can select the key you prefer to
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+(defun dired-back-to-top ()
+  (interactive)
+  (beginning-of-buffer)
+  (dired-next-line 4))
+
+(define-key dired-mode-map
+  (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
+
+(defun dired-jump-to-bottom ()
+  (interactive)
+  (end-of-buffer)
+  (dired-next-line -1))
+
+(define-key dired-mode-map
+  (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
+
+;; (add-hook 'ido-setup-hook
+;;  (lambda ()
+;;    ;; Go straight home
+;;    (define-key ido-file-completion-map
+;;      (kbd "~")
+;;      (lambda ()
+;;        (interactive)
+;;        (if (looking-back "/")
+;;            (insert "~/")
+;;          (call-interactively 'self-insert-command))))))
+
 
 (defun 4clojure-login (user pwd)
   "Login to 4clojure"
