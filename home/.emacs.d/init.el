@@ -125,14 +125,6 @@
 (global-set-key (kbd "<C-S-left>")   'buf-move-left)
 (global-set-key (kbd "<C-S-right>")  'buf-move-right)
 
-
-(defadvice 4clojure-open-question (around 4clojure-open-question-around)
-  "Start a cider/nREPL connection if one hasn't already been started when
-opening 4clojure questions"
-  ad-do-it
-  (unless cider-current-clojure-buffer
-    (cider-jack-in)))
-
 ;;
 ;; ace jump mode major function
 ;; 
@@ -143,6 +135,24 @@ opening 4clojure questions"
   t)
 ;; you can select the key you prefer to
 (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+;; Function to create new functions that look for a specific pattern
+(defun ffip-create-pattern-file-finder (&rest patterns)
+  (lexical-let ((patterns patterns))
+    (lambda ()
+      (interactive)
+      (let ((ffip-patterns patterns))
+        (find-file-in-project)))))
+
+;; Find file in project, with specific patterns
+(global-unset-key (kbd "C-x C-o"))
+(global-set-key (kbd "C-x C-o ja")
+                (ffip-create-pattern-file-finder "*.java"))
+(global-set-key (kbd "C-x C-o js")
+                (ffip-create-pattern-file-finder "*.js"))
+(global-set-key (kbd "C-x C-o jp")
+                (ffip-create-pattern-file-finder "*.jsp"))
+
 
 (defun dired-back-to-top ()
   (interactive)
@@ -171,6 +181,12 @@ opening 4clojure questions"
 ;;            (insert "~/")
 ;;          (call-interactively 'self-insert-command))))))
 
+(defadvice 4clojure-open-question (around 4clojure-open-question-around)
+  "Start a cider/nREPL connection if one hasn't already been started when
+opening 4clojure questions"
+  ad-do-it
+  (unless cider-current-clojure-buffer
+    (cider-jack-in)))
 
 (defun 4clojure-login (user pwd)
   "Login to 4clojure"
