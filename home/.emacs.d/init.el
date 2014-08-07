@@ -89,6 +89,7 @@
 (help-at-pt-set-timer)
 (setq visible-bell t)
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
+(setq tramp-default-method "ssh")
 
 ;; regular auto-complete initialization
 (require 'auto-complete-config)
