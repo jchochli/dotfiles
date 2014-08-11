@@ -35,8 +35,8 @@ complete -W "NSGlobalDomain" defaults
 # Add `killall` tab completion for common apps
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall
 
-source ~/.docker_bash
-source ~/gradle-tab-completion.bash
+source "${HOME}/.docker_bash"
+source "${HOME}/gradle-tab-completion.bash"
 
 # If possible, add tab completion for many more commands
 # [ -f /etc/bash_completion ] && source /etc/bash_completion
