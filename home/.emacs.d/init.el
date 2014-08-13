@@ -5,7 +5,7 @@
 
 ;; Add the Melpa repository to the list of package sources
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+			 ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
 
 ;; Initialise the package system.
 (package-initialize)
