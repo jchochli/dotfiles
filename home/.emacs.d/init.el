@@ -5,7 +5,7 @@
 
 ;; Add the Melpa repository to the list of package sources
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa" . "http://melpa.milkbox.net/packages/")))
+			 ("melpa" . "http://melpa-stable.milkbox.net/packages/")))
 
 ;; Initialise the package system.
 (package-initialize)
@@ -21,10 +21,8 @@
     undo-tree
     clj-refactor
     clojure-mode
-    clojure-test-mode
     cider
     company
-    company-cider
     magit
     magit-filenotify
     ahg
