@@ -19,9 +19,9 @@
     ace-jump-mode
     ace-window
     undo-tree
-    clj-refactor
     clojure-mode
     cider
+    clj-refactor    
     company
     magit
     magit-filenotify
@@ -58,6 +58,8 @@
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+
 (projectile-global-mode)
 (global-rainbow-delimiters-mode)
 
@@ -74,7 +76,7 @@
  '(custom-enabled-themes (quote (graphene wombat)))
  '(custom-safe-themes
    (quote
-    ("f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" "27b7d32fa83dc83ce3034e2a1fe31174c9abff70c1121e4a42b2ce08cc791aec" "5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
+    ("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" "f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" "27b7d32fa83dc83ce3034e2a1fe31174c9abff70c1121e4a42b2ce08cc791aec" "5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
  '(desktop-save-mode t)
  '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse-luna")))
  '(eclim-executable "~/Development/bin/eclipse-luna/eclim")
