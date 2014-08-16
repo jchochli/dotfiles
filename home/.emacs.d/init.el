@@ -58,7 +58,7 @@
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 (projectile-global-mode)
 (global-rainbow-delimiters-mode)
