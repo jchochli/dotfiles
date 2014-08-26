@@ -82,7 +82,14 @@
  '(eclim-executable "~/Development/bin/eclipse-luna/eclim")
  '(erc-email-userid "jchochli@xpzen.com")
  '(erc-nick "jchochli")
- '(erc-nick-uniquifier "_"))
+ '(erc-nick-uniquifier "_")
+ '(indent-tabs-mode nil)
+ '(tab-width 4))
+
+(setq javascript-indent-level 4)
+(setq c-basic-indent 4)
+(setq tab-width 4)
+(setq indent-tabs-mode nil)
 
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
