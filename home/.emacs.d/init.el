@@ -26,7 +26,8 @@
     magit
     magit-filenotify
     ahg
-    emacs-eclim     
+    emacs-eclim
+    know-your-http-well
     4clojure))
 
 ;; multiple-cursors and expand-region?
