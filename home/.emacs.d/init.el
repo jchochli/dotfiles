@@ -186,6 +186,7 @@
 (add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xsl\\'" . web-mode))
 
 ;; Function to create new functions that look for a specific pattern
 (defun ffip-create-pattern-file-finder (&rest patterns)
@@ -231,6 +232,19 @@
        (if (looking-back "/")
            (insert "~/")
          (call-interactively 'self-insert-command))))))
+
+(add-hook 'shell-mode-hook 
+          'ansi-color-for-comint-mode-on)
+
+(progn (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
+       (setq comint-output-filter-functions (remove 'ansi-color-process-output comint-output-filter-functions))
+       (setq font-lock-unfontify-region-function 'xterm-color-unfontify-region))
+
+(progn (remove-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
+       (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+       (setq font-lock-unfontify-region-function 'font-lock-default-unfontify-region))
+
+;; (setq ansi-term-color-vector [unspecified "#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)
   "Start a cider/nREPL connection if one hasn't already been started when
