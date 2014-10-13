@@ -7,6 +7,8 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 			 ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
 
+(add-to-list 'exec-path "/usr/local/bin")
+
 ;; Initialise the package system.
 (package-initialize)
 
@@ -21,7 +23,8 @@
     undo-tree
     clojure-mode
     cider
-    clj-refactor    
+    clj-refactor
+    
     company
     magit
     magit-filenotify
@@ -68,6 +71,8 @@
 (global-eclim-mode)
 (require 'eclimd)
 
+(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -91,6 +96,10 @@
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
+
+(defun my-sml-mode-hook () "Local defaults for SML mode"
+       (setq indent-tabs-mode nil))     ; never ever indent with tabs
+(add-hook 'sml-mode-hook 'my-sml-mode-hook)
 
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
