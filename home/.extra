@@ -7,6 +7,6 @@ export M2_HOME=~/Development/bin/apache-maven-3.0.5
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 export EC2_HOME=~/Development/bin/ec2-api-tools-1.6.8.0
-export PATH=/usr/local/bin:$M2:/usr/local/heroku/bin:$PATH
+export PATH=$HOME/Library/Haskell/bin:/usr/local/bin:$M2:/usr/local/heroku/bin:$PATH
 #export TERM="xterm-16color"
 
