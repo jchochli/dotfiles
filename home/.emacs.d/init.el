@@ -5,7 +5,7 @@
 
 ;; Add the Melpa repository to the list of package sources
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa-stable" . "http://melpa-stable.milkbox.net/packages/")))
+			 ("melpa-stable" . "http://melpa.org/packages/")))
 
 (add-to-list 'exec-path "/usr/local/bin")
 
@@ -23,8 +23,7 @@
     undo-tree
     clojure-mode
     cider
-    clj-refactor
-    
+    clj-refactor    
     company
     magit
     magit-filenotify
@@ -196,6 +195,7 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xsl\\'" . web-mode))
+(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; Function to create new functions that look for a specific pattern
 (defun ffip-create-pattern-file-finder (&rest patterns)
