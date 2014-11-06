@@ -28,6 +28,7 @@
     magit
     magit-filenotify
     ahg
+    browse-kill-ring
     emacs-eclim
     know-your-http-well
     4clojure))
@@ -186,6 +187,8 @@
 (eval-after-load "ace-jump-mode"
   '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+
 
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
