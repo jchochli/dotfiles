@@ -54,11 +54,6 @@ source "$HOME/bin/z.sh"
 source "$HOME/.bash_prompt"
 homeshick --quiet refresh
 
-# If possible, add tab completion for many more commands
-# [ -f /etc/bash_completion ] && source /etc/bash_completion
-#if [ -f `brew --prefix`/etc/bash_completion ]; then
-#    . `brew --prefix`/etc/bash_completion
-#fi
 export DOCKER_HOST=tcp://localhost:4243
 
 
