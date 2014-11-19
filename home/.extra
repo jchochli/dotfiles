@@ -12,6 +12,4 @@ export PATH=$HOME/Library/Haskell/bin:/usr/local/bin:$M2:/usr/local/heroku/bin:$
 
 # If possible, add tab completion for many more commands
 [ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
-if [ -f `brew --prefix`/etc/bash_completion ]; then
-    . `brew --prefix`/etc/bash_completion
-fi
+
