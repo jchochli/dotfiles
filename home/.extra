@@ -8,6 +8,7 @@ export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 export EC2_HOME=~/Development/bin/ec2-api-tools-1.6.8.0
 export PATH=$HOME/Library/Haskell/bin:/usr/local/bin:$M2:/usr/local/heroku/bin:$PATH
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 #export TERM="xterm-16color"
 
 # If possible, add tab completion for many more commands

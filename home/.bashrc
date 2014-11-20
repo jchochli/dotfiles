@@ -57,3 +57,5 @@ homeshick --quiet refresh
 export DOCKER_HOST=tcp://localhost:4243
 
 
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting

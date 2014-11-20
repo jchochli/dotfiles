@@ -26,3 +26,10 @@ export HOMEBREW_CASK_OPTS="--appdir=/Applications"
 
 #rlwrap completions
 export RLWRAP_HOME="$HOME/.rlwrap"
+
+export EDITOR='emacsclient'
+export DOCKER_HOST=tcp://localhost:4243
+
+# Add `~/bin` to the `$PATH`
+export PATH="$HOME/bin:$PATH"
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
