@@ -29,6 +29,7 @@
     magit-filenotify
     ahg    
     browse-kill-ring+
+    bm
     emacs-eclim
     know-your-http-well
     4clojure))
@@ -75,6 +76,11 @@
 
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
+
+(require 'bm)
+(global-set-key (kbd "<C-f2>") 'bm-toggle)
+(global-set-key (kbd "<f2>") 'bm-next)
+(global-set-key (kbd "<S-f2>") 'bm-previous)
 
 
 (custom-set-variables
