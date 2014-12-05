@@ -30,6 +30,7 @@
     ahg    
     browse-kill-ring+
     bm
+    helm-descbinds
     emacs-eclim
     know-your-http-well
     4clojure))
@@ -72,8 +73,6 @@
 (global-eclim-mode)
 (require 'eclimd)
 
-(add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
-
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
 
@@ -82,19 +81,20 @@
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
 
+(require 'helm-descbinds)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode t)
  '(browse-kill-ring-highlight-current-entry t)
  '(browse-kill-ring-highlight-inserted-item t)
- '(blink-cursor-mode t)
  '(custom-enabled-themes (quote (graphene wombat)))
  '(custom-safe-themes
    (quote
-    ("cd70962b469931807533f5ab78293e901253f5eeb133a46c2965359f23bfb2ea" "f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" "27b7d32fa83dc83ce3034e2a1fe31174c9abff70c1121e4a42b2ce08cc791aec" "5a1a016301ecf6874804aef2df36ca8b957443b868049d35043a02a0c1368517" default)))
+    ("f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
  '(desktop-save-mode t)
  '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse-luna")))
  '(eclim-executable "~/Development/bin/eclipse-luna/eclim")
@@ -268,7 +268,6 @@
        (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
        (setq font-lock-unfontify-region-function 'font-lock-default-unfontify-region))
 
-;; (setq ansi-term-color-vector [unspecified "#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)
   "Start a cider/nREPL connection if one hasn't already been started when

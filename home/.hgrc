@@ -1,9 +1,10 @@
 [ui]
 username = James Chochlinski <jchochlinski@payveris.com>
-merge = emacs
+merge = emacsclient
 
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
 
 [merge-tools]
-emacs.args = -q --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
+ediff3.executable = emacsclient
+ediff3.args = --eval '(ediff-merge-with-ancestor "'$local'" "'$other'" "'$base'")'
