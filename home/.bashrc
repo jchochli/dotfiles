@@ -1,4 +1,4 @@
-[ -n "$PS1" ] && source "${HOME}/.bashrc"
+[ -n "$PS1" ] && source "${HOME}/.bash_profile"
 
 
 
