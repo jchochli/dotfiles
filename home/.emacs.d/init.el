@@ -104,6 +104,7 @@
  '(indent-tabs-mode nil)
  '(tab-width 4))
 
+(setq-default tab-width 4)
 (setq javascript-indent-level 4)
 (setq c-basic-indent 4)
 (setq tab-width 4)
