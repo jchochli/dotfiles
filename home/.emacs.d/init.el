@@ -20,6 +20,7 @@
     buffer-move
     ace-jump-mode
     ace-window
+    graphene
     undo-tree
     clojure-mode
     cider
