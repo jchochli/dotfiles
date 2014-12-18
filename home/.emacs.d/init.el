@@ -120,6 +120,8 @@
 (setq visible-bell t)
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
 (setq tramp-default-method "ssh")
+(setq tramp-verbose 9)
+;; (re-search-forward (concat tramp-shell-prompt-pattern "λ"))
 
 ;; regular auto-complete initialization
 (require 'auto-complete-config)
@@ -210,7 +212,7 @@
 (add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.xsl\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xsl\\'" . xml-mode))
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; Function to create new functions that look for a specific pattern
