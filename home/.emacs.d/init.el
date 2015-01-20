@@ -105,7 +105,7 @@
  '(tab-width 4))
 
 (setq-default tab-width 4)
-(setq javascript-indent-level 4)
+(setq js-indent-level 2)
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
@@ -121,7 +121,6 @@
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
 (setq tramp-default-method "ssh")
 (setq tramp-verbose 9)
-;; (re-search-forward (concat tramp-shell-prompt-pattern "λ"))
 
 ;; regular auto-complete initialization
 (require 'auto-complete-config)
@@ -134,8 +133,16 @@
 (require 'company)
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
-(global-company-mode t)
-(define-key eclim-mode-map (kbd "C-c C-SPC") 'company-complete)
+;;(global-company-mode t)
+(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
+
+(autoload 'bash-completion-dynamic-complete 
+  "bash-completion"
+  "BASH completion hook")
+(add-hook 'shell-dynamic-complete-functions
+  'bash-completion-dynamic-complete)
+(add-hook 'shell-command-complete-functions
+  'bash-completion-dynamic-complete)
 
 ;; keyboard bindings for lookup
 (define-key 'help-command (kbd "C-l") 'find-library)

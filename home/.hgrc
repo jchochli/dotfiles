@@ -6,5 +6,8 @@ merge = emacsclient
 prompt = ~/Development/repos/hg-prompt/prompt.py
 
 [merge-tools]
-ediff3.executable = emacsclient
-ediff3.args = --eval '(ediff-merge-with-ancestor "'$local'" "'$other'" "'$base'")'
+emacs.executable = emacsclient
+emacs.premerge = False
+emacs.args = --eval "(ediff-merge-with-ancestor \"$local\" \"$other\" \"$base\" nil \"$output\")"
+
+
