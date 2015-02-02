@@ -73,6 +73,9 @@
 (global-eclim-mode)
 (require 'eclimd)
 
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
 
@@ -80,6 +83,8 @@
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
+;; Allow cross-buffer 'next'
+;; (setq bm-cycle-all-buffers t)
 
 (require 'helm-descbinds)
 
@@ -106,9 +111,39 @@
 
 (setq-default tab-width 4)
 (setq js-indent-level 2)
+(setq jsx-indent-level 2)
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
+
+(flycheck-define-checker jsxhint-checker
+  "A JSX syntax and style checker based on JSXHint."
+
+  :command ("jsxhint" source)
+  :error-patterns
+  ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+  :modes (web-mode))
+(add-hook 'web-mode-hook
+          (lambda ()
+            (when (equal web-mode-content-type "jsx")
+              ;; enable flycheck
+              (flycheck-select-checker 'jsxhint-checker)
+              (flycheck-mode))))
+
+(require 'flycheck)
+(flycheck-define-checker jsxhint-checker
+  "A JSX syntax and style checker based on JSXHint."
+
+  :command ("jsxhint" source)
+  :error-patterns
+  ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
+  :modes (jsx-mode))
+(add-hook 'jsx-mode-hook (lambda ()
+                          (flycheck-select-checker 'jsxhint-checker)
+                          (flycheck-mode)))
+
+(add-hook 'jsx-mode-hook
+          (lambda () (auto-complete-mode 1)))
 
 (defun my-sml-mode-hook () "Local defaults for SML mode"
        (setq indent-tabs-mode nil))     ; never ever indent with tabs
@@ -220,6 +255,14 @@
 (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.xsl\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
+(defadvice web-mode-highlight-part (around tweak-jsx activate)
+  (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+    ad-do-it))
+
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; Function to create new functions that look for a specific pattern
