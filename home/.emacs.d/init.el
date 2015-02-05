@@ -101,8 +101,8 @@
    (quote
     ("f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
  '(desktop-save-mode t)
- '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse-luna")))
- '(eclim-executable "~/Development/bin/eclipse-luna/eclim")
+ '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse")))
+ '(eclim-executable "~/Development/bin/eclipse/eclim")
  '(erc-email-userid "jchochli@xpzen.com")
  '(erc-nick "jchochli")
  '(erc-nick-uniquifier "_")
@@ -296,16 +296,19 @@
            (insert "~/")
          (call-interactively 'self-insert-command))))))
 
+(require 'xterm-color)
 (add-hook 'shell-mode-hook 
           'ansi-color-for-comint-mode-on)
+
+;(add-to-list ‘comint-output-filter-functions ‘ansi-color-process-output)
 
 (progn (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
        (setq comint-output-filter-functions (remove 'ansi-color-process-output comint-output-filter-functions))
        (setq font-lock-unfontify-region-function 'xterm-color-unfontify-region))
 
-(progn (remove-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
-       (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
-       (setq font-lock-unfontify-region-function 'font-lock-default-unfontify-region))
+;; (progn (remove-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
+;;        (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
+;;        (setq font-lock-unfontify-region-function 'font-lock-default-unfontify-region))
 
 
 (defadvice 4clojure-open-question (around 4clojure-open-question-around)

@@ -3,7 +3,7 @@
 # Screenshot: http://i.imgur.com/s0Blh.png
 case "$TERM" in
 "dumb")
-    PS1="> "
+    PS1="[\u@\h \W]$ "
     ;;
 xterm*|rxvt*|eterm*|screen*)
     if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
