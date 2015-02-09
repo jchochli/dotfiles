@@ -67,7 +67,6 @@
 ;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 (projectile-global-mode)
-(global-rainbow-delimiters-mode)
 
 (require 'eclim)
 (global-eclim-mode)
@@ -99,7 +98,7 @@
  '(custom-enabled-themes (quote (graphene wombat)))
  '(custom-safe-themes
    (quote
-    ("f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
+    ("ebd976c3d91de7c6858db3ba07c52238d545a106c8fbf05192913f6d42421621" "f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
  '(desktop-save-mode t)
  '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse")))
  '(eclim-executable "~/Development/bin/eclipse/eclim")
