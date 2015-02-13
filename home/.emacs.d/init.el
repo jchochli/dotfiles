@@ -106,6 +106,10 @@
  '(erc-nick "jchochli")
  '(erc-nick-uniquifier "_")
  '(indent-tabs-mode nil)
+ '(projectile-globally-ignored-directories
+   (quote
+    (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" "build" "logs" "dist" "lib" "classes")))
+ '(projectile-globally-ignored-files (quote ("TAGS")))
  '(tab-width 4))
 
 (setq-default tab-width 4)
