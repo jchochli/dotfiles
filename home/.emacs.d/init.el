@@ -75,6 +75,10 @@
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 
+(require 'guide-key)
+(setq guide-key/guide-key-sequence t)
+(guide-key-mode 1)
+
 (require 'browse-kill-ring)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
 
@@ -295,6 +299,17 @@
 
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
+
+(defun sudired ()
+  (interactive)
+  (require 'tramp)
+  (let ((dir (expand-file-name default-directory)))
+    (if (string-match "^/sudo:" dir)
+        (user-error "Already in sudo")
+      (dired (concat "/sudo::" dir)))))
+
+(define-key dired-mode-map "!" 'sudired)
+
 
 (add-hook 'ido-setup-hook
  (lambda ()
