@@ -89,6 +89,16 @@
 ;; Allow cross-buffer 'next'
 ;; (setq bm-cycle-all-buffers t)
 
+(require 'bookmark+)
+
+;; On OS X/Darwin, make sure we add the path to the homebrew installs
+(when (string-equal system-type "darwin")
+  (setq exec-path (append exec-path '("/usr/local/bin"))))
+
+(when (executable-find "hunspell")
+  (setq-default ispell-program-name "hunspell")
+  (setq ispell-really-hunspell t))
+
 (require 'helm-descbinds)
 
 (custom-set-variables
@@ -263,8 +273,6 @@
       (let ((web-mode-enable-part-face nil))
         ad-do-it)
     ad-do-it))
-
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
 
 ;; Function to create new functions that look for a specific pattern
 (defun ffip-create-pattern-file-finder (&rest patterns)
