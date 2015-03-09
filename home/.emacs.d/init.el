@@ -37,18 +37,14 @@
 
 ;; multiple-cursors and expand-region?
 
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
-
-(defun ad-advised-definition-p (definition)
-  "Return non-nil if DEFINITION was generated from advice information."
-  (if (or (ad-lambda-p definition)
-	  (macrop definition)
-	  (ad-compiled-p definition))
-      (let ((docstring (ad-docstring definition)))
-	(and (stringp docstring)
-	     (get-text-property 0 'dynamic-docstring-function docstring)))))
+;; (defun ad-advised-definition-p (definition)
+;;   "Return non-nil if DEFINITION was generated from advice information."
+;;   (if (or (ad-lambda-p definition)
+;;           (macrop definition)
+;;           (ad-compiled-p definition))
+;;       (let ((docstring (ad-docstring definition)))
+;;         (and (stringp docstring)
+;;              (get-text-property 0 'dynamic-docstring-function docstring)))))
 
 (require 'graphene)
 
@@ -95,36 +91,32 @@
 (when (string-equal system-type "darwin")
   (setq exec-path (append exec-path '("/usr/local/bin"))))
 
-(when (executable-find "hunspell")
-  (setq-default ispell-program-name "hunspell")
-  (setq ispell-really-hunspell t))
-
 (require 'helm-descbinds)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode t)
- '(browse-kill-ring-highlight-current-entry t)
- '(browse-kill-ring-highlight-inserted-item t)
- '(custom-enabled-themes (quote (graphene wombat)))
- '(custom-safe-themes
-   (quote
-    ("ebd976c3d91de7c6858db3ba07c52238d545a106c8fbf05192913f6d42421621" "f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
- '(desktop-save-mode t)
- '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse")))
- '(eclim-executable "~/Development/bin/eclipse/eclim")
- '(erc-email-userid "jchochli@xpzen.com")
- '(erc-nick "jchochli")
- '(erc-nick-uniquifier "_")
- '(indent-tabs-mode nil)
- '(projectile-globally-ignored-directories
-   (quote
-    (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" "build" "logs" "dist" "lib" "classes")))
- '(projectile-globally-ignored-files (quote ("TAGS")))
- '(tab-width 4))
+(defun ora-test-emacs ()
+  (interactive)
+  (require 'async)
+  (async-start
+   (lambda () (shell-command-to-string
+          "emacs --batch --eval \"
+(condition-case e
+    (progn
+      (load \\\"~/.emacs\\\")
+      (message \\\"-OK-\\\"))
+  (error
+   (message \\\"ERROR!\\\")
+   (signal (car e) (cdr e))))\""))
+   `(lambda (output)
+      (if (string-match "-OK-" output)
+          (when ,(called-interactively-p 'any)
+            (message "All is well"))
+        (switch-to-buffer-other-window "*startup error*")
+        (delete-region (point-min) (point-max))
+        (insert output)
+        (search-backward "ERROR!")))))
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
 
 (setq-default tab-width 4)
 (setq js-indent-level 2)
@@ -132,6 +124,7 @@
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
+(winner-mode 1)
 
 (require 'flycheck)
 (flycheck-define-checker jsxhint-checker
@@ -205,6 +198,13 @@
 (global-set-key (kbd "C-x C-n") 'other-window)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
+
+;; Wind-move
+
+(global-set-key (kbd "C-c C-j") 'windmove-left)
+(global-set-key (kbd "C-c C-k") 'windmove-down)
+(global-set-key (kbd "C-c C-p") 'windmove-up)
+(global-set-key (kbd "C-c C-n") 'windmove-right)
 
 (require 'buffer-move)
 (global-set-key (kbd "<C-S-up>")     'buf-move-up)
@@ -282,6 +282,8 @@
       (let ((ffip-patterns patterns))
         (find-file-in-project)))))
 
+
+
 ;; Find file in project, with specific patterns
 (global-unset-key (kbd "C-x C-o"))
 (global-set-key (kbd "C-x C-o ja")
@@ -290,7 +292,6 @@
                 (ffip-create-pattern-file-finder "*.js"))
 (global-set-key (kbd "C-x C-o jp")
                 (ffip-create-pattern-file-finder "*.jsp"))
-
 
 (defun dired-back-to-top ()
   (interactive)
@@ -308,17 +309,6 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-(defun sudired ()
-  (interactive)
-  (require 'tramp)
-  (let ((dir (expand-file-name default-directory)))
-    (if (string-match "^/sudo:" dir)
-        (user-error "Already in sudo")
-      (dired (concat "/sudo::" dir)))))
-
-(define-key dired-mode-map "!" 'sudired)
-
-
 (add-hook 'ido-setup-hook
  (lambda ()
    ;; Go straight home
@@ -334,94 +324,11 @@
 (add-hook 'shell-mode-hook 
           'ansi-color-for-comint-mode-on)
 
-;(add-to-list ‘comint-output-filter-functions ‘ansi-color-process-output)
-
-(progn (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
-       (setq comint-output-filter-functions (remove 'ansi-color-process-output comint-output-filter-functions))
-       (setq font-lock-unfontify-region-function 'xterm-color-unfontify-region))
-
-;; (progn (remove-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
-;;        (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
-;;        (setq font-lock-unfontify-region-function 'font-lock-default-unfontify-region))
-
-
-(defadvice 4clojure-open-question (around 4clojure-open-question-around)
-  "Start a cider/nREPL connection if one hasn't already been started when
-opening 4clojure questions"
-  ad-do-it
-  (unless cider-current-clojure-buffer
-    (cider-jack-in)))
-
-(defun 4clojure-login (user pwd)
-  "Login to 4clojure"
-  (interactive "sWhat's your name? \nsAnd your password ")
-  (request
-   "http://www.4clojure.com/login"
-   :type "POST"
-   :sync t
-   :headers '(
-              ("User-Agent" . "Mozilla/5.0 (X11; Linux x86_64; rv:28.0) Gecko/20100101  Firefox/28.0")
-              ("Referer" . "http://www.4clojure.com/login")
-              )
-;   :parser 'buffer-string
-   :data `(("user" . ,user) ("pwd" . ,pwd))
-   :success (function*
-             (lambda (&key data &allow-other-keys)
-               data
-               )
-             )
-; when server send 302 header, `request` redirect request with original method POST, 
-; So 4clojure will not handle this redirect and given 404
-   :status-code '((404 . (lambda (&rest _) (message "login successful!"))))
-   )
-  )
-
-
-;; To load a file and run sml repl -> Press C-c C-v inside a sml file.
-;; To run the current files tests -> Press C-c C-r inside a sml file. It assumes the tests are inside the same directory.
-;; For example, If your code file is hw1.sml your test file should be named as hw1tests.sml in the same directory
-(require 'sml-mode)
-
-;;; Credits: https://gist.github.com/koddo/4555655
-(defun my-sml-restart-repl-and-load-current-file ()
-  (interactive)
-  (save-buffer)
-  (ignore-errors (with-current-buffer "*sml*"
-                   (comint-interrupt-subjob)
-                   (comint-send-eof)
-                   (let ((some-time 0.1))
-                     (while (process-status (get-process "sml"))
-                       (sleep-for some-time)))))
-  (flet ((sml--read-run-cmd ()
-           '("sml" "" nil))) ; (command args host)
-    (sml-prog-proc-send-buffer t)))
- 
-(defun my-sml-restart-repl-and-load-current-file-tests ()
-  (interactive)
-  (save-buffer)
-  (let ((code-file-name (replace-regexp-in-string "tests.sml$" ".sml" (buffer-file-name))))
-    (let ((test-file-name (replace-regexp-in-string ".sml$" "tests.sml" code-file-name))
-          (code-buffer (buffer-name)))
-      (find-file test-file-name)
-      (my-sml-restart-repl-and-load-current-file)
-      (switch-to-buffer-other-window code-buffer))))
- 
-(eval-after-load 'sml-mode
-  '(progn
-    (define-key sml-mode-map (kbd "C-j") 'reindent-then-newline-and-indent)
-    (define-key sml-mode-map (kbd "C-c C-s") 'sml-run)
-    (define-key sml-mode-map (kbd "C-c C-v") 'my-sml-restart-repl-and-load-current-file)
-    (define-key sml-mode-map (kbd "C-c C-r") 'my-sml-restart-repl-and-load-current-file-tests)))
-
-
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(require 'edit-server)
+(edit-server-start)
 
 (load "server")
 (unless (server-running-p) (server-start))
+
 
 
