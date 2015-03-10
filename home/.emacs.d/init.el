@@ -134,6 +134,7 @@
   :error-patterns
   ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
   :modes (jsx-mode))
+
 (add-hook 'jsx-mode-hook (lambda ()
                           (flycheck-select-checker 'jsxhint-checker)
                           (flycheck-mode)))
@@ -141,9 +142,6 @@
 (add-hook 'jsx-mode-hook
           (lambda () (auto-complete-mode 1)))
 
-(defun my-sml-mode-hook () "Local defaults for SML mode"
-       (setq indent-tabs-mode nil))     ; never ever indent with tabs
-(add-hook 'sml-mode-hook 'my-sml-mode-hook)
 
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
@@ -329,6 +327,4 @@
 
 (load "server")
 (unless (server-running-p) (server-start))
-
-
 
