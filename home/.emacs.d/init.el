@@ -1,119 +1,165 @@
-;;; init.el --- init file
-;; Require Emacs' package functionality
-(setq debug-on-error t)
+(defconst emacs-start-time (current-time))
+(unless noninteractive
+  (message "Loading %s..." load-file-name))
+
+(setq message-log-max 16384)
+
 (require 'package)
-
-;; Add the Melpa repository to the list of package sources
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa-stable" . "http://melpa.org/packages/")))
-
-(add-to-list 'exec-path "/usr/local/bin")
-
-;; Initialise the package system.
 (package-initialize)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(setq load-prefer-newer t)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-(defvar my-packages
-  '(graphene
-    paredit
-    rainbow-delimiters
-    projectile
-    buffer-move
-    ace-jump-mode
-    ace-window
-    undo-tree
-    clojure-mode
-    cider
-    clj-refactor    
-    company
-    magit
-    magit-filenotify
-    ahg    
-    browse-kill-ring+
-    bm
-    helm-descbinds
-    emacs-eclim
-    know-your-http-well
-    4clojure))
+(require 'use-package)
 
-;; multiple-cursors and expand-region?
+;;(eval-when-compile  (require 'use-package))
 
-;; (defun ad-advised-definition-p (definition)
-;;   "Return non-nil if DEFINITION was generated from advice information."
-;;   (if (or (ad-lambda-p definition)
-;;           (macrop definition)
-;;           (ad-compiled-p definition))
-;;       (let ((docstring (ad-docstring definition)))
-;;         (and (stringp docstring)
-;;              (get-text-property 0 'dynamic-docstring-function docstring)))))
+(use-package diminish
+  :ensure t)
 
-(require 'graphene)
+(require 'bind-key)                ;; if you use any :bind variant
+(setq debug-on-error t)
 
-(require 'ahg)
 
-(require 'project-persist)
-(project-persist-mode t)
+;; On OS X/Darwin, make sure we add the path to the homebrew installs
+(when (string-equal system-type "darwin")
+  (setq exec-path (append exec-path '("/usr/local/bin"))))
+;; (add-to-list 'exec-path "/usr/local/bin")
 
-(require 'rainbow-delimiters)
+(use-package graphene
+  :ensure t)
 
-(require 'paredit)
+(use-package paredit
+  :ensure t)
+
+(use-package rainbow-delimiters             
+  :ensure t)
+
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode))
+
+
+(use-package buffer-move
+  :ensure t)
+
+(use-package ace-jump-mode
+  :ensure t
+  :config
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+  )
+
+(use-package ace-window
+  :ensure t)
+
+;; 
+;; enable a more powerful jump back function from ace jump mode
+;;
+(autoload
+  'ace-jump-mode-pop-mark
+  "ace-jump-mode"
+  "Ace jump back:-)"
+  t)
+(eval-after-load "ace-jump-mode"
+  '(ace-jump-mode-enable-mark-sync))
+(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
+
+
+
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+(add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
+(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xsl\\'" . xml-mode))
+
+(use-package undo-tree
+  :ensure t)
+
+(use-package clojure-mode
+  :ensure t)
+
+(use-package cider
+  :ensure t)
+
+(use-package clj-refactor
+  :ensure t)
+
+(use-package rainbow-delimiters
+  :ensure t)
+
+(use-package paredit
+  :ensure t)
 (add-hook 'clojure-mode-hook 'paredit-mode)
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
-;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-
-(projectile-global-mode)
-
-(require 'eclim)
-(global-eclim-mode)
-(require 'eclimd)
-
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
-
-(require 'guide-key)
-(setq guide-key/guide-key-sequence t)
-(guide-key-mode 1)
-
-(require 'browse-kill-ring)
+(use-package browse-kill-ring
+  :ensure t)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
 
-(require 'bm)
+(use-package bm
+  :ensure t)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
 ;; Allow cross-buffer 'next'
 ;; (setq bm-cycle-all-buffers t)
 
-(require 'bookmark+)
+(use-package bookmark+
+  :ensure t)
 
-;; On OS X/Darwin, make sure we add the path to the homebrew installs
-(when (string-equal system-type "darwin")
-  (setq exec-path (append exec-path '("/usr/local/bin"))))
+(use-package browse-kill-ring+
+  :ensure t)
 
-(require 'helm-descbinds)
+(use-package project-persist
+  :ensure t)
+(project-persist-mode t)
 
-(defun ora-test-emacs ()
-  (interactive)
-  (require 'async)
-  (async-start
-   (lambda () (shell-command-to-string
-          "emacs --batch --eval \"
-(condition-case e
-    (progn
-      (load \\\"~/.emacs\\\")
-      (message \\\"-OK-\\\"))
-  (error
-   (message \\\"ERROR!\\\")
-   (signal (car e) (cdr e))))\""))
-   `(lambda (output)
-      (if (string-match "-OK-" output)
-          (when ,(called-interactively-p 'any)
-            (message "All is well"))
-        (switch-to-buffer-other-window "*startup error*")
-        (delete-region (point-min) (point-max))
-        (insert output)
-        (search-backward "ERROR!")))))
+(use-package helm-descbinds
+  :ensure t)
+
+(use-package emacs-eclim
+  :ensure t)
+(require 'eclim)
+(global-eclim-mode)
+;; (require 'eclimd)
+
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
+
+;; regular auto-complete initialization
+(require 'auto-complete-config)
+(ac-config-default)
+
+;; add the emacs-eclim source
+(require 'ac-emacs-eclim-source)
+(ac-emacs-eclim-config)
+
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
+(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
+
+
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+
+(use-package guide-key
+  :ensure t)
+(setq guide-key/guide-key-sequence t)
+(guide-key-mode 1)
+
+(use-package flycheck
+  :ensure t)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
@@ -126,21 +172,6 @@
 (setq indent-tabs-mode nil)
 (winner-mode 1)
 
-(require 'flycheck)
-(flycheck-define-checker jsxhint-checker
-  "A JSX syntax and style checker based on JSXHint."
-
-  :command ("jsxhint" source)
-  :error-patterns
-  ((error line-start (1+ nonl) ": line " line ", col " column ", " (message) line-end))
-  :modes (jsx-mode))
-
-(add-hook 'jsx-mode-hook (lambda ()
-                          (flycheck-select-checker 'jsxhint-checker)
-                          (flycheck-mode)))
-
-(add-hook 'jsx-mode-hook
-          (lambda () (auto-complete-mode 1)))
 
 
 (setq help-at-pt-display-when-idle t)
@@ -151,19 +182,6 @@
 (setq tramp-default-method "ssh")
 (setq tramp-verbose 9)
 
-;; regular auto-complete initialization
-(require 'auto-complete-config)
-(ac-config-default)
-
-;; add the emacs-eclim source
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
-
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-;;(global-company-mode t)
-(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
 
 (autoload 'bash-completion-dynamic-complete 
   "bash-completion"
@@ -198,7 +216,6 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
 ;; Wind-move
-
 (global-set-key (kbd "C-c C-j") 'windmove-left)
 (global-set-key (kbd "C-c C-k") 'windmove-down)
 (global-set-key (kbd "C-c C-p") 'windmove-up)
@@ -231,46 +248,6 @@
                   (interactive)
                   (ignore-errors (backward-char 5))))
 
-;;
-;; ace jump mode major function
-;; 
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Emacs quick move minor mode"
-  t)
-;; you can select the key you prefer to
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-
-;; 
-;; enable a more powerful jump back function from ace jump mode
-;;
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-
-
-
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-(add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.xsl\\'" . xml-mode))
-(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
-
-(defadvice web-mode-highlight-part (around tweak-jsx activate)
-  (if (equal web-mode-content-type "jsx")
-      (let ((web-mode-enable-part-face nil))
-        ad-do-it)
-    ad-do-it))
 
 ;; Function to create new functions that look for a specific pattern
 (defun ffip-create-pattern-file-finder (&rest patterns)
@@ -279,8 +256,6 @@
       (interactive)
       (let ((ffip-patterns patterns))
         (find-file-in-project)))))
-
-
 
 ;; Find file in project, with specific patterns
 (global-unset-key (kbd "C-x C-o"))
@@ -318,12 +293,6 @@
            (insert "~/")
          (call-interactively 'self-insert-command))))))
 
-(require 'xterm-color)
-(add-hook 'shell-mode-hook 
-          'ansi-color-for-comint-mode-on)
-
-(require 'edit-server)
-(edit-server-start)
 
 (load "server")
 (unless (server-running-p) (server-start))
