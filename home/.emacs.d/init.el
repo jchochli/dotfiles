@@ -3,31 +3,26 @@
   (message "Loading %s..." load-file-name))
 
 (setq message-log-max 16384)
+(setq debug-on-error t)
 
 (require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+
 (package-initialize)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
-(setq load-prefer-newer t)
+
+;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
 (require 'use-package)
-
 ;;(eval-when-compile  (require 'use-package))
 
 (use-package diminish
   :ensure t)
 
-(require 'bind-key)                ;; if you use any :bind variant
-(setq debug-on-error t)
-
-
-;; On OS X/Darwin, make sure we add the path to the homebrew installs
-(when (string-equal system-type "darwin")
-  (setq exec-path (append exec-path '("/usr/local/bin"))))
-;; (add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'exec-path "/usr/local/bin")
 
 (use-package graphene
   :ensure t)
@@ -35,23 +30,23 @@
 (use-package paredit
   :ensure t)
 
-(use-package rainbow-delimiters             
-  :ensure t)
+(use-package rainbow-mode
+  :ensure t
+  :commands rainbow-mode)
 
 (use-package projectile
+  :init (progn
+          (add-hook 'prog-mode-hook 'projectile-mode))
   :ensure t
-  :config
-  (projectile-global-mode))
-
+  :defer t)
+;; (global-projectile-mode t)
 
 (use-package buffer-move
   :ensure t)
 
 (use-package ace-jump-mode
   :ensure t
-  :config
-  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-  )
+  :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
 (use-package ace-window
   :ensure t)
@@ -68,16 +63,21 @@
   '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
+(use-package markdown-mode
+  :ensure t)
 
+(use-package groovy-mode
+  :ensure t)
 
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-(add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.xsl\\'" . xml-mode))
+(use-package web-mode
+  :ensure t
+  :mode (("\\.html$" . web-mode)
+         ("\\.mustache\\'" . web-mode)))
+  
+
+(use-package nxml
+  :ensure t
+  :mode ("\\.xsl\\'" . xml-mode))
 
 (use-package undo-tree
   :ensure t)
@@ -91,14 +91,15 @@
 (use-package clj-refactor
   :ensure t)
 
-(use-package rainbow-delimiters
-  :ensure t)
-
 (use-package paredit
+  :ensure t
+  :init
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+
+(use-package macrostep
   :ensure t)
-(add-hook 'clojure-mode-hook 'paredit-mode)
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
 
 (use-package browse-kill-ring
   :ensure t)
@@ -109,8 +110,6 @@
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
-;; Allow cross-buffer 'next'
-;; (setq bm-cycle-all-buffers t)
 
 (use-package bookmark+
   :ensure t)
