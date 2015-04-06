@@ -22,7 +22,8 @@
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" "build" "logs" "dist" "lib" "classes")))
  '(projectile-globally-ignored-files (quote ("TAGS")))
- '(tab-width 4))
+ '(tab-width 4)
+ '(use-package-verbose t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

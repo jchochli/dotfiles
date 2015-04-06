@@ -2,33 +2,51 @@
 (unless noninteractive
   (message "Loading %s..." load-file-name))
 
+(setq user-full-name "James Chochlinski")
+(setq user-mail-address "jchochli@xpzen.com")
+(fset 'yes-or-no-p 'y-or-n-p)
+(show-paren-mode t)
 (setq message-log-max 16384)
 (setq debug-on-error t)
 (add-to-list 'exec-path "/usr/local/bin")
 
-(require 'package)
-(setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;; Set locale to UTF8
+(set-language-environment 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
 
+(require 'package)
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("melpa" . "http://melpa.org/packages/")))
 (package-initialize)
 
 ;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
 (require 'use-package)
-;;(eval-when-compile  (require 'use-package))
 
+;;(eval-when-compile  (require 'use-package))
+(setq use-package-verbose t)
+(use-package ggtags :ensure t  :defer t
+  :commands ggtags-mode
+  :diminish ggtags-mode)
 (use-package diminish  :ensure t  :defer t)
 (use-package graphene  :ensure t  :defer t)
 (use-package bug-hunter  :ensure t  :defer t)
-(use-package projectile
+(use-package ido :ensure t
+  :init
+  (ido-mode t))
+(use-package  visual-regexp  :ensure t  :defer t)
+(use-package projectile  :ensure t  :defer t
   :init (progn
-          (add-hook 'prog-mode-hook 'projectile-mode))
-  :ensure t  :defer t)
+          (add-hook 'prog-mode-hook 'projectile-mode)))
 ;; (global-projectile-mode t)
-
+(use-package switch-window  :ensure t  :defer t
+  :bind ("C-x o" . switch-window))
 (use-package clojure-mode  :ensure t  :defer t)
 (use-package cider  :ensure t  :defer t)
 (use-package clj-refactor  :ensure t  :defer t)
@@ -57,55 +75,49 @@
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
 (use-package markdown-mode  :ensure t  :defer t)
-
+(use-package yaml-mode  :ensure t  :defer t)
 (use-package groovy-mode  :ensure t  :defer t)
-
 (use-package web-mode  :ensure t  :defer t
   :mode (("\\.html$" . web-mode)
          ("\\.mustache\\'" . web-mode)))
-
 (use-package nxml  :ensure t  :defer t
   :mode ("\\.xsl\\'" . xml-mode))
-
 (use-package undo-tree  :ensure t  :defer t)
-
 (use-package macrostep  :ensure t  :defer t
   :bind ("C-c e m" . macrostep-expand))
 (use-package browse-kill-ring  :ensure t  :defer t)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
-
 (use-package bm  :ensure t  :defer t)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
-
 (use-package bookmark+  :ensure t  :defer t)
 (use-package browse-kill-ring+  :ensure t  :defer t)
 (use-package project-persist  :ensure t  :defer t)
 (project-persist-mode t)
-
 (use-package helm-descbinds  :ensure t  :defer t)
-(use-package emacs-eclim  :ensure t  :defer t)
-(require 'eclim)
-(global-eclim-mode)
+(use-package emacs-eclim  :ensure t  :defer t
+  :bind ("C-c C-c" . company-complete)
+  :config (company-emacs-eclim-setup))
+;;(require 'eclim)
+;;(global-eclim-mode)
 ;; (require 'eclimd)
 
 (use-package company  :ensure t  :defer t
-  :config
+  :config 
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;; regular auto-complete initialization
-(require 'auto-complete-config)
-(ac-config-default)
+;;(require 'auto-complete-config)
+;;(ac-config-default)
 
 ;; add the emacs-eclim source
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
+;;(require 'ac-emacs-eclim-source)
+;;(ac-emacs-eclim-config)
 
 ;; (require 'company-emacs-eclim)
 ;; (company-emacs-eclim-setup)
-(global-company-mode t)
-(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
+;;(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
 
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
@@ -238,6 +250,8 @@
                     (insert "~/")
                   (call-interactively 'self-insert-command))))))
 
+
+(add-hook 'after-init-hook 'global-company-mode)
 
 (load "server")
 (unless (server-running-p) (server-start))
