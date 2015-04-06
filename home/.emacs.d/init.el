@@ -4,6 +4,7 @@
 
 (setq message-log-max 16384)
 (setq debug-on-error t)
+(add-to-list 'exec-path "/usr/local/bin")
 
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -19,38 +20,30 @@
 (require 'use-package)
 ;;(eval-when-compile  (require 'use-package))
 
-(use-package diminish
-  :ensure t)
-
-(add-to-list 'exec-path "/usr/local/bin")
-
-(use-package graphene
-  :ensure t)
-
-(use-package paredit
-  :ensure t)
-
-(use-package rainbow-mode
-  :ensure t
-  :commands rainbow-mode)
-
+(use-package diminish  :ensure t  :defer t)
+(use-package graphene  :ensure t  :defer t)
+(use-package bug-hunter  :ensure t  :defer t)
 (use-package projectile
   :init (progn
           (add-hook 'prog-mode-hook 'projectile-mode))
-  :ensure t
-  :defer t)
+  :ensure t  :defer t)
 ;; (global-projectile-mode t)
 
-(use-package buffer-move
-  :ensure t)
-
-(use-package ace-jump-mode
-  :ensure t
+(use-package clojure-mode  :ensure t  :defer t)
+(use-package cider  :ensure t  :defer t)
+(use-package clj-refactor  :ensure t  :defer t)
+(use-package paredit  :ensure t  :defer t
+  :init
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+(use-package rainbow-mode  :ensure t  :defer t
+  :commands rainbow-mode)
+(use-package buffer-move :ensure t :defer t)
+(use-package ace-jump-mode  :ensure t  :defer t
   :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
-(use-package ace-window
-  :ensure t)
-
+(use-package ace-window  :ensure t  :defer t)
 ;; 
 ;; enable a more powerful jump back function from ace jump mode
 ;;
@@ -63,75 +56,41 @@
   '(ace-jump-mode-enable-mark-sync))
 (define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
 
-(use-package markdown-mode
-  :ensure t)
+(use-package markdown-mode  :ensure t  :defer t)
 
-(use-package groovy-mode
-  :ensure t)
+(use-package groovy-mode  :ensure t  :defer t)
 
-(use-package web-mode
-  :ensure t
+(use-package web-mode  :ensure t  :defer t
   :mode (("\\.html$" . web-mode)
          ("\\.mustache\\'" . web-mode)))
-  
 
-(use-package nxml
-  :ensure t
+(use-package nxml  :ensure t  :defer t
   :mode ("\\.xsl\\'" . xml-mode))
 
-(use-package undo-tree
-  :ensure t)
+(use-package undo-tree  :ensure t  :defer t)
 
-(use-package clojure-mode
-  :ensure t)
-
-(use-package cider
-  :ensure t)
-
-(use-package clj-refactor
-  :ensure t)
-
-(use-package paredit
-  :ensure t
-  :init
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
-
-(use-package macrostep
-  :ensure t)
-
-(use-package browse-kill-ring
-  :ensure t)
+(use-package macrostep  :ensure t  :defer t
+  :bind ("C-c e m" . macrostep-expand))
+(use-package browse-kill-ring  :ensure t  :defer t)
 (global-set-key (kbd "C-c y") 'browse-kill-ring)
 
-(use-package bm
-  :ensure t)
+(use-package bm  :ensure t  :defer t)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
 
-(use-package bookmark+
-  :ensure t)
-
-(use-package browse-kill-ring+
-  :ensure t)
-
-(use-package project-persist
-  :ensure t)
+(use-package bookmark+  :ensure t  :defer t)
+(use-package browse-kill-ring+  :ensure t  :defer t)
+(use-package project-persist  :ensure t  :defer t)
 (project-persist-mode t)
 
-(use-package helm-descbinds
-  :ensure t)
-
-(use-package emacs-eclim
-  :ensure t)
+(use-package helm-descbinds  :ensure t  :defer t)
+(use-package emacs-eclim  :ensure t  :defer t)
 (require 'eclim)
 (global-eclim-mode)
 ;; (require 'eclimd)
 
-(use-package company
-  :ensure t
+(use-package company  :ensure t  :defer t
   :config
   (add-hook 'after-init-hook 'global-company-mode))
 
@@ -143,22 +102,19 @@
 (require 'ac-emacs-eclim-source)
 (ac-emacs-eclim-config)
 
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
+;; (require 'company-emacs-eclim)
+;; (company-emacs-eclim-setup)
 (global-company-mode t)
 (define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
-
 
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 
-(use-package guide-key
-  :ensure t)
+(use-package guide-key  :ensure t  :defer t)
 (setq guide-key/guide-key-sequence t)
 (guide-key-mode 1)
 
-(use-package flycheck
-  :ensure t)
+(use-package flycheck  :ensure t  :defer t)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
@@ -170,44 +126,32 @@
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
 (winner-mode 1)
-
-
-
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
 (setq visible-bell t)
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
-(setq tramp-default-method "ssh")
+;; (setq tramp-default-method "ssh")
 (setq tramp-verbose 9)
 
-
 (autoload 'bash-completion-dynamic-complete 
   "bash-completion"
   "BASH completion hook")
 (add-hook 'shell-dynamic-complete-functions
-  'bash-completion-dynamic-complete)
+          'bash-completion-dynamic-complete)
 (add-hook 'shell-command-complete-functions
-  'bash-completion-dynamic-complete)
-
-(autoload 'bash-completion-dynamic-complete 
-  "bash-completion"
-  "BASH completion hook")
-(add-hook 'shell-dynamic-complete-functions
-  'bash-completion-dynamic-complete)
-(add-hook 'shell-command-complete-functions
-  'bash-completion-dynamic-complete)
+          'bash-completion-dynamic-complete)
 
 ;; keyboard bindings for lookup
 (define-key 'help-command (kbd "C-l") 'find-library)
 (define-key 'help-command (kbd "C-f") 'find-function)
 (define-key 'help-command (kbd "C-k") 'find-function-on-key)
 (define-key 'help-command (kbd "C-v") 'find-variable)
-                                       
+
 (defun other-window-backward (&optional n)
-    "Select Nth previous window."
-    (interactive "P")    
-    (other-window (- (prefix-numeric-value n))))
+  "Select Nth previous window."
+  (interactive "P")    
+  (other-window (- (prefix-numeric-value n))))
 
 (global-set-key (kbd "C-x C-p") 'other-window-backward)
 (global-set-key (kbd "C-x C-n") 'other-window)
@@ -249,6 +193,7 @@
 
 
 ;; Function to create new functions that look for a specific pattern
+(use-package cl)
 (defun ffip-create-pattern-file-finder (&rest patterns)
   (lexical-let ((patterns patterns))
     (lambda ()
@@ -265,6 +210,7 @@
 (global-set-key (kbd "C-x C-o jp")
                 (ffip-create-pattern-file-finder "*.jsp"))
 
+(use-package dired)
 (defun dired-back-to-top ()
   (interactive)
   (beginning-of-buffer)
@@ -282,15 +228,15 @@
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (add-hook 'ido-setup-hook
- (lambda ()
-   ;; Go straight home
-   (define-key ido-file-completion-map
-     (kbd "~")
-     (lambda ()
-       (interactive)
-       (if (looking-back "/")
-           (insert "~/")
-         (call-interactively 'self-insert-command))))))
+          (lambda ()
+            ;; Go straight home
+            (define-key ido-file-completion-map
+              (kbd "~")
+              (lambda ()
+                (interactive)
+                (if (looking-back "/")
+                    (insert "~/")
+                  (call-interactively 'self-insert-command))))))
 
 
 (load "server")
