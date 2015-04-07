@@ -18,6 +18,10 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
+;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+;;(if (fboundp 'scroll-bar-mode) (scroll-bar-mode t))
+
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("melpa" . "http://melpa.org/packages/")))
@@ -44,6 +48,8 @@
 (use-package projectile  :ensure t  :defer t
   :init (progn
           (add-hook 'prog-mode-hook 'projectile-mode)))
+
+
 ;; (global-projectile-mode t)
 (use-package switch-window  :ensure t  :defer t
   :bind ("C-x o" . switch-window))
@@ -96,9 +102,11 @@
 (use-package project-persist  :ensure t  :defer t)
 (project-persist-mode t)
 (use-package helm-descbinds  :ensure t  :defer t)
-(use-package emacs-eclim  :ensure t  :defer t
+
+(use-package emacs-eclim  :defer t  :load-path "~/Development/repos/emacs/emacs-eclim"
   :bind ("C-c C-c" . company-complete)
   :config (company-emacs-eclim-setup))
+
 ;;(require 'eclim)
 ;;(global-eclim-mode)
 ;; (require 'eclimd)
