@@ -20,7 +20,7 @@
 
 ;;(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
-;;(if (fboundp 'scroll-bar-mode) (scroll-bar-mode t))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -44,15 +44,25 @@
 (use-package ido :ensure t
   :init
   (ido-mode t))
-(use-package  visual-regexp  :ensure t  :defer t)
+(use-package visual-regexp  :ensure t  :defer t)
+(use-package puppet-mode  :ensure t  :defer t)
 (use-package projectile  :ensure t  :defer t
   :init (progn
           (add-hook 'prog-mode-hook 'projectile-mode)))
-
-
 ;; (global-projectile-mode t)
 (use-package switch-window  :ensure t  :defer t
   :bind ("C-x o" . switch-window))
+(use-package clojure-mode  :ensure t  :defer t
+  :mode      ("\\.\\(clj\\|cljs\\)$" . clojure-mode)
+  :init      (defun rename-clojure-modeline ()
+               (interactive)
+               (setq mode-name "CLJ"))
+  :config    (add-hook 'clojure-mode-hook 'rename-clojure-modeline))
+(use-package cider  :ensure t  :defer t
+  :pre-init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
+  :config    (defalias 'cji 'cider-jack-in)
+  :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  :diminish  (cider-mode . ""))
 (use-package clojure-mode  :ensure t  :defer t)
 (use-package cider  :ensure t  :defer t)
 (use-package clj-refactor  :ensure t  :defer t)
@@ -99,13 +109,16 @@
 (global-set-key (kbd "<S-f2>") 'bm-previous)
 (use-package bookmark+  :ensure t  :defer t)
 (use-package browse-kill-ring+  :ensure t  :defer t)
-(use-package project-persist  :ensure t  :defer t)
+(use-package project-persist  :ensure t  :defer t
+  :config    (projectile-global-mode t))
 (project-persist-mode t)
 (use-package helm-descbinds  :ensure t  :defer t)
 
 (use-package emacs-eclim  :defer t  :load-path "~/Development/repos/emacs/emacs-eclim"
   :bind ("C-c C-c" . company-complete)
-  :config (company-emacs-eclim-setup))
+  :config (progn
+            (add-hook 'prog-mode-hook 'eclim-mode)
+            (company-emacs-eclim-setup)))
 
 ;;(require 'eclim)
 ;;(global-eclim-mode)
