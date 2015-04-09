@@ -174,7 +174,7 @@
                (setq mode-name "CLJ"))
   :config    (add-hook 'clojure-mode-hook 'rename-clojure-modeline))
 (use-package cider  :ensure t  :defer t
-  :pre-init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
+  :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
   :config    (defalias 'cji 'cider-jack-in)
   :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   :diminish  (cider-mode . ""))
