@@ -35,6 +35,121 @@
 
 ;;(eval-when-compile  (require 'use-package))
 (setq use-package-verbose t)
+
+(use-package company  :ensure t  :defer t
+  :config 
+  (add-hook 'after-init-hook 'global-company-mode))
+;; -------------------------------------
+;; (use-package company
+;;   :ensure t
+;;   :diminish company-mode
+;;   :commands company-mode
+;;   :config
+;;   ;; From https://github.com/company-mode/company-mode/issues/87
+;;   ;; See also https://github.com/company-mode/company-mode/issues/123
+;;   (defadvice company-pseudo-tooltip-unless-just-one-frontend
+;;       (around only-show-tooltip-when-invoked activate)
+;;     (when (company-explicit-action-p)
+;;       ad-do-it))
+;;   (use-package helm-company
+;;     :ensure t
+;;     :disabled t))
+;; (use-package ag
+;;   :ensure t
+;;   :commands (ag ag-regexp)
+;;   :init
+;;   (use-package helm-ag
+;;     :ensure t
+;;     :commands helm-ag))
+
+;; (use-package helm-grep
+;;   :ensure t
+;;   :commands helm-do-grep-1
+;;   :bind (("M-s f" . my-helm-do-grep-r)
+;;          ("M-s g" . my-helm-do-grep))
+;;   :preface
+;;   (defun my-helm-do-grep ()
+;;     (interactive)
+;;     (helm-do-grep-1 (list default-directory)))
+
+;;   (defun my-helm-do-grep-r ()
+;;     (interactive)
+;;     (helm-do-grep-1 (list default-directory) t)))
+
+;; (use-package helm-swoop
+;;   :ensure t
+;;   :bind (("M-s o" . helm-swoop)
+;;          ("M-s /" . helm-multi-swoop))
+;;   :config
+;;   (use-package helm-match-plugin
+;;     :config
+;;     (helm-match-plugin-mode 1)))
+
+;; (use-package helm-descbinds
+;;   :ensure t
+;;   :bind ("C-h b" . helm-descbinds)
+;;   :init
+;;   (fset 'describe-bindings 'helm-descbinds)
+;;   :config
+;;   (require 'helm-config))
+
+;; (use-package helm-config
+;;   :if (not running-alternate-emacs)
+;;   :demand t
+;;   :ensure t
+;;   :bind (("C-c h"   . helm-command-prefix)
+;;          ("C-h a"   . helm-apropos)
+;;          ("C-h e a" . my-helm-apropos)
+;;          ("C-x f"   . helm-multi-files)
+;;          ("M-s b"   . helm-occur)
+;;          ("M-s n"   . my-helm-find)
+;;          ("M-h"     . helm-resume))
+
+;;   :preface
+;;   (defun my-helm-find ()
+;;     (interactive)
+;;     (helm-find nil))
+
+;;   :config
+;;   (use-package helm-commands)
+;;   (use-package helm-files)
+;;   (use-package helm-buffers)
+;;   (use-package helm-mode
+;;     :diminish helm-mode
+;;     :init
+;;     (helm-mode 1))
+
+;;   (use-package helm-ls-git
+;;     :ensure t)
+
+;;   (use-package helm-match-plugin
+;;     :config
+;;     (helm-match-plugin-mode 1))
+
+;;   (helm-autoresize-mode 1)
+
+;;   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
+;;   (bind-key "C-i" 'helm-execute-persistent-action helm-map)
+;;   (bind-key "C-z" 'helm-select-action helm-map)
+;;   (bind-key "A-v" 'helm-previous-page helm-map)
+
+;;   (when (executable-find "curl")
+;;     (setq helm-google-suggest-use-curl-p t)))
+
+;; (use-package projectile
+;;   :ensure t
+;;   :diminish projectile-mode
+;;   :commands projectile-global-mode
+;;   :defer 5
+;;   :bind-keymap ("C-c p" . projectile-command-map)
+;;   :config
+;;   (use-package helm-projectile
+;;     :config
+;;     (setq projectile-completion-system 'helm)
+;;     (helm-projectile-on))
+;;   (projectile-global-mode))
+;; ----------------------------------
+
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
   :diminish ggtags-mode)
@@ -123,10 +238,6 @@
 ;;(require 'eclim)
 ;;(global-eclim-mode)
 ;; (require 'eclimd)
-
-(use-package company  :ensure t  :defer t
-  :config 
-  (add-hook 'after-init-hook 'global-company-mode))
 
 ;; regular auto-complete initialization
 ;;(require 'auto-complete-config)
