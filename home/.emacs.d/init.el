@@ -37,45 +37,54 @@
 
 (setq use-package-verbose t)
 (use-package command-log-mode  :ensure t :defer t)
+
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
   :diminish ggtags-mode)
+
 (use-package diminish  :ensure t  :defer t)
-(use-package graphene  :ensure t  :defer 5)
+;; (use-package graphene  :ensure t  :defer 5)
 (use-package bug-hunter  :ensure t  :defer t)
-(use-package ido :ensure t
-  :init
-  (ido-mode t))
+;; (use-package ido :ensure t
+;;   :init
+;;   (ido-mode t))
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
+
 (use-package projectile  :ensure t  :defer t
   :init (progn
           (add-hook 'prog-mode-hook 'projectile-mode)))
 ;; (global-projectile-mode t)
+
 (use-package switch-window  :ensure t  :defer t
   :bind ("C-x o" . switch-window))
+
 (use-package clojure-mode  :ensure t  :defer t
   :mode      ("\\.\\(clj\\|cljs\\)$" . clojure-mode)
   :init      (defun rename-clojure-modeline ()
                (interactive)
                (setq mode-name "CLJ"))
   :config    (add-hook 'clojure-mode-hook 'rename-clojure-modeline))
+
 (use-package cider  :ensure t  :defer t
   :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
   :config    (defalias 'cji 'cider-jack-in)
   :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   :diminish  (cider-mode . ""))
+
 (use-package clojure-mode  :ensure t  :defer t)
 (use-package cider  :ensure t  :defer t)
 (use-package clj-refactor  :ensure t  :defer t)
+
 (use-package paredit  :ensure t  :defer t
   :init
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+
 (use-package rainbow-mode  :ensure t  :defer t
   :commands rainbow-mode)
-(use-package buffer-move :ensure t :defer t)
+
 (use-package ace-jump-mode  :ensure t  :defer t
   :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
@@ -109,12 +118,20 @@
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
 (global-set-key (kbd "<f2>") 'bm-next)
 (global-set-key (kbd "<S-f2>") 'bm-previous)
-(use-package bookmark+  :ensure t  :defer t)
-(use-package browse-kill-ring+  :ensure t  :defer t)
+
+(use-package bookmark
+  :load-path "site-lisp/bookmark-plus"
+  :defer 10
+  :config
+  (use-package bookmark+))
+
+(use-package browse-kill-ring+
+  :defer 10
+  :commands browse-kill-ring)
+
 (use-package project-persist  :ensure t  :defer t
   :config    (projectile-global-mode t))
 (project-persist-mode t)
-(use-package helm-descbinds  :ensure t  :defer t)
 
 (use-package emacs-eclim  :defer 5  :load-path "~/Development/repos/emacs/emacs-eclim"
   :bind ("C-c C-c" . company-complete)
@@ -199,6 +216,7 @@
 (global-set-key (kbd "C-c C-p") 'windmove-up)
 (global-set-key (kbd "C-c C-n") 'windmove-right)
 
+(use-package buffer-move :ensure t :defer t)
 (require 'buffer-move)
 (global-set-key (kbd "<C-S-up>")     'buf-move-up)
 (global-set-key (kbd "<C-S-down>")   'buf-move-down)
@@ -267,16 +285,74 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-(add-hook 'ido-setup-hook
-          (lambda ()
-            ;; Go straight home
-            (define-key ido-file-completion-map
-              (kbd "~")
-              (lambda ()
-                (interactive)
-                (if (looking-back "/")
-                    (insert "~/")
-                  (call-interactively 'self-insert-command))))))
+(use-package helm
+  :ensure helm
+  :diminish helm-mode
+  :init
+  (progn
+    (require 'helm-config)
+    (setq helm-candidate-number-limit 100)
+    ;; From https://gist.github.com/antifuchs/9238468
+    (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+          helm-input-idle-delay 0.01  ; this actually updates things
+                                        ; reeeelatively quickly.
+          helm-quick-update t
+          helm-M-x-requires-pattern nil
+          helm-ff-skip-boring-files t)
+    (helm-mode))
+  :bind (("C-c h" . helm-mini)
+         ("C-h a" . helm-apropos)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-x c o" . helm-occur)
+         ("C-x f"   . helm-multi-files)
+         ("C-x c s" . helm-swoop)
+         ("C-x c b" . my/helm-do-grep-book-notes)
+         ("C-x c SPC" . helm-all-mark-rings)))
+(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+
+(use-package helm-descbinds
+  :defer t
+  :bind (("C-h b" . helm-descbinds)
+         ("C-h w" . helm-descbinds)))
+
+(defun do-eval-buffer ()
+  (interactive)
+  (call-interactively 'eval-buffer)
+  (message "Buffer has been evaluated"))
+
+(defun do-eval-region ()
+  (interactive)
+  (call-interactively 'eval-region)
+  (message "Region has been evaluated"))
+
+(bind-keys :prefix-map my-lisp-devel-map
+           :prefix "C-c e"
+           ("E" . elint-current-buffer)
+           ("b" . do-eval-buffer)
+           ("c" . cancel-debug-on-entry)
+           ("d" . debug-on-entry)
+           ("e" . toggle-debug-on-error)
+           ("f" . emacs-lisp-byte-compile-and-load)
+           ("j" . emacs-lisp-mode)
+           ("l" . find-library)
+           ("r" . do-eval-region)
+           ("s" . scratch)
+           ("z" . byte-recompile-directory))
+
+
+;; (add-hook 'ido-setup-hook
+;;           (lambda ()
+;;             ;; Go straight home
+;;             (define-key ido-file-completion-map
+;;               (kbd "~")
+;;               (lambda ()
+;;                 (interactive)
+;;                 (if (looking-back "/")
+;;                     (insert "~/")
+;;                   (call-interactively 'self-insert-command))))))
 
 
 (add-hook 'after-init-hook 'global-company-mode)
