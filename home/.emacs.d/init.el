@@ -31,15 +31,17 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
 
-;;(eval-when-compile  (require 'use-package))
+(eval-when-compile
+  (require 'use-package))
+
 (setq use-package-verbose t)
+(use-package command-log-mode  :ensure t :defer t)
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
   :diminish ggtags-mode)
 (use-package diminish  :ensure t  :defer t)
-(use-package graphene  :ensure t  :defer t)
+(use-package graphene  :ensure t  :defer 5)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package ido :ensure t
   :init
@@ -114,7 +116,7 @@
 (project-persist-mode t)
 (use-package helm-descbinds  :ensure t  :defer t)
 
-(use-package emacs-eclim  :defer t  :load-path "~/Development/repos/emacs/emacs-eclim"
+(use-package emacs-eclim  :defer 5  :load-path "~/Development/repos/emacs/emacs-eclim"
   :bind ("C-c C-c" . company-complete)
   :config (progn
             (add-hook 'prog-mode-hook 'eclim-mode)
@@ -202,6 +204,11 @@
 (global-set-key (kbd "<C-S-down>")   'buf-move-down)
 (global-set-key (kbd "<C-S-left>")   'buf-move-left)
 (global-set-key (kbd "<C-S-right>")  'buf-move-right)
+
+(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "S-C-<down>") 'shrink-window)
+(global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 ;; Move more quickly
 (global-set-key (kbd "C-S-n")
