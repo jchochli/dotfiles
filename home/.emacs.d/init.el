@@ -286,7 +286,7 @@
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (use-package helm
-  :ensure helm
+  :ensure t
   :diminish helm-mode
   :init
   (progn
@@ -314,6 +314,7 @@
 (ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
 
 (use-package helm-descbinds
+  :ensure t
   :defer t
   :bind (("C-h b" . helm-descbinds)
          ("C-h w" . helm-descbinds)))
