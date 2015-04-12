@@ -43,18 +43,23 @@
   :diminish ggtags-mode)
 
 (use-package diminish  :ensure t  :defer t)
-;; (use-package graphene  :ensure t  :defer 5)
 (use-package bug-hunter  :ensure t  :defer t)
-;; (use-package ido :ensure t
-;;   :init
-;;   (ido-mode t))
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
 
-(use-package projectile  :ensure t  :defer t
-  :init (progn
-          (add-hook 'prog-mode-hook 'projectile-mode)))
-;; (global-projectile-mode t)
+(use-package projectile
+  :ensure t
+  :diminish projectile-mode
+  :commands projectile-global-mode
+  :defer 5
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (use-package helm-projectile
+    :ensure t
+    :config
+    (setq projectile-completion-system 'helm)
+    (helm-projectile-on))
+  (projectile-global-mode))
 
 (use-package switch-window  :ensure t  :defer t
   :bind ("C-x o" . switch-window))
@@ -72,8 +77,6 @@
   :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   :diminish  (cider-mode . ""))
 
-(use-package clojure-mode  :ensure t  :defer t)
-(use-package cider  :ensure t  :defer t)
 (use-package clj-refactor  :ensure t  :defer t)
 
 (use-package paredit  :ensure t  :defer t
@@ -82,50 +85,37 @@
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
 
-(use-package rainbow-mode  :ensure t  :defer t
+(use-package rainbow-mode  :ensure t  :defer 5
   :commands rainbow-mode)
 
-(use-package ace-jump-mode  :ensure t  :defer t
+(use-package ace-jump-mode  :ensure t  :defer 5
   :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
-(use-package ace-window  :ensure t  :defer t)
-;; 
-;; enable a more powerful jump back function from ace jump mode
-;;
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-
+(use-package ace-window  :ensure t  :defer 5)
 (use-package markdown-mode  :ensure t  :defer t)
 (use-package yaml-mode  :ensure t  :defer t)
 (use-package groovy-mode  :ensure t  :defer t)
+(use-package undo-tree  :ensure t  :defer t)
+
 (use-package web-mode  :ensure t  :defer t
   :mode (("\\.html$" . web-mode)
          ("\\.mustache\\'" . web-mode)))
+
 (use-package nxml  :ensure t  :defer t
   :mode ("\\.xsl\\'" . xml-mode))
-(use-package undo-tree  :ensure t  :defer t)
-(use-package macrostep  :ensure t  :defer t
-  :bind ("C-c e m" . macrostep-expand))
-(use-package browse-kill-ring  :ensure t  :defer t)
-(global-set-key (kbd "C-c y") 'browse-kill-ring)
-(use-package bm  :ensure t  :defer t)
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<f2>") 'bm-next)
-(global-set-key (kbd "<S-f2>") 'bm-previous)
+
+(use-package macrostep
+  :defer 5
+  :ensure t)
 
 (use-package bookmark
-  :load-path "site-lisp/bookmark-plus"
+  :ensure
   :defer 10
   :config
   (use-package bookmark+))
 
 (use-package browse-kill-ring+
+  :ensure
   :defer 10
   :commands browse-kill-ring)
 
@@ -133,31 +123,49 @@
   :config    (projectile-global-mode t))
 (project-persist-mode t)
 
-(use-package emacs-eclim  :defer 5  :load-path "~/Development/repos/emacs/emacs-eclim"
-  :bind ("C-c C-c" . company-complete)
-  :config (progn
-            (add-hook 'prog-mode-hook 'eclim-mode)
-            (company-emacs-eclim-setup)))
-
-;;(require 'eclim)
-;;(global-eclim-mode)
-;; (require 'eclimd)
-
-(use-package company  :ensure t  :defer t
-  :config 
+(use-package company  :ensure t  
+  :commands company-mode
+  :config
   (add-hook 'after-init-hook 'global-company-mode))
 
-;; regular auto-complete initialization
-;;(require 'auto-complete-config)
-;;(ac-config-default)
+(use-package yasnippet :ensure t)
+(use-package auto-complete :ensure t)
 
-;; add the emacs-eclim source
-;;(require 'ac-emacs-eclim-source)
-;;(ac-emacs-eclim-config)
+(use-package eclimd
+  :defer t
+  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :commands start-eclimd)
 
-;; (require 'company-emacs-eclim)
-;; (company-emacs-eclim-setup)
-;;(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
+(use-package emacs-eclim
+  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :bind ("C-." . company-complete)
+  :requires eclim
+  :mode (("\\.java\\'" . eclim-mode)
+	 ("\\.xsl\\'" . eclim-mode)
+	 ("\\.jspx\\'" . eclim-mode))
+  :config
+  (use-package eclim
+    :config
+    (global-eclim-mode)
+    (use-package company-emacs-eclim
+      :requires company
+      :config
+      (company-emacs-eclim-setup)))
+  (global-company-mode t))
+
+(require 'eclim)
+(global-eclim-mode)
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+(require 'auto-complete-config)
+(ac-config-default)
+(require 'ac-emacs-eclim-source)
+(ac-emacs-eclim-config)
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
 
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
@@ -210,23 +218,16 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-;; Wind-move
-(global-set-key (kbd "C-c C-j") 'windmove-left)
-(global-set-key (kbd "C-c C-k") 'windmove-down)
-(global-set-key (kbd "C-c C-p") 'windmove-up)
-(global-set-key (kbd "C-c C-n") 'windmove-right)
+(use-package buffer-move :ensure t :defer t
+  :bind (("C-c C-j" . buf-move-left)
+         ("C-c C-k" . buf-move-right)
+         ("C-c C-p" . buf-move-up)
+         ("C-c C-n" . buf-move-down)))
 
-(use-package buffer-move :ensure t :defer t)
-(require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
-
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
+(global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-S-<down>") 'shrink-window)
+(global-set-key (kbd "C-S-<up>") 'enlarge-window)
 
 ;; Move more quickly
 (global-set-key (kbd "C-S-n")
@@ -339,6 +340,7 @@
            ("f" . emacs-lisp-byte-compile-and-load)
            ("j" . emacs-lisp-mode)
            ("l" . find-library)
+           ("m" . macrostep-expand)
            ("r" . do-eval-region)
            ("s" . scratch)
            ("z" . byte-recompile-directory))
@@ -354,9 +356,6 @@
 ;;                 (if (looking-back "/")
 ;;                     (insert "~/")
 ;;                   (call-interactively 'self-insert-command))))))
-
-
-(add-hook 'after-init-hook 'global-company-mode)
 
 (load "server")
 (unless (server-running-p) (server-start))

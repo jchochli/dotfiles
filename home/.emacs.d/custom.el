@@ -7,7 +7,7 @@
  '(bmkp-last-as-first-bookmark-file "/Users/jameschochlinski/.emacs.d/bookmarks")
  '(browse-kill-ring-highlight-current-entry t)
  '(browse-kill-ring-highlight-inserted-item t)
- '(custom-enabled-themes (quote (graphene wombat)))
+ '(custom-enabled-themes (quote (wombat)))
  '(custom-safe-themes
    (quote
     ("ebd976c3d91de7c6858db3ba07c52238d545a106c8fbf05192913f6d42421621" "f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
