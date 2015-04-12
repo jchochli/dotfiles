@@ -31,225 +31,141 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
 
-;;(eval-when-compile  (require 'use-package))
+(eval-when-compile
+  (require 'use-package))
+
 (setq use-package-verbose t)
-
-(use-package company  :ensure t  :defer t
-  :config 
-  (add-hook 'after-init-hook 'global-company-mode))
-;; -------------------------------------
-;; (use-package company
-;;   :ensure t
-;;   :diminish company-mode
-;;   :commands company-mode
-;;   :config
-;;   ;; From https://github.com/company-mode/company-mode/issues/87
-;;   ;; See also https://github.com/company-mode/company-mode/issues/123
-;;   (defadvice company-pseudo-tooltip-unless-just-one-frontend
-;;       (around only-show-tooltip-when-invoked activate)
-;;     (when (company-explicit-action-p)
-;;       ad-do-it))
-;;   (use-package helm-company
-;;     :ensure t
-;;     :disabled t))
-;; (use-package ag
-;;   :ensure t
-;;   :commands (ag ag-regexp)
-;;   :init
-;;   (use-package helm-ag
-;;     :ensure t
-;;     :commands helm-ag))
-
-;; (use-package helm-grep
-;;   :ensure t
-;;   :commands helm-do-grep-1
-;;   :bind (("M-s f" . my-helm-do-grep-r)
-;;          ("M-s g" . my-helm-do-grep))
-;;   :preface
-;;   (defun my-helm-do-grep ()
-;;     (interactive)
-;;     (helm-do-grep-1 (list default-directory)))
-
-;;   (defun my-helm-do-grep-r ()
-;;     (interactive)
-;;     (helm-do-grep-1 (list default-directory) t)))
-
-;; (use-package helm-swoop
-;;   :ensure t
-;;   :bind (("M-s o" . helm-swoop)
-;;          ("M-s /" . helm-multi-swoop))
-;;   :config
-;;   (use-package helm-match-plugin
-;;     :config
-;;     (helm-match-plugin-mode 1)))
-
-;; (use-package helm-descbinds
-;;   :ensure t
-;;   :bind ("C-h b" . helm-descbinds)
-;;   :init
-;;   (fset 'describe-bindings 'helm-descbinds)
-;;   :config
-;;   (require 'helm-config))
-
-;; (use-package helm-config
-;;   :if (not running-alternate-emacs)
-;;   :demand t
-;;   :ensure t
-;;   :bind (("C-c h"   . helm-command-prefix)
-;;          ("C-h a"   . helm-apropos)
-;;          ("C-h e a" . my-helm-apropos)
-;;          ("C-x f"   . helm-multi-files)
-;;          ("M-s b"   . helm-occur)
-;;          ("M-s n"   . my-helm-find)
-;;          ("M-h"     . helm-resume))
-
-;;   :preface
-;;   (defun my-helm-find ()
-;;     (interactive)
-;;     (helm-find nil))
-
-;;   :config
-;;   (use-package helm-commands)
-;;   (use-package helm-files)
-;;   (use-package helm-buffers)
-;;   (use-package helm-mode
-;;     :diminish helm-mode
-;;     :init
-;;     (helm-mode 1))
-
-;;   (use-package helm-ls-git
-;;     :ensure t)
-
-;;   (use-package helm-match-plugin
-;;     :config
-;;     (helm-match-plugin-mode 1))
-
-;;   (helm-autoresize-mode 1)
-
-;;   (bind-key "<tab>" 'helm-execute-persistent-action helm-map)
-;;   (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-;;   (bind-key "C-z" 'helm-select-action helm-map)
-;;   (bind-key "A-v" 'helm-previous-page helm-map)
-
-;;   (when (executable-find "curl")
-;;     (setq helm-google-suggest-use-curl-p t)))
-
-;; (use-package projectile
-;;   :ensure t
-;;   :diminish projectile-mode
-;;   :commands projectile-global-mode
-;;   :defer 5
-;;   :bind-keymap ("C-c p" . projectile-command-map)
-;;   :config
-;;   (use-package helm-projectile
-;;     :config
-;;     (setq projectile-completion-system 'helm)
-;;     (helm-projectile-on))
-;;   (projectile-global-mode))
-;; ----------------------------------
+(use-package command-log-mode  :ensure t :defer t)
 
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
   :diminish ggtags-mode)
+
 (use-package diminish  :ensure t  :defer t)
-(use-package graphene  :ensure t  :defer t)
 (use-package bug-hunter  :ensure t  :defer t)
-(use-package ido :ensure t
-  :init
-  (ido-mode t))
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
-(use-package projectile  :ensure t  :defer t
-  :init (progn
-          (add-hook 'prog-mode-hook 'projectile-mode)))
-;; (global-projectile-mode t)
+
+(use-package projectile
+  :ensure t
+  :diminish projectile-mode
+  :commands projectile-global-mode
+  :defer 5
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config
+  (use-package helm-projectile
+    :ensure t
+    :config
+    (setq projectile-completion-system 'helm)
+    (helm-projectile-on))
+  (projectile-global-mode))
+
 (use-package switch-window  :ensure t  :defer t
   :bind ("C-x o" . switch-window))
+
 (use-package clojure-mode  :ensure t  :defer t
   :mode      ("\\.\\(clj\\|cljs\\)$" . clojure-mode)
   :init      (defun rename-clojure-modeline ()
                (interactive)
                (setq mode-name "CLJ"))
   :config    (add-hook 'clojure-mode-hook 'rename-clojure-modeline))
+
 (use-package cider  :ensure t  :defer t
   :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
   :config    (defalias 'cji 'cider-jack-in)
   :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
   :diminish  (cider-mode . ""))
-(use-package clojure-mode  :ensure t  :defer t)
-(use-package cider  :ensure t  :defer t)
+
 (use-package clj-refactor  :ensure t  :defer t)
+
 (use-package paredit  :ensure t  :defer t
   :init
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
-(use-package rainbow-mode  :ensure t  :defer t
+
+(use-package rainbow-mode  :ensure t  :defer 5
   :commands rainbow-mode)
-(use-package buffer-move :ensure t :defer t)
-(use-package ace-jump-mode  :ensure t  :defer t
+
+(use-package ace-jump-mode  :ensure t  :defer 5
   :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
-(use-package ace-window  :ensure t  :defer t)
-;; 
-;; enable a more powerful jump back function from ace jump mode
-;;
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-
+(use-package ace-window  :ensure t  :defer 5)
 (use-package markdown-mode  :ensure t  :defer t)
 (use-package yaml-mode  :ensure t  :defer t)
 (use-package groovy-mode  :ensure t  :defer t)
+(use-package undo-tree  :ensure t  :defer t)
+
 (use-package web-mode  :ensure t  :defer t
   :mode (("\\.html$" . web-mode)
          ("\\.mustache\\'" . web-mode)))
+
 (use-package nxml  :ensure t  :defer t
   :mode ("\\.xsl\\'" . xml-mode))
-(use-package undo-tree  :ensure t  :defer t)
-(use-package macrostep  :ensure t  :defer t
-  :bind ("C-c e m" . macrostep-expand))
-(use-package browse-kill-ring  :ensure t  :defer t)
-(global-set-key (kbd "C-c y") 'browse-kill-ring)
-(use-package bm  :ensure t  :defer t)
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<f2>") 'bm-next)
-(global-set-key (kbd "<S-f2>") 'bm-previous)
-(use-package bookmark+  :ensure t  :defer t)
-(use-package browse-kill-ring+  :ensure t  :defer t)
+
+(use-package macrostep
+  :defer 5
+  :ensure t)
+
+(use-package bookmark
+  :ensure
+  :defer 10
+  :config
+  (use-package bookmark+))
+
+(use-package browse-kill-ring+
+  :ensure
+  :defer 10
+  :commands browse-kill-ring)
+
 (use-package project-persist  :ensure t  :defer t
   :config    (projectile-global-mode t))
 (project-persist-mode t)
-(use-package helm-descbinds  :ensure t  :defer t)
 
-(use-package emacs-eclim  :defer t  :load-path "~/Development/repos/emacs/emacs-eclim"
-  :bind ("C-c C-c" . company-complete)
-  :config (progn
-            (add-hook 'prog-mode-hook 'eclim-mode)
-            (company-emacs-eclim-setup)))
+(use-package company  :ensure t  
+  :commands company-mode
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
 
-;;(require 'eclim)
-;;(global-eclim-mode)
-;; (require 'eclimd)
+(use-package yasnippet :ensure t)
+(use-package auto-complete :ensure t)
 
-;; regular auto-complete initialization
-;;(require 'auto-complete-config)
-;;(ac-config-default)
+(use-package eclimd
+  :defer t
+  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :commands start-eclimd)
 
-;; add the emacs-eclim source
-;;(require 'ac-emacs-eclim-source)
-;;(ac-emacs-eclim-config)
+(use-package emacs-eclim
+  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :bind ("C-." . company-complete)
+  :requires eclim
+  :mode (("\\.java\\'" . eclim-mode)
+	 ("\\.xsl\\'" . eclim-mode)
+	 ("\\.jspx\\'" . eclim-mode))
+  :config
+  (use-package eclim
+    :config
+    (global-eclim-mode)
+    (use-package company-emacs-eclim
+      :requires company
+      :config
+      (company-emacs-eclim-setup)))
+  (global-company-mode t))
 
-;; (require 'company-emacs-eclim)
-;; (company-emacs-eclim-setup)
-;;(define-key eclim-mode-map (kbd "C-c C-c") 'company-complete)
+(require 'eclim)
+(global-eclim-mode)
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+(require 'auto-complete-config)
+(ac-config-default)
+(require 'ac-emacs-eclim-source)
+(ac-emacs-eclim-config)
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
 
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
@@ -302,17 +218,16 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-;; Wind-move
-(global-set-key (kbd "C-c C-j") 'windmove-left)
-(global-set-key (kbd "C-c C-k") 'windmove-down)
-(global-set-key (kbd "C-c C-p") 'windmove-up)
-(global-set-key (kbd "C-c C-n") 'windmove-right)
+(use-package buffer-move :ensure t :defer t
+  :bind (("C-c C-j" . buf-move-left)
+         ("C-c C-k" . buf-move-right)
+         ("C-c C-p" . buf-move-up)
+         ("C-c C-n" . buf-move-down)))
 
-(require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+(global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-S-<down>") 'shrink-window)
+(global-set-key (kbd "C-S-<up>") 'enlarge-window)
 
 ;; Move more quickly
 (global-set-key (kbd "C-S-n")
@@ -371,19 +286,76 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-(add-hook 'ido-setup-hook
-          (lambda ()
-            ;; Go straight home
-            (define-key ido-file-completion-map
-              (kbd "~")
-              (lambda ()
-                (interactive)
-                (if (looking-back "/")
-                    (insert "~/")
-                  (call-interactively 'self-insert-command))))))
+(use-package helm
+  :ensure t
+  :diminish helm-mode
+  :init
+  (progn
+    (require 'helm-config)
+    (setq helm-candidate-number-limit 100)
+    ;; From https://gist.github.com/antifuchs/9238468
+    (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
+          helm-input-idle-delay 0.01  ; this actually updates things
+                                        ; reeeelatively quickly.
+          helm-quick-update t
+          helm-M-x-requires-pattern nil
+          helm-ff-skip-boring-files t)
+    (helm-mode))
+  :bind (("C-c h" . helm-mini)
+         ("C-h a" . helm-apropos)
+         ("C-x C-b" . helm-buffers-list)
+         ("C-x b" . helm-buffers-list)
+         ("M-y" . helm-show-kill-ring)
+         ("M-x" . helm-M-x)
+         ("C-x c o" . helm-occur)
+         ("C-x f"   . helm-multi-files)
+         ("C-x c s" . helm-swoop)
+         ("C-x c b" . my/helm-do-grep-book-notes)
+         ("C-x c SPC" . helm-all-mark-rings)))
+(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+
+(use-package helm-descbinds
+  :ensure t
+  :defer t
+  :bind (("C-h b" . helm-descbinds)
+         ("C-h w" . helm-descbinds)))
+
+(defun do-eval-buffer ()
+  (interactive)
+  (call-interactively 'eval-buffer)
+  (message "Buffer has been evaluated"))
+
+(defun do-eval-region ()
+  (interactive)
+  (call-interactively 'eval-region)
+  (message "Region has been evaluated"))
+
+(bind-keys :prefix-map my-lisp-devel-map
+           :prefix "C-c e"
+           ("E" . elint-current-buffer)
+           ("b" . do-eval-buffer)
+           ("c" . cancel-debug-on-entry)
+           ("d" . debug-on-entry)
+           ("e" . toggle-debug-on-error)
+           ("f" . emacs-lisp-byte-compile-and-load)
+           ("j" . emacs-lisp-mode)
+           ("l" . find-library)
+           ("m" . macrostep-expand)
+           ("r" . do-eval-region)
+           ("s" . scratch)
+           ("z" . byte-recompile-directory))
 
 
-(add-hook 'after-init-hook 'global-company-mode)
+;; (add-hook 'ido-setup-hook
+;;           (lambda ()
+;;             ;; Go straight home
+;;             (define-key ido-file-completion-map
+;;               (kbd "~")
+;;               (lambda ()
+;;                 (interactive)
+;;                 (if (looking-back "/")
+;;                     (insert "~/")
+;;                   (call-interactively 'self-insert-command))))))
 
 (load "server")
 (unless (server-running-p) (server-start))
