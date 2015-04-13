@@ -174,17 +174,23 @@
 (global-company-mode t)
 (global-set-key (kbd "C-.") 'company-complete)
 
-(require 'highlight-cl)
-(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
-(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
+(use-package highlight-cl
+  :ensure t
+  :demand t
+  :config  
+  (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
+  (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords))
 
 
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 
-(use-package guide-key  :ensure t  :defer t)
-(setq guide-key/guide-key-sequence t)
-(guide-key-mode 1)
+(use-package guide-key
+  :ensure t
+  :defer t
+  :config  
+  (setq guide-key/guide-key-sequence t)
+  (guide-key-mode 1))
 
 (use-package flycheck  :ensure t  :defer t)
 
