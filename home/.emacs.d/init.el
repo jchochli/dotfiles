@@ -37,15 +37,20 @@
 
 (setq use-package-verbose t)
 (use-package command-log-mode  :ensure t :defer t)
-
-(use-package ggtags :ensure t  :defer t
-  :commands ggtags-mode
-  :diminish ggtags-mode)
-
+;; dash
+;; f
+;; s
+(use-package dash  :ensure t  :defer t)
+(use-package f  :ensure t  :defer t)
+(use-package s  :ensure t  :defer t)
 (use-package diminish  :ensure t  :defer t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
+
+(use-package ggtags :ensure t  :defer t
+  :commands ggtags-mode
+  :diminish ggtags-mode)
 
 (use-package projectile
   :ensure t
@@ -137,6 +142,7 @@
   :commands start-eclimd)
 
 (use-package emacs-eclim
+  :demand t
   :load-path "~/Development/repos/emacs/emacs-eclim"
   :bind ("C-." . company-complete)
   :requires eclim
@@ -166,6 +172,12 @@
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
 (global-company-mode t)
+(global-set-key (kbd "C-.") 'company-complete)
+
+(require 'highlight-cl)
+(add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
+(add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords)
+
 
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
