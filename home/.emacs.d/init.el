@@ -37,9 +37,6 @@
 
 (setq use-package-verbose t)
 (use-package command-log-mode  :ensure t :defer t)
-;; dash
-;; f
-;; s
 (use-package dash  :ensure t  :defer t)
 (use-package f  :ensure t  :defer t)
 (use-package s  :ensure t  :defer t)
@@ -268,25 +265,6 @@
                   (interactive)
                   (ignore-errors (backward-char 5))))
 
-
-;; Function to create new functions that look for a specific pattern
-(use-package cl)
-(defun ffip-create-pattern-file-finder (&rest patterns)
-  (lexical-let ((patterns patterns))
-    (lambda ()
-      (interactive)
-      (let ((ffip-patterns patterns))
-        (find-file-in-project)))))
-
-;; Find file in project, with specific patterns
-(global-unset-key (kbd "C-x C-o"))
-(global-set-key (kbd "C-x C-o ja")
-                (ffip-create-pattern-file-finder "*.java"))
-(global-set-key (kbd "C-x C-o js")
-                (ffip-create-pattern-file-finder "*.js"))
-(global-set-key (kbd "C-x C-o jp")
-                (ffip-create-pattern-file-finder "*.jsp"))
-
 (use-package dired)
 (defun dired-back-to-top ()
   (interactive)
@@ -376,5 +354,6 @@
 ;;                   (call-interactively 'self-insert-command))))))
 
 (load "server")
-(unless (server-running-p) (server-start))
+(unless (server-running-p)
+  (server-start))
 
