@@ -161,10 +161,10 @@
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
-(require 'auto-complete-config)
-(ac-config-default)
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
+;;(require 'auto-complete-config)
+;;(ac-config-default)
+;;(require 'ac-emacs-eclim-source)
+;;(ac-emacs-eclim-config)
 (require 'company)
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
@@ -284,7 +284,6 @@
 
 (use-package helm
   :ensure t
-  :diminish helm-mode
   :init
   (progn
     (require 'helm-config)
@@ -298,15 +297,13 @@
           helm-ff-skip-boring-files t)
     (helm-mode))
   :bind (("C-c h" . helm-mini)
-         ("C-h a" . helm-apropos)
-         ("C-x C-b" . helm-buffers-list)
+         ("C-h a" . helm-apropos)        
          ("C-x b" . helm-buffers-list)
          ("M-y" . helm-show-kill-ring)
          ("M-x" . helm-M-x)
          ("C-x c o" . helm-occur)
          ("C-x f"   . helm-multi-files)
          ("C-x c s" . helm-swoop)
-         ("C-x c b" . my/helm-do-grep-book-notes)
          ("C-x c SPC" . helm-all-mark-rings)))
 (ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
 
