@@ -9,6 +9,15 @@
 (setq message-log-max 16384)
 (setq debug-on-error t)
 (add-to-list 'exec-path "/usr/local/bin")
+(global-auto-revert-mode t)
+
+;; eldoc
+(autoload 'turn-on-eldoc-mode "eldoc" nil t)
+;;(diminish 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 ;; Set locale to UTF8
 (set-language-environment 'utf-8)
@@ -40,18 +49,43 @@
 (use-package dash  :ensure t  :defer t)
 (use-package f  :ensure t  :defer t)
 (use-package s  :ensure t  :defer t)
-(use-package diminish  :ensure t  :defer t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
 
+(use-package diminish
+  :ensure t
+  :init
+  (defmacro rename-modeline (package-name mode new-name)
+    `(eval-after-load ,package-name
+       '(defadvice ,mode (after rename-modeline activate)
+          (setq mode-name ,new-name))))
+  (diminish 'isearch-mode))
+
+(use-package golden-ratio
+  :ensure t
+  :defer t
+  :diminish golden-ratio-mode
+  :init
+  (golden-ratio-mode 1)
+  (setq golden-ratio-auto-scale t)
+  (setq golden-ratio-exclude-modes '("ediff-mode"
+                                   "eshell-mode"
+                                   "dired-mode"
+                                   "helm-mode-find-file"))
+  (setq golden-ratio-exclude-buffer-names '(" *guide-key*"
+                                            "*helm-mini*"
+                                            "*helm-buffers*"
+                                            "*helm-mode-find-files*")))
+
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
-  :diminish ggtags-mode)
+;;  :diminish ggtags-mode
+  )
 
 (use-package projectile
   :ensure t
-  :diminish projectile-mode
+;;  :diminish projectile-mode
   :commands projectile-global-mode
   :defer 5
   :bind-keymap ("C-c p" . projectile-command-map)
@@ -66,18 +100,32 @@
 (use-package switch-window  :ensure t  :defer t
   :bind ("C-x o" . switch-window))
 
-(use-package clojure-mode  :ensure t  :defer t
-  :mode      ("\\.\\(clj\\|cljs\\)$" . clojure-mode)
-  :init      (defun rename-clojure-modeline ()
-               (interactive)
-               (setq mode-name "CLJ"))
-  :config    (add-hook 'clojure-mode-hook 'rename-clojure-modeline))
+(use-package clojure-mode
+  :ensure t
+  :init
+  (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+  :config
+  (rename-modeline "clojure-mode" clojure-mode "λ")
+  (use-package align-cljlet
+    :ensure t
+    :bind ("C-! a a" . align-cljlet)))
+
+(use-package clj-refactor
+  :ensure t
+  :init
+  (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+  :config
+  (cljr-add-keybindings-with-prefix "C-!"))
 
 (use-package cider  :ensure t  :defer t
   :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
   :config    (defalias 'cji 'cider-jack-in)
   :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  :diminish  (cider-mode . ""))
+;;  :diminish  (cider-mode . "")
+  )
 
 (use-package clj-refactor  :ensure t  :defer t)
 
@@ -122,13 +170,32 @@
   :commands browse-kill-ring)
 
 (use-package project-persist  :ensure t  :defer t
+  :init (project-persist-mode t)
   :config    (projectile-global-mode t))
-(project-persist-mode t)
 
-(use-package company  :ensure t  
-  :commands company-mode
+(use-package multiple-cursors
+  :ensure t
+  :bind 
+  (("C->" . mc/mark-next-like-this)
+   ("C-<" . mc/mark-previous-like-this)
+   ("C-*" . mc/mark-all-like-this)))
+
+(use-package company
+  :ensure t
+  :bind ("C-." . company-complete)
+  :init
+  (global-company-mode 1)
   :config
-  (add-hook 'after-init-hook 'global-company-mode))
+  (bind-keys :map company-active-map
+             ("C-n" . company-select-next)
+             ("C-p" . company-select-previous)
+             ("C-d" . company-show-doc-buffer)
+             ("<tab>" . company-complete)))
+
+;; (use-package company  :ensure t  
+;;   :commands company-mode
+;;   :config
+;;   (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package yasnippet :ensure t)
 (use-package auto-complete :ensure t)
@@ -180,7 +247,6 @@
 
 (use-package guide-key
   :ensure t
-  :defer t
   :config  
   (setq guide-key/guide-key-sequence t)
   (guide-key-mode 1))
