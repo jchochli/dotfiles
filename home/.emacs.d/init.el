@@ -3,13 +3,15 @@
   (message "Loading %s..." load-file-name))
 
 (setq user-full-name "James Chochlinski")
-(setq user-mail-address "jchochli@xpzen.com")
+(sqetq user-mail-address "jchochli@xpzen.com")
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode t)
 (setq message-log-max 16384)
 (setq debug-on-error t)
 (add-to-list 'exec-path "/usr/local/bin")
 (global-auto-revert-mode t)
+;;(defalias 'helm-buffer-match-major-mode 'helm-buffers-match-function)
+(defalias 'helm-buffer-match-major-mode 'helm-buffers-list--match-fn)
 
 ;; eldoc
 (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -32,14 +34,14 @@
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 (require 'package)
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                         ("melpa" . "http://melpa.org/packages/")))
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(setq load-prefer-newer t)
 (package-initialize)
-
-;; Bootstrap `use-package'
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+(require 'use-package)
 
 (eval-when-compile
   (require 'use-package))
@@ -61,22 +63,22 @@
        '(defadvice ,mode (after rename-modeline activate)
           (setq mode-name ,new-name))))
   (diminish 'isearch-mode))
-
+                                        
 (use-package golden-ratio
-  :ensure t
-  :defer t
-  :diminish golden-ratio-mode
-  :init
-  (golden-ratio-mode 1)
-  (setq golden-ratio-auto-scale t)
-  (setq golden-ratio-exclude-modes '("ediff-mode"
-                                   "eshell-mode"
-                                   "dired-mode"
-                                   "helm-mode-find-file"))
-  (setq golden-ratio-exclude-buffer-names '(" *guide-key*"
-                                            "*helm-mini*"
-                                            "*helm-buffers*"
-                                            "*helm-mode-find-files*")))
+   :ensure t
+   :defer t
+   :diminish golden-ratio-mode
+   :init
+   (golden-ratio-mode 1)
+   (setq golden-ratio-auto-scale t)
+   (setq golden-ratio-exclude-modes '("ediff-mode"
+                                    "eshell-mode"
+                                    "dired-mode"
+                                    "helm-mode-find-file"))
+   (setq golden-ratio-exclude-buffer-names '(" *guide-key*"
+                                             "*helm-mini*"
+                                             "*helm-buffers*"
+                                             "*helm-mode-find-files*")))
 
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
