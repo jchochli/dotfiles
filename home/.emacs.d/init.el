@@ -65,6 +65,7 @@
   (diminish 'isearch-mode))
                                         
 (use-package golden-ratio
+   :disabled
    :ensure t
    :defer t
    :diminish golden-ratio-mode
