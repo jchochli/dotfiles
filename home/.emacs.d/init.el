@@ -3,7 +3,7 @@
   (message "Loading %s..." load-file-name))
 
 (setq user-full-name "James Chochlinski")
-(sqetq user-mail-address "jchochli@xpzen.com")
+(setq user-mail-address "jchochli@xpzen.com")
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode t)
 (setq message-log-max 16384)
