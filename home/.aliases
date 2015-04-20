@@ -143,3 +143,4 @@ alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v exten
 alias rm="rm -i"
 alias ll="ls -alG"
 alias ec="emacsclient "
+alias et="emacsclient-terminal "
