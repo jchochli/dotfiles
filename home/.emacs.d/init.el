@@ -54,6 +54,8 @@
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
+(use-package yasnippet :ensure t)
+(use-package auto-complete :ensure t)
 
 (use-package diminish
   :ensure t
@@ -130,8 +132,6 @@
 ;;  :diminish  (cider-mode . "")
   )
 
-(use-package clj-refactor  :ensure t  :defer t)
-
 (use-package paredit  :ensure t  :defer t
   :init
   (add-hook 'clojure-mode-hook 'paredit-mode)
@@ -142,7 +142,8 @@
   :commands rainbow-mode)
 
 (use-package ace-jump-mode  :ensure t  :defer 5
-  :config (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
+  :config 
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
 (use-package ace-window  :ensure t  :defer 5)
 (use-package markdown-mode  :ensure t  :defer t)
@@ -194,14 +195,6 @@
              ("C-p" . company-select-previous)
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
-
-;; (use-package company  :ensure t  
-;;   :commands company-mode
-;;   :config
-;;   (add-hook 'after-init-hook 'global-company-mode))
-
-(use-package yasnippet :ensure t)
-(use-package auto-complete :ensure t)
 
 (use-package eclimd
   :defer t
@@ -418,4 +411,3 @@
 (load "server")
 (unless (server-running-p)
   (server-start))
-
