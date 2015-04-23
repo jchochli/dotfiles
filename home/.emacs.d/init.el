@@ -56,6 +56,7 @@
 (use-package puppet-mode  :ensure t  :defer t)
 (use-package yasnippet :ensure t)
 (use-package auto-complete :ensure t)
+(use-package flycheck  :ensure t  :defer t)
 
 (use-package diminish
   :ensure t
@@ -245,9 +246,8 @@
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
+  (setq guide-key/idle-delay 0.1)
   (guide-key-mode 1))
-
-(use-package flycheck  :ensure t  :defer t)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
