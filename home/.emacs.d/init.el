@@ -214,22 +214,26 @@
   (use-package eclim
     :config
     (global-eclim-mode)
+    (setq help-at-pt-display-when-idle t)
+    (setq help-at-pt-timer-delay 0.1)
+    (help-at-pt-set-timer)
     (use-package company-emacs-eclim
       :requires company
       :config
       (company-emacs-eclim-setup)))
-  (global-company-mode t))
+  (global-company-mode t)
+  (global-set-key (kbd "C-.") 'company-complete))
 
-(require 'eclim)
-(global-eclim-mode)
-(setq help-at-pt-display-when-idle t)
-(setq help-at-pt-timer-delay 0.1)
-(help-at-pt-set-timer)
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-(global-company-mode t)
-(global-set-key (kbd "C-.") 'company-complete)
+;; (require 'eclim)
+;; (global-eclim-mode)
+;; (setq help-at-pt-display-when-idle t)
+;; (setq help-at-pt-timer-delay 0.1)
+;; (help-at-pt-set-timer)
+;; (require 'company)
+;; (require 'company-emacs-eclim)
+;; (company-emacs-eclim-setup)
+;; (global-company-mode t)
+;; (global-set-key (kbd "C-.") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
@@ -407,6 +411,12 @@
 ;;                 (if (looking-back "/")
 ;;                     (insert "~/")
 ;;                   (call-interactively 'self-insert-command))))))
+
+(defun server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
 
 (load "server")
 (unless (server-running-p)
