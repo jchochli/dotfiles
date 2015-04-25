@@ -206,14 +206,15 @@
   :demand t
   :load-path "~/Development/repos/emacs/emacs-eclim"
   :bind ("C-." . company-complete)
-  :requires eclim
-  :mode (("\\.java\\'" . eclim-mode)
-	 ("\\.xsl\\'" . eclim-mode)
-	 ("\\.jspx\\'" . eclim-mode))
+  :requires eclim company-emacs-eclim company
+;;  :mode
+;;  (("\\.java\\'" . eclim-mode)
+;;   ("\\.xsl\\'" . eclim-mode)
+;;   ("\\.jspx\\'" . eclim-mode)) 
   :config
+  (global-eclim-mode)
   (use-package eclim
-    :config
-    (global-eclim-mode)
+    :config    
     (setq help-at-pt-display-when-idle t)
     (setq help-at-pt-timer-delay 0.1)
     (help-at-pt-set-timer)
@@ -250,7 +251,7 @@
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 0.1)
+  (setq guide-key/idle-delay 0.3)
   (guide-key-mode 1))
 
 (setq custom-file "~/.emacs.d/custom.el")
