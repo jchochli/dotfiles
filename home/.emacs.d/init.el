@@ -11,7 +11,7 @@
 (add-to-list 'exec-path "/usr/local/bin")
 (global-auto-revert-mode t)
 ;;(defalias 'helm-buffer-match-major-mode 'helm-buffers-match-function)
-(defalias 'helm-buffer-match-major-mode 'helm-buffers-list--match-fn)
+;;(defalias 'helm-buffer-match-major-mode 'helm-buffers-list--match-fn)
 
 ;; eldoc
 (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -67,27 +67,46 @@
           (setq mode-name ,new-name))))
   (diminish 'isearch-mode))
                                         
-(use-package golden-ratio
-   :disabled
-   :ensure t
-   :defer t
-   :diminish golden-ratio-mode
-   :init
-   (golden-ratio-mode 1)
-   (setq golden-ratio-auto-scale t)
-   (setq golden-ratio-exclude-modes '("ediff-mode"
-                                    "eshell-mode"
-                                    "dired-mode"
-                                    "helm-mode-find-file"))
-   (setq golden-ratio-exclude-buffer-names '(" *guide-key*"
-                                             "*helm-mini*"
-                                             "*helm-buffers*"
-                                             "*helm-mode-find-files*")))
-
 (use-package ggtags :ensure t  :defer t
   :commands ggtags-mode
 ;;  :diminish ggtags-mode
   )
+
+(use-package ido
+  :ensure t
+  :init (progn (ido-mode 1)
+               (ido-everywhere 1))
+  :config
+  (progn
+    (setq ido-case-fold t)
+    (setq ido-everywhere t)
+    (setq ido-enable-prefix nil)
+    (setq ido-enable-flex-matching t)
+    (setq ido-create-new-buffer 'always)
+    (setq ido-max-prospects 10)
+    (setq ido-use-faces nil)
+    (setq ido-file-extensions-order '(".rb" ".el" ".coffee" ".js"))
+    (add-to-list 'ido-ignore-files "\\.DS_Store")))
+
+(use-package yasnippet
+  :ensure t
+  :init
+  (progn
+    (use-package yasnippets)
+    (yas-global-mode 1)
+    (setq-default yas/prompt-functions '(yas/ido-prompt))))
+
+(use-package flx-ido
+  :ensure t
+  :init (flx-ido-mode 1))
+
+(use-package ido-vertical-mode
+  :ensure t
+  :init (ido-vertical-mode 1))
+
+(use-package idomenu
+  :ensure t
+  :bind ("M-i" . idomenu))
 
 (use-package projectile
   :ensure t
@@ -95,12 +114,7 @@
   :commands projectile-global-mode
   :defer 5
   :bind-keymap ("C-c p" . projectile-command-map)
-  :config
-  (use-package helm-projectile
-    :ensure t
-    :config
-    (setq projectile-completion-system 'helm)
-    (helm-projectile-on))
+  :config  
   (projectile-global-mode))
 
 (use-package switch-window  :ensure t  :defer t
@@ -109,12 +123,13 @@
 (use-package clojure-mode
   :ensure t
   :init
+  (setq projectile-completion-system 'ido)
   (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
   (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
   (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
   (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
   :config
-  (rename-modeline "clojure-mode" clojure-mode "λ")
+  (rename-modeline "clojure-mode" clojure-mode "λ")  
   (use-package align-cljlet
     :ensure t
     :bind ("C-! a a" . align-cljlet)))
@@ -346,6 +361,7 @@
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (use-package helm
+  :disabled t
   :ensure t
   :init
   (progn
@@ -368,13 +384,20 @@
          ("C-x f"   . helm-multi-files)
          ("C-x c s" . helm-swoop)
          ("C-x c SPC" . helm-all-mark-rings)))
-(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
+;;(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
 
 (use-package helm-descbinds
+  :disabled t
   :ensure t
   :defer t
   :bind (("C-h b" . helm-descbinds)
          ("C-h w" . helm-descbinds)))
+
+(use-package magit
+  :ensure t
+  :bind (("C-x g" . magit-status)
+         ("C-c g" . magit-status))
+  )
 
 (defun do-eval-buffer ()
   (interactive)
@@ -397,10 +420,10 @@
            ("j" . emacs-lisp-mode)
            ("l" . find-library)
            ("m" . macrostep-expand)
+           ("p" . eval-print-last-sexp)
            ("r" . do-eval-region)
            ("s" . scratch)
            ("z" . byte-recompile-directory))
-
 
 ;; (add-hook 'ido-setup-hook
 ;;           (lambda ()
