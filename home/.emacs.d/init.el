@@ -10,8 +10,6 @@
 (setq debug-on-error t)
 (add-to-list 'exec-path "/usr/local/bin")
 (global-auto-revert-mode t)
-;;(defalias 'helm-buffer-match-major-mode 'helm-buffers-match-function)
-;;(defalias 'helm-buffer-match-major-mode 'helm-buffers-list--match-fn)
 
 ;; eldoc
 (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -72,7 +70,7 @@
 ;;  :diminish ggtags-mode
   )
 
-(use-package ido
+(use-package ido   
   :ensure t
   :init (progn (ido-mode 1)
                (ido-everywhere 1))
@@ -86,7 +84,17 @@
     (setq ido-max-prospects 10)
     (setq ido-use-faces nil)
     (setq ido-file-extensions-order '(".rb" ".el" ".coffee" ".js"))
-    (add-to-list 'ido-ignore-files "\\.DS_Store")))
+    (add-to-list 'ido-ignore-files "\\.DS_Store"))
+    (add-hook 'ido-setup-hook
+            (lambda ()
+              ;; Go straight home
+              (define-key ido-file-completion-map
+                (kbd "~")
+                (lambda ()
+                  (interactive)
+                  (if (looking-back "/")
+                      (insert "~/")
+                    (call-interactively 'self-insert-command)))))))
 
 (use-package yasnippet
   :ensure t
@@ -323,25 +331,15 @@
 (global-set-key (kbd "C-S-<up>") 'enlarge-window)
 
 ;; Move more quickly
-(global-set-key (kbd "C-S-n")
+(global-set-key (kbd "M-n")
                 (lambda ()
                   (interactive)
                   (ignore-errors (next-line 5))))
 
-(global-set-key (kbd "C-S-p")
+(global-set-key (kbd "M-p")
                 (lambda ()
                   (interactive)
                   (ignore-errors (previous-line 5))))
-
-(global-set-key (kbd "C-S-f")
-                (lambda ()
-                  (interactive)
-                  (ignore-errors (forward-char 5))))
-
-(global-set-key (kbd "C-S-b")
-                (lambda ()
-                  (interactive)
-                  (ignore-errors (backward-char 5))))
 
 (use-package dired)
 (defun dired-back-to-top ()
@@ -360,44 +358,10 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-(use-package helm
-  :disabled t
-  :ensure t
-  :init
-  (progn
-    (require 'helm-config)
-    (setq helm-candidate-number-limit 100)
-    ;; From https://gist.github.com/antifuchs/9238468
-    (setq helm-idle-delay 0.0 ; update fast sources immediately (doesn't).
-          helm-input-idle-delay 0.01  ; this actually updates things
-                                        ; reeeelatively quickly.
-          helm-quick-update t
-          helm-M-x-requires-pattern nil
-          helm-ff-skip-boring-files t)
-    (helm-mode))
-  :bind (("C-c h" . helm-mini)
-         ("C-h a" . helm-apropos)        
-         ("C-x b" . helm-buffers-list)
-         ("M-y" . helm-show-kill-ring)
-         ("M-x" . helm-M-x)
-         ("C-x c o" . helm-occur)
-         ("C-x f"   . helm-multi-files)
-         ("C-x c s" . helm-swoop)
-         ("C-x c SPC" . helm-all-mark-rings)))
-;;(ido-mode -1) ;; Turn off ido mode in case I enabled it accidentally
-
-(use-package helm-descbinds
-  :disabled t
-  :ensure t
-  :defer t
-  :bind (("C-h b" . helm-descbinds)
-         ("C-h w" . helm-descbinds)))
-
 (use-package magit
   :ensure t
   :bind (("C-x g" . magit-status)
-         ("C-c g" . magit-status))
-  )
+         ("C-c g" . magit-status)))
 
 (defun do-eval-buffer ()
   (interactive)
@@ -424,17 +388,6 @@
            ("r" . do-eval-region)
            ("s" . scratch)
            ("z" . byte-recompile-directory))
-
-;; (add-hook 'ido-setup-hook
-;;           (lambda ()
-;;             ;; Go straight home
-;;             (define-key ido-file-completion-map
-;;               (kbd "~")
-;;               (lambda ()
-;;                 (interactive)
-;;                 (if (looking-back "/")
-;;                     (insert "~/")
-;;                   (call-interactively 'self-insert-command))))))
 
 (defun server-shutdown ()
   "Save buffers, Quit, and Shutdown (kill) server"
