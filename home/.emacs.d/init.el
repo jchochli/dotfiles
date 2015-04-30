@@ -52,9 +52,8 @@
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
-(use-package yasnippet :ensure t)
 (use-package auto-complete :ensure t)
-(use-package flycheck  :ensure t  :defer t)
+(use-package flycheck  :ensure t)
 
 (use-package diminish
   :ensure t
@@ -65,7 +64,7 @@
           (setq mode-name ,new-name))))
   (diminish 'isearch-mode))
                                         
-(use-package ggtags :ensure t  :defer t
+(use-package ggtags :ensure t
   :commands ggtags-mode
 ;;  :diminish ggtags-mode
   )
@@ -96,14 +95,6 @@
                       (insert "~/")
                     (call-interactively 'self-insert-command)))))))
 
-(use-package yasnippet
-  :ensure t
-  :init
-  (progn
-    (use-package yasnippets)
-    (yas-global-mode 1)
-    (setq-default yas/prompt-functions '(yas/ido-prompt))))
-
 (use-package flx-ido
   :ensure t
   :init (flx-ido-mode 1))
@@ -116,6 +107,14 @@
   :ensure t
   :bind ("M-i" . idomenu))
 
+(use-package yasnippet
+  :ensure t
+  :init
+  (progn
+    (use-package yasnippets)
+    (yas-global-mode 1)
+    (setq-default yas/prompt-functions '(yas/ido-prompt))))
+
 (use-package projectile
   :ensure t
 ;;  :diminish projectile-mode
@@ -125,17 +124,18 @@
   :config  
   (projectile-global-mode))
 
-(use-package switch-window  :ensure t  :defer t
+(use-package switch-window  :ensure t  
   :bind ("C-x o" . switch-window))
 
 (use-package clojure-mode
   :ensure t
   :init
-  (setq projectile-completion-system 'ido)
-  (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
+  (progn 
+    (setq projectile-completion-system 'ido)
+    (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode)))
   :config
   (rename-modeline "clojure-mode" clojure-mode "λ")  
   (use-package align-cljlet
@@ -149,14 +149,14 @@
   :config
   (cljr-add-keybindings-with-prefix "C-!"))
 
-(use-package cider  :ensure t  :defer t
+(use-package cider  :ensure t  
   :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
   :config    (defalias 'cji 'cider-jack-in)
   :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 ;;  :diminish  (cider-mode . "")
   )
 
-(use-package paredit  :ensure t  :defer t
+(use-package paredit  :ensure t  
   :init
   (add-hook 'clojure-mode-hook 'paredit-mode)
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
@@ -170,16 +170,16 @@
   (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
 
 (use-package ace-window  :ensure t  :defer 5)
-(use-package markdown-mode  :ensure t  :defer t)
-(use-package yaml-mode  :ensure t  :defer t)
-(use-package groovy-mode  :ensure t  :defer t)
-(use-package undo-tree  :ensure t  :defer t)
+(use-package markdown-mode  :ensure t  )
+(use-package yaml-mode  :ensure t  )
+(use-package groovy-mode  :ensure t  )
+(use-package undo-tree  :ensure t  )
 
-(use-package web-mode  :ensure t  :defer t
+(use-package web-mode  :ensure t  
   :mode (("\\.html$" . web-mode)
          ("\\.mustache\\'" . web-mode)))
 
-(use-package nxml  :ensure t  :defer t
+(use-package nxml  :ensure t  
   :mode ("\\.xsl\\'" . xml-mode))
 
 (use-package macrostep
@@ -197,7 +197,7 @@
   :defer 10
   :commands browse-kill-ring)
 
-(use-package project-persist  :ensure t  :defer t
+(use-package project-persist  :ensure t  
   :init (project-persist-mode t)
   :config    (projectile-global-mode t))
 
@@ -220,36 +220,35 @@
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
 
-(use-package eclimd
-  :defer t
+(use-package eclimd  
   :load-path "~/Development/repos/emacs/emacs-eclim"
   :commands start-eclimd)
 
 (use-package emacs-eclim
-  :demand t
+  :requires (eclim company-emacs-eclim company)
   :load-path "~/Development/repos/emacs/emacs-eclim"
-  :bind ("C-." . company-complete)
-  :requires eclim company-emacs-eclim company
-;;  :mode
-;;  (("\\.java\\'" . eclim-mode)
-;;   ("\\.xsl\\'" . eclim-mode)
-;;   ("\\.jspx\\'" . eclim-mode)) 
+  :mode
+  (("\\.java\\'" . eclim-mode)
+   ("\\.xsl\\'" . eclim-mode)
+   ("\\.jspx\\'" . eclim-mode))
+  :commands (eclim-mode)
+  :init
+  (message " eclim +++ ")
   :config
+  (message " ---- eclim ------ ")
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
   (global-eclim-mode)
-  (use-package eclim
+  (global-set-key (kbd "C-.") 'company-complete)
+  (use-package company-emacs-eclim
+    :requires company
     :config    
-    (setq help-at-pt-display-when-idle t)
-    (setq help-at-pt-timer-delay 0.1)
-    (help-at-pt-set-timer)
-    (use-package company-emacs-eclim
-      :requires company
-      :config
-      (company-emacs-eclim-setup)))
-  (global-company-mode t)
-  (global-set-key (kbd "C-.") 'company-complete))
+    (message " ---- company ------ ")
+    (company-emacs-eclim-setup)))
 
-;; (require 'eclim)
-;; (global-eclim-mode)
+(require 'eclim)
+(global-eclim-mode)
 ;; (setq help-at-pt-display-when-idle t)
 ;; (setq help-at-pt-timer-delay 0.1)
 ;; (help-at-pt-set-timer)
@@ -319,7 +318,7 @@
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-(use-package buffer-move :ensure t :defer t
+(use-package buffer-move :ensure t 
   :bind (("C-c C-j" . buf-move-left)
          ("C-c C-k" . buf-move-right)
          ("C-c C-p" . buf-move-up)
@@ -360,8 +359,7 @@
 
 (use-package magit
   :ensure t
-  :bind (("C-x g" . magit-status)
-         ("C-c g" . magit-status)))
+  :bind ("C-c g" . magit-status))
 
 (defun do-eval-buffer ()
   (interactive)
@@ -395,6 +393,6 @@
   (save-some-buffers)
   (kill-emacs))
 
-(load "server")
-(unless (server-running-p)
-  (server-start))
+;; (load "server")
+;; (unless (server-running-p)
+;;   (server-start))
