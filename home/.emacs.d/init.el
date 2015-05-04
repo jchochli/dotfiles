@@ -53,7 +53,7 @@
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t  :defer t)
 (use-package auto-complete :ensure t)
-(use-package flycheck  :ensure t)
+;;(use-package flycheck  :ensure t)
 
 (use-package diminish
   :ensure t
@@ -229,7 +229,6 @@
   :load-path "~/Development/repos/emacs/emacs-eclim"
   :mode
   (("\\.java\\'" . eclim-mode)
-   ("\\.xsl\\'" . eclim-mode)
    ("\\.jspx\\'" . eclim-mode))
   :commands (eclim-mode)
   :init

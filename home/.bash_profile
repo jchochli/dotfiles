@@ -50,7 +50,6 @@ fi
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 source "$HOME/bin/z.sh"
-source "$HOME/.bash_prompt"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 homeshick --quiet refresh
 
