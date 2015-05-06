@@ -1,10 +1,14 @@
 [ui]
 username = James Chochlinski <jchochlinski@payveris.com>
-merge = emacsclient
+#merge = emacsclient
 
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
 
 [merge-tools]
-ediff3.executable = emacsclient
-ediff3.args = --eval '(ediff-merge-with-ancestor "'$local'" "'$other'" "'$base'")'
+#emacs.executable = emacsclient
+#emacs.args = -q --eval "(require 'ediff)" --eval "(setq ediff-window-setup-function 'ediff-setup-windows-plain)" --eval "(add-hook 'ediff-quit-hook 'save-buffers-kill-emacs)" --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
+#emacs.premerge = False
+#emacs.args = --eval "(ediff-merge-with-ancestor \"$local\" \"$other\" \"$base\" nil \"$output\")"
+
+

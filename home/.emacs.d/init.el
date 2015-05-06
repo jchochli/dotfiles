@@ -1,237 +1,345 @@
-;;; init.el --- init file
-;; Require Emacs' package functionality
+(defconst emacs-start-time (current-time))
+(unless noninteractive
+  (message "Loading %s..." load-file-name))
+
+(setq user-full-name "James Chochlinski")
+(setq user-mail-address "jchochli@xpzen.com")
+(fset 'yes-or-no-p 'y-or-n-p)
+(show-paren-mode t)
+(setq message-log-max 16384)
 (setq debug-on-error t)
-(require 'package)
-
-;; Add the Melpa repository to the list of package sources
-(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("melpa-stable" . "http://melpa.org/packages/")))
-
 (add-to-list 'exec-path "/usr/local/bin")
+(global-auto-revert-mode t)
 
-;; Initialise the package system.
+;; eldoc
+(autoload 'turn-on-eldoc-mode "eldoc" nil t)
+;;(diminish 'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+
+;; Set locale to UTF8
+(set-language-environment 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(setq locale-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-selection-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+(setq load-prefer-newer t)
 (package-initialize)
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+(require 'use-package)
 
-(defvar my-packages
-  '(graphene
-    paredit
-    rainbow-delimiters
-    projectile
-    buffer-move
-    ace-jump-mode
-    ace-window
-    graphene
-    undo-tree
-    clojure-mode
-    cider
-    clj-refactor    
-    company
-    magit
-    magit-filenotify
-    ahg    
-    browse-kill-ring+
-    bm
-    helm-descbinds
-    emacs-eclim
-    know-your-http-well
-    4clojure))
+(eval-when-compile
+  (require 'use-package))
 
-;; multiple-cursors and expand-region?
+(setq use-package-verbose t)
+(use-package command-log-mode  :ensure t :defer t)
+(use-package dash  :ensure t  :defer t)
+(use-package f  :ensure t  :defer t)
+(use-package s  :ensure t  :defer t)
+(use-package bug-hunter  :ensure t  :defer t)
+(use-package visual-regexp  :ensure t  :defer t)
+(use-package puppet-mode  :ensure t  :defer t)
+(use-package auto-complete :ensure t)
+;;(use-package flycheck  :ensure t)
 
-(dolist (p my-packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+(use-package diminish
+  :ensure t
+  :init
+  (defmacro rename-modeline (package-name mode new-name)
+    `(eval-after-load ,package-name
+       '(defadvice ,mode (after rename-modeline activate)
+          (setq mode-name ,new-name))))
+  (diminish 'isearch-mode))
+                                        
+(use-package ggtags :ensure t
+  :commands ggtags-mode
+;;  :diminish ggtags-mode
+  )
 
-(defun ad-advised-definition-p (definition)
-  "Return non-nil if DEFINITION was generated from advice information."
-  (if (or (ad-lambda-p definition)
-	  (macrop definition)
-	  (ad-compiled-p definition))
-      (let ((docstring (ad-docstring definition)))
-	(and (stringp docstring)
-	     (get-text-property 0 'dynamic-docstring-function docstring)))))
+(use-package ido   
+  :ensure t
+  :init (progn (ido-mode 1)
+               (ido-everywhere 1))
+  :config
+  (progn
+    (setq ido-case-fold t)
+    (setq ido-everywhere t)
+    (setq ido-enable-prefix nil)
+    (setq ido-enable-flex-matching t)
+    (setq ido-create-new-buffer 'always)
+    (setq ido-max-prospects 10)
+    (setq ido-use-faces nil)
+    (setq ido-file-extensions-order '(".rb" ".el" ".coffee" ".js"))
+    (add-to-list 'ido-ignore-files "\\.DS_Store"))
+    (add-hook 'ido-setup-hook
+            (lambda ()
+              ;; Go straight home
+              (define-key ido-file-completion-map
+                (kbd "~")
+                (lambda ()
+                  (interactive)
+                  (if (looking-back "/")
+                      (insert "~/")
+                    (call-interactively 'self-insert-command)))))))
 
-(require 'graphene)
+(use-package flx-ido
+  :ensure t
+  :init (flx-ido-mode 1))
 
-(require 'ahg)
+(use-package ido-vertical-mode
+  :ensure t
+  :init (ido-vertical-mode 1))
 
-(require 'project-persist)
-(project-persist-mode t)
+(use-package idomenu
+  :ensure t
+  :bind ("M-i" . idomenu))
 
-(require 'rainbow-delimiters)
+(use-package yasnippet
+  :ensure t
+  :init
+  (progn
+    (use-package yasnippets)
+    (yas-global-mode 1)
+    (setq-default yas/prompt-functions '(yas/ido-prompt))))
 
-(require 'paredit)
-(add-hook 'clojure-mode-hook 'paredit-mode)
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
-(add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+(use-package projectile
+  :ensure t
+;;  :diminish projectile-mode
+  :commands projectile-global-mode
+  :defer 5
+  :bind-keymap ("C-c p" . projectile-command-map)
+  :config  
+  (projectile-global-mode))
 
-;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(use-package switch-window  :ensure t  
+  :bind ("C-x o" . switch-window))
 
-(projectile-global-mode)
-(global-rainbow-delimiters-mode)
+(use-package clojure-mode
+  :ensure t
+  :init
+  (progn 
+    (setq projectile-completion-system 'ido)
+    (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
+    (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode)))
+  :config
+  (rename-modeline "clojure-mode" clojure-mode "λ")  
+  (use-package align-cljlet
+    :ensure t
+    :bind ("C-! a a" . align-cljlet)))
+
+(use-package clj-refactor
+  :ensure t
+  :init
+  (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+  :config
+  (cljr-add-keybindings-with-prefix "C-!"))
+
+(use-package cider  :ensure t  
+  :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
+  :config    (defalias 'cji 'cider-jack-in)
+  :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;;  :diminish  (cider-mode . "")
+  )
+
+(use-package paredit  :ensure t  
+  :init
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+
+(use-package rainbow-mode  :ensure t  :defer 5
+  :commands rainbow-mode)
+
+(use-package ace-jump-mode  :ensure t  :defer 5
+  :config 
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
+
+(use-package ace-window  :ensure t  :defer 5)
+(use-package markdown-mode  :ensure t  )
+(use-package yaml-mode  :ensure t  )
+(use-package groovy-mode  :ensure t  )
+(use-package undo-tree  :ensure t  )
+
+(use-package web-mode  :ensure t  
+  :mode (("\\.html$" . web-mode)
+         ("\\.mustache\\'" . web-mode)))
+
+(use-package nxml  :ensure t  
+  :mode ("\\.xsl\\'" . xml-mode))
+
+(use-package macrostep
+  :defer 5
+  :ensure t)
+
+(use-package bookmark
+  :ensure
+  :defer 10
+  :config
+  (use-package bookmark+))
+
+(use-package browse-kill-ring+
+  :ensure
+  :defer 10
+  :commands browse-kill-ring)
+
+(use-package project-persist  :ensure t  
+  :init (project-persist-mode t)
+  :config    (projectile-global-mode t))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind 
+  (("C->" . mc/mark-next-like-this)
+   ("C-<" . mc/mark-previous-like-this)
+   ("C-*" . mc/mark-all-like-this)))
+
+(use-package company
+  :ensure t
+  :bind ("C-." . company-complete)
+  :init
+  (global-company-mode 1)
+  :config
+  (bind-keys :map company-active-map
+             ("C-n" . company-select-next)
+             ("C-p" . company-select-previous)
+             ("C-d" . company-show-doc-buffer)
+             ("<tab>" . company-complete)))
+
+(use-package eclimd  
+  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :commands start-eclimd)
+
+(use-package emacs-eclim
+  :requires (eclim company-emacs-eclim company)
+  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :mode
+  (("\\.java\\'" . eclim-mode)
+   ("\\.jspx\\'" . eclim-mode))
+  :commands (eclim-mode)
+  :init
+  (message " eclim +++ ")
+  :config
+  (message " ---- eclim ------ ")
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  (global-eclim-mode)
+  (global-set-key (kbd "C-.") 'company-complete)
+  (use-package company-emacs-eclim
+    :requires company
+    :config    
+    (message " ---- company ------ ")
+    (company-emacs-eclim-setup)))
 
 (require 'eclim)
 (global-eclim-mode)
-(require 'eclimd)
+;; (setq help-at-pt-display-when-idle t)
+;; (setq help-at-pt-timer-delay 0.1)
+;; (help-at-pt-set-timer)
+;; (require 'company)
+;; (require 'company-emacs-eclim)
+;; (company-emacs-eclim-setup)
+;; (global-company-mode t)
+;; (global-set-key (kbd "C-.") 'company-complete)
 
-(require 'browse-kill-ring)
-(global-set-key (kbd "C-c y") 'browse-kill-ring)
+(use-package highlight-cl
+  :ensure t
+  :demand t
+  :config  
+  (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
+  (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords))
 
-(require 'bm)
-(global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<f2>") 'bm-next)
-(global-set-key (kbd "<S-f2>") 'bm-previous)
 
-(require 'helm-descbinds)
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(blink-cursor-mode t)
- '(browse-kill-ring-highlight-current-entry t)
- '(browse-kill-ring-highlight-inserted-item t)
- '(custom-enabled-themes (quote (graphene wombat)))
- '(custom-safe-themes
-   (quote
-    ("f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
- '(desktop-save-mode t)
- '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse-luna")))
- '(eclim-executable "~/Development/bin/eclipse-luna/eclim")
- '(erc-email-userid "jchochli@xpzen.com")
- '(erc-nick "jchochli")
- '(erc-nick-uniquifier "_")
- '(indent-tabs-mode nil)
- '(tab-width 4))
+(use-package guide-key
+  :ensure t
+  :config  
+  (setq guide-key/guide-key-sequence t)
+  (setq guide-key/idle-delay 0.3)
+  (guide-key-mode 1))
+
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
 
 (setq-default tab-width 4)
-(setq javascript-indent-level 4)
+(setq js-indent-level 2)
+(setq jsx-indent-level 2)
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
-
-(defun my-sml-mode-hook () "Local defaults for SML mode"
-       (setq indent-tabs-mode nil))     ; never ever indent with tabs
-(add-hook 'sml-mode-hook 'my-sml-mode-hook)
-
+(winner-mode 1)
 (setq help-at-pt-display-when-idle t)
 (setq help-at-pt-timer-delay 0.1)
 (help-at-pt-set-timer)
 (setq visible-bell t)
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
-(setq tramp-default-method "ssh")
+;; (setq tramp-default-method "ssh")
+(setq tramp-verbose 9)
 
-;; regular auto-complete initialization
-(require 'auto-complete-config)
-(ac-config-default)
-
-;; add the emacs-eclim source
-(require 'ac-emacs-eclim-source)
-(ac-emacs-eclim-config)
-
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-(global-company-mode t)
-(define-key eclim-mode-map (kbd "C-c C-SPC") 'company-complete)
+(autoload 'bash-completion-dynamic-complete 
+  "bash-completion"
+  "BASH completion hook")
+(add-hook 'shell-dynamic-complete-functions
+          'bash-completion-dynamic-complete)
+(add-hook 'shell-command-complete-functions
+          'bash-completion-dynamic-complete)
 
 ;; keyboard bindings for lookup
 (define-key 'help-command (kbd "C-l") 'find-library)
 (define-key 'help-command (kbd "C-f") 'find-function)
 (define-key 'help-command (kbd "C-k") 'find-function-on-key)
 (define-key 'help-command (kbd "C-v") 'find-variable)
-                                       
+
 (defun other-window-backward (&optional n)
-    "Select Nth previous window."
-    (interactive "P")    
-    (other-window (- (prefix-numeric-value n))))
+  "Select Nth previous window."
+  (interactive "P")    
+  (other-window (- (prefix-numeric-value n))))
 
 (global-set-key (kbd "C-x C-p") 'other-window-backward)
 (global-set-key (kbd "C-x C-n") 'other-window)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
-(require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+(use-package buffer-move :ensure t 
+  :bind (("C-c C-j" . buf-move-left)
+         ("C-c C-k" . buf-move-right)
+         ("C-c C-p" . buf-move-up)
+         ("C-c C-n" . buf-move-down)))
+
+(global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+(global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+(global-set-key (kbd "C-S-<down>") 'shrink-window)
+(global-set-key (kbd "C-S-<up>") 'enlarge-window)
 
 ;; Move more quickly
-(global-set-key (kbd "C-S-n")
+(global-set-key (kbd "M-n")
                 (lambda ()
                   (interactive)
                   (ignore-errors (next-line 5))))
 
-(global-set-key (kbd "C-S-p")
+(global-set-key (kbd "M-p")
                 (lambda ()
                   (interactive)
                   (ignore-errors (previous-line 5))))
 
-(global-set-key (kbd "C-S-f")
-                (lambda ()
-                  (interactive)
-                  (ignore-errors (forward-char 5))))
-
-(global-set-key (kbd "C-S-b")
-                (lambda ()
-                  (interactive)
-                  (ignore-errors (backward-char 5))))
-
-;;
-;; ace jump mode major function
-;; 
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Emacs quick move minor mode"
-  t)
-;; you can select the key you prefer to
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-
-;; 
-;; enable a more powerful jump back function from ace jump mode
-;;
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
-(define-key global-map (kbd "C-x SPC") 'ace-jump-mode-pop-mark)
-
-
-
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
-(add-to-list 'auto-mode-alist '("\\.gradle\\'" . groovy-mode))
-(add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.xsl\\'" . web-mode))
-(add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-
-;; Function to create new functions that look for a specific pattern
-(defun ffip-create-pattern-file-finder (&rest patterns)
-  (lexical-let ((patterns patterns))
-    (lambda ()
-      (interactive)
-      (let ((ffip-patterns patterns))
-        (find-file-in-project)))))
-
-;; Find file in project, with specific patterns
-(global-unset-key (kbd "C-x C-o"))
-(global-set-key (kbd "C-x C-o ja")
-                (ffip-create-pattern-file-finder "*.java"))
-(global-set-key (kbd "C-x C-o js")
-                (ffip-create-pattern-file-finder "*.js"))
-(global-set-key (kbd "C-x C-o jp")
-                (ffip-create-pattern-file-finder "*.jsp"))
-
-
+(use-package dired)
 (defun dired-back-to-top ()
   (interactive)
   (beginning-of-buffer)
@@ -248,106 +356,42 @@
 (define-key dired-mode-map
   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
-(add-hook 'ido-setup-hook
- (lambda ()
-   ;; Go straight home
-   (define-key ido-file-completion-map
-     (kbd "~")
-     (lambda ()
-       (interactive)
-       (if (looking-back "/")
-           (insert "~/")
-         (call-interactively 'self-insert-command))))))
+(use-package magit
+  :ensure t
+  :bind ("C-c g" . magit-status))
 
-(add-hook 'shell-mode-hook 
-          'ansi-color-for-comint-mode-on)
-
-(progn (add-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
-       (setq comint-output-filter-functions (remove 'ansi-color-process-output comint-output-filter-functions))
-       (setq font-lock-unfontify-region-function 'xterm-color-unfontify-region))
-
-(progn (remove-hook 'comint-preoutput-filter-functions 'xterm-color-filter)
-       (add-to-list 'comint-output-filter-functions 'ansi-color-process-output)
-       (setq font-lock-unfontify-region-function 'font-lock-default-unfontify-region))
-
-
-(defadvice 4clojure-open-question (around 4clojure-open-question-around)
-  "Start a cider/nREPL connection if one hasn't already been started when
-opening 4clojure questions"
-  ad-do-it
-  (unless cider-current-clojure-buffer
-    (cider-jack-in)))
-
-(defun 4clojure-login (user pwd)
-  "Login to 4clojure"
-  (interactive "sWhat's your name? \nsAnd your password ")
-  (request
-   "http://www.4clojure.com/login"
-   :type "POST"
-   :sync t
-   :headers '(
-              ("User-Agent" . "Mozilla/5.0 (X11; Linux x86_64; rv:28.0) Gecko/20100101  Firefox/28.0")
-              ("Referer" . "http://www.4clojure.com/login")
-              )
-;   :parser 'buffer-string
-   :data `(("user" . ,user) ("pwd" . ,pwd))
-   :success (function*
-             (lambda (&key data &allow-other-keys)
-               data
-               )
-             )
-; when server send 302 header, `request` redirect request with original method POST, 
-; So 4clojure will not handle this redirect and given 404
-   :status-code '((404 . (lambda (&rest _) (message "login successful!"))))
-   )
-  )
-
-
-;; To load a file and run sml repl -> Press C-c C-v inside a sml file.
-;; To run the current files tests -> Press C-c C-r inside a sml file. It assumes the tests are inside the same directory.
-;; For example, If your code file is hw1.sml your test file should be named as hw1tests.sml in the same directory
-(require 'sml-mode)
-
-;;; Credits: https://gist.github.com/koddo/4555655
-(defun my-sml-restart-repl-and-load-current-file ()
+(defun do-eval-buffer ()
   (interactive)
-  (save-buffer)
-  (ignore-errors (with-current-buffer "*sml*"
-                   (comint-interrupt-subjob)
-                   (comint-send-eof)
-                   (let ((some-time 0.1))
-                     (while (process-status (get-process "sml"))
-                       (sleep-for some-time)))))
-  (flet ((sml--read-run-cmd ()
-           '("sml" "" nil))) ; (command args host)
-    (sml-prog-proc-send-buffer t)))
- 
-(defun my-sml-restart-repl-and-load-current-file-tests ()
+  (call-interactively 'eval-buffer)
+  (message "Buffer has been evaluated"))
+
+(defun do-eval-region ()
   (interactive)
-  (save-buffer)
-  (let ((code-file-name (replace-regexp-in-string "tests.sml$" ".sml" (buffer-file-name))))
-    (let ((test-file-name (replace-regexp-in-string ".sml$" "tests.sml" code-file-name))
-          (code-buffer (buffer-name)))
-      (find-file test-file-name)
-      (my-sml-restart-repl-and-load-current-file)
-      (switch-to-buffer-other-window code-buffer))))
- 
-(eval-after-load 'sml-mode
-  '(progn
-    (define-key sml-mode-map (kbd "C-j") 'reindent-then-newline-and-indent)
-    (define-key sml-mode-map (kbd "C-c C-s") 'sml-run)
-    (define-key sml-mode-map (kbd "C-c C-v") 'my-sml-restart-repl-and-load-current-file)
-    (define-key sml-mode-map (kbd "C-c C-r") 'my-sml-restart-repl-and-load-current-file-tests)))
+  (call-interactively 'eval-region)
+  (message "Region has been evaluated"))
 
+(bind-keys :prefix-map my-lisp-devel-map
+           :prefix "C-c e"
+           ("E" . elint-current-buffer)
+           ("b" . do-eval-buffer)
+           ("c" . cancel-debug-on-entry)
+           ("d" . debug-on-entry)
+           ("e" . toggle-debug-on-error)
+           ("f" . emacs-lisp-byte-compile-and-load)
+           ("j" . emacs-lisp-mode)
+           ("l" . find-library)
+           ("m" . macrostep-expand)
+           ("p" . eval-print-last-sexp)
+           ("r" . do-eval-region)
+           ("s" . scratch)
+           ("z" . byte-recompile-directory))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(defun server-shutdown ()
+  "Save buffers, Quit, and Shutdown (kill) server"
+  (interactive)
+  (save-some-buffers)
+  (kill-emacs))
 
-(load "server")
-(unless (server-running-p) (server-start))
-
-
+;; (load "server")
+;; (unless (server-running-p)
+;;   (server-start))
