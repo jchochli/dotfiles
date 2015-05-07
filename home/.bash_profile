@@ -41,12 +41,11 @@ GIT_AUTHOR_EMAIL="jchochlinski@xpzen.com"
 GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
+# If possible, add tab completion for many more commands
+[ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
+
 source "${HOME}/.docker_bash"
 source "${HOME}/.gradle_bash"
-if [[ ( -z "$INSIDE_EMACS" || "$EMACS_BASH_COMPLETE" = "t" ) &&\
-     -f /usr/local/etc/bash_completion ]]; then
-  . /usr/local/etc/bash_completion
-fi
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 source "$HOME/bin/z.sh"
