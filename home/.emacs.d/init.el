@@ -95,6 +95,12 @@
                       (insert "~/")
                     (call-interactively 'self-insert-command)))))))
 
+(defadvice ido-find-file (after find-file-sudo activate)
+  "Find file as root if necessary."
+  (unless (and buffer-file-name
+               (file-writable-p buffer-file-name))
+        (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
 (use-package flx-ido
   :ensure t
   :init (flx-ido-mode 1))
@@ -248,14 +254,14 @@
 
 (require 'eclim)
 (global-eclim-mode)
-;; (setq help-at-pt-display-when-idle t)
-;; (setq help-at-pt-timer-delay 0.1)
-;; (help-at-pt-set-timer)
-;; (require 'company)
-;; (require 'company-emacs-eclim)
-;; (company-emacs-eclim-setup)
-;; (global-company-mode t)
-;; (global-set-key (kbd "C-.") 'company-complete)
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
+(global-set-key (kbd "C-.") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
