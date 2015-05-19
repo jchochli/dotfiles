@@ -51,7 +51,7 @@
 (use-package s  :ensure t  :defer t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
-(use-package puppet-mode  :ensure t  :defer t)
+(use-package puppet-mode  :ensure t)
 (use-package auto-complete :ensure t)
 ;;(use-package flycheck  :ensure t)
 
@@ -203,7 +203,9 @@
   :defer 10
   :commands browse-kill-ring)
 
-(use-package project-persist  :ensure t  
+(use-package project-persist  
+  :disabled
+  :ensure t
   :init (project-persist-mode t)
   :config    (projectile-global-mode t))
 
@@ -266,10 +268,6 @@
   :config  
   (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
   (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords))
-
-
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
 
 (use-package guide-key
   :ensure t
@@ -364,6 +362,7 @@
 
 (use-package magit
   :ensure t
+  :defer 5
   :bind ("C-c g" . magit-status))
 
 (defun do-eval-buffer ()
