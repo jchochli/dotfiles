@@ -227,20 +227,17 @@
              ("<tab>" . company-complete)))
 
 (use-package eclimd  
-  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :load-path "~/Development/repos/elisp/emacs-eclim"
   :commands start-eclimd)
 
 (use-package emacs-eclim
   :requires (eclim company-emacs-eclim company)
-  :load-path "~/Development/repos/emacs/emacs-eclim"
+  :load-path "~/Development/repos/elisp/emacs-eclim"
   :mode
   (("\\.java\\'" . eclim-mode)
    ("\\.jspx\\'" . eclim-mode))
   :commands (eclim-mode)
-  :init
-  (message " eclim +++ ")
   :config
-  (message " ---- eclim ------ ")
   (setq help-at-pt-display-when-idle t)
   (setq help-at-pt-timer-delay 0.1)
   (help-at-pt-set-timer)
@@ -280,6 +277,9 @@
   (setq guide-key/guide-key-sequence t)
   (setq guide-key/idle-delay 0.3)
   (guide-key-mode 1))
+
+(use-package exec-path-from-shell
+  :ensure t)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
