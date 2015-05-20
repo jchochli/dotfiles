@@ -1,7 +1,3 @@
-function title() {
-    echo -n -e "\033]0;$1\007"
-}
-
 # Simple calculator
 function calc() {
 	local result=""
@@ -18,11 +14,6 @@ function calc() {
 		printf "$result"
 	fi
 	printf "\n"
-}
-
-# Change working directory to the top-most Finder window location
-function cdf() { # short for `cdfinder`
-	cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
 }
 
 # Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
@@ -172,13 +163,6 @@ function getcertnames() {
 	fi
 }
 
-# Manually remove a downloaded app or file from the quarantine
-function unquarantine() {
-	for attribute in com.apple.metadata:kMDItemDownloadedDate com.apple.metadata:kMDItemWhereFroms com.apple.quarantine; do
-		xattr -r -d "$attribute" "$@"
-	done
-}
-
 # `v` with no arguments opens the current directory in Vim, otherwise opens the
 # given location
 function v() {
@@ -207,17 +191,51 @@ function tre() {
 	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX
 }
 
-function setjdk() {
-  if [ $# -ne 0 ]; then
-   removeFromPath '/System/Library/Frameworks/JavaVM.framework/Home/bin'
-   if [ -n "${JAVA_HOME+x}" ]; then
-    removeFromPath $JAVA_HOME
-   fi
-   export JAVA_HOME=`/usr/libexec/java_home -v $@`
-   export PATH=$JAVA_HOME/bin:$PATH
-  fi
- }
- function removeFromPath() {
-  export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
- }
-setjdk 1.7
+
+function removeFromPath() {
+    export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
+}
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Linux
+    : # : is noop
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    # Change working directory to the top-most Finder window location
+    function title() {
+        echo -n -e "\033]0;$1\007"
+    }
+
+    # Change working directory to the top-most Finder window location
+    function cdf() { # short for `cdfinder`
+	    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+    }
+
+    function cdf() { # short for `cdfinder`
+	    cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+    }
+
+    # Manually remove a downloaded app or file from the quarantine  
+  function unquarantine() {
+	    for attribute in com.apple.metadata:kMDItemDownloadedDate com.apple.metadata:kMDItemWhereFroms com.apple.quarantine; do
+		    xattr -r -d "$attribute" "$@"
+	    done
+    }
+    
+    function setjdk() {
+        if [ $# -ne 0 ]; then
+            removeFromPath '/System/Library/Frameworks/JavaVM.framework/Home/bin'
+            if [ -n "${JAVA_HOME+x}" ]; then
+                removeFromPath $JAVA_HOME
+            fi
+            export JAVA_HOME=`/usr/libexec/java_home -v $@`
+            export PATH=$JAVA_HOME/bin:$PATH
+        fi
+    }
+    setjdk 1.7
+else
+    # Unknown.
+	: 
+fi
+
+

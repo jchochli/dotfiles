@@ -129,4 +129,14 @@ alias chromekill="ps ux | grep '[C]hrome Helper --type=renderer' | grep -v exten
 
 alias rm="rm -i"
 alias ll="ls -alG"
-alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Linux
+    : # : is noop
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+else
+    # Unknown.
+    :
+fi
