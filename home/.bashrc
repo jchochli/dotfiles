@@ -39,7 +39,7 @@ complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes Syste
 GIT_AUTHOR_NAME="James Chochlinski"
 GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
 git config --global user.name "$GIT_AUTHOR_NAME"
-GIT_AUTHOR_EMAIL="jchochlinski@xpzen.com"
+GIT_AUTHOR_EMAIL="jchochli@xpzen.com"
 GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
@@ -53,7 +53,7 @@ source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 source "$HOME/bin/z.sh"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 
-export NVM_DIR="/Users/jchochli/.nvm"
+export NVM_DIR="~/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 homeshick --quiet refresh
