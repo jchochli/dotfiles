@@ -44,6 +44,9 @@
 (eval-when-compile
   (require 'use-package))
 
+(when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize))
+
 (setq use-package-verbose t)
 (use-package command-log-mode  :ensure t :defer t)
 (use-package dash  :ensure t  :defer t)
@@ -53,7 +56,8 @@
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package puppet-mode  :ensure t)
 (use-package auto-complete :ensure t)
-;;(use-package flycheck  :ensure t)
+(use-package dash-at-point :ensure t)
+(use-package flycheck  :ensure t)
 
 (use-package diminish
   :ensure t
