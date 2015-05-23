@@ -81,7 +81,7 @@
 	default = matching
 [user]
 	name = James Chochlinski
-	email = jchochlinski@xpzen.com
+	email = jchochli@xpzen.com
 [difftool "emacsclient"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
