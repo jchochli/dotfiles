@@ -26,6 +26,7 @@
 (set-default-coding-systems 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+(setq magit-last-seen-setup-instructions "1.4.0")
 
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -48,13 +49,13 @@
     (exec-path-from-shell-initialize))
 
 (setq use-package-verbose t)
-(use-package command-log-mode  :ensure t :defer t)
-(use-package dash  :ensure t  :defer t)
-(use-package f  :ensure t  :defer t)
-(use-package s  :ensure t  :defer t)
+(use-package command-log-mode :ensure t :defer t)
+(use-package dash :ensure t)
+(use-package f :ensure t)
+(use-package s :ensure t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
-(use-package puppet-mode  :ensure t)
+(use-package puppet-mode  :ensure t :defer t)
 (use-package auto-complete :ensure t)
 (use-package dash-at-point :ensure t)
 (use-package flycheck  :ensure t)
@@ -233,12 +234,14 @@
              ("<tab>" . company-complete)))
 
 (use-package eclimd  
-  :load-path "~/Development/repos/elisp/emacs-eclim"
+  :load-path "~/Development/repos/elisp/senny-emacs-eclim"
+  ;; :ensure t
   :commands start-eclimd)
 
-(use-package emacs-eclim
+(use-package eclim
+  ;; :ensure t
   :requires (eclim company-emacs-eclim company)
-  :load-path "~/Development/repos/elisp/emacs-eclim"
+  :load-path "~/Development/repos/elisp/senny-emacs-eclim"
   :mode
   (("\\.java\\'" . eclim-mode)
    ("\\.jspx\\'" . eclim-mode))
@@ -252,7 +255,6 @@
   (use-package company-emacs-eclim
     :requires company
     :config    
-    (message " ---- company ------ ")
     (company-emacs-eclim-setup)))
 
 (require 'eclim)
@@ -277,7 +279,7 @@
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 0.3)
+  (setq guide-key/idle-delay 1.0)
   (guide-key-mode 1))
 
 (use-package exec-path-from-shell
@@ -400,6 +402,18 @@
   (interactive)
   (save-some-buffers)
   (kill-emacs))
+
+(defun was-compiled-p (path)
+  "Does the directory at PATH contain any .elc files?"
+  (--any-p (f-ext? it "elc") (f-files path)))
+
+(defun ensure-packages-compiled ()
+  "If any packages installed with package.el aren't compiled yet, compile them."
+  (--each (f-directories package-user-dir)
+    (unless (was-compiled-p it)
+      (byte-recompile-directory it 0))))
+
+(ensure-packages-compiled)
 
 ;; (load "server")
 ;; (unless (server-running-p)
