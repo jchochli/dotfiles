@@ -227,14 +227,14 @@
              ("<tab>" . company-complete)))
 
 (use-package eclimd  
-  :load-path "~/Development/repos/elisp/senny-emacs-eclim"
+  :load-path "~/Development/repos/elisp/emacs-eclim"
   ;; :ensure t
   :commands start-eclimd)
 
 (use-package eclim
   ;; :ensure t
   :requires (eclim company-emacs-eclim company)
-  :load-path "~/Development/repos/elisp/senny-emacs-eclim"
+  :load-path "~/Development/repos/elisp/emacs-eclim"
   :mode
   (("\\.java\\'" . eclim-mode)
    ("\\.jspx\\'" . eclim-mode))
@@ -244,7 +244,7 @@
   (setq help-at-pt-timer-delay 0.1)
   (help-at-pt-set-timer)
   (global-eclim-mode)
-  (global-set-key (kbd "C-.") 'company-complete)
+  (global-set-key (kbd "C-c .") 'company-complete)
   (use-package company-emacs-eclim
     :requires company
     :config    
@@ -259,7 +259,7 @@
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
 (global-company-mode t)
-(global-set-key (kbd "C-.") 'company-complete)
+(global-set-key (kbd "C-c .") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
@@ -276,7 +276,10 @@
   (guide-key-mode 1))
 
 (use-package exec-path-from-shell
-  :ensure t)
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)))
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
