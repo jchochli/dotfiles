@@ -44,19 +44,23 @@
 (eval-when-compile
   (require 'use-package))
 
-(when (memq window-system '(mac ns))
-    (exec-path-from-shell-initialize))
-
 (setq use-package-verbose t)
+
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns))
+    (exec-path-from-shell-initialize)))
+
 (use-package command-log-mode  :ensure t :defer t)
 (use-package dash  :ensure t  :defer t)
-(use-package f  :ensure t  :defer t)
-(use-package s  :ensure t  :defer t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
-(use-package puppet-mode  :ensure t)
+(use-package puppet-mode  :ensure t :defer t)
+(use-package dash-at-point :ensure t :defer t)
 (use-package auto-complete :ensure t)
-(use-package dash-at-point :ensure t)
+(use-package f  :ensure t)
+(use-package s  :ensure t)
 (use-package flycheck  :ensure t)
 
 (use-package diminish
@@ -69,9 +73,7 @@
   (diminish 'isearch-mode))
                                         
 (use-package ggtags :ensure t
-  :commands ggtags-mode
-;;  :diminish ggtags-mode
-  )
+  :commands ggtags-mode)
 
 (use-package ido   
   :ensure t
@@ -86,7 +88,7 @@
     (setq ido-create-new-buffer 'always)
     (setq ido-max-prospects 10)
     (setq ido-use-faces nil)
-    (setq ido-file-extensions-order '(".rb" ".el" ".coffee" ".js"))
+    (setq ido-file-extensions-order '(".el" ".java" ".js" ".rb"))
     (add-to-list 'ido-ignore-files "\\.DS_Store"))
     (add-hook 'ido-setup-hook
             (lambda ()
@@ -117,6 +119,15 @@
   :ensure t
   :bind ("M-i" . idomenu))
 
+(use-package smex
+  :ensure t
+  :init (smex-initialize)
+    :bind ("M-x" . smex))
+
+(use-package ido-ubiquitous
+  :ensure t
+  :init (ido-ubiquitous-mode 1))
+
 (use-package yasnippet
   :ensure t
   :init
@@ -127,9 +138,7 @@
 
 (use-package projectile
   :ensure t
-;;  :diminish projectile-mode
   :commands projectile-global-mode
-  :defer 5
   :bind-keymap ("C-c p" . projectile-command-map)
   :config  
   (projectile-global-mode))
@@ -162,9 +171,7 @@
 (use-package cider  :ensure t  
   :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
   :config    (defalias 'cji 'cider-jack-in)
-  :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-;;  :diminish  (cider-mode . "")
-  )
+  :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode))
 
 (use-package paredit  :ensure t  
   :init
@@ -172,14 +179,16 @@
   (add-hook 'cider-repl-mode-hook 'paredit-mode)
   (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
 
-(use-package rainbow-mode  :ensure t  :defer 5
+(use-package rainbow-mode  :ensure t  
   :commands rainbow-mode)
 
-(use-package ace-jump-mode  :ensure t  :defer 5
-  :config 
-  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode))
+(use-package ace-jump-mode
+  :ensure t
+  :commands ace-jump-mode
+  :init
+    (bind-key "C-c SPC" 'ace-jump-mode))
 
-(use-package ace-window  :ensure t  :defer 5)
+(use-package ace-window  :ensure t )
 (use-package markdown-mode  :ensure t  )
 (use-package yaml-mode  :ensure t  )
 (use-package groovy-mode  :ensure t  )
@@ -193,32 +202,23 @@
   :mode ("\\.xsl\\'" . xml-mode))
 
 (use-package macrostep
-  :defer 5
   :ensure t)
 
 (use-package bookmark
   :ensure
-  :defer 10
   :config
   (use-package bookmark+))
 
 (use-package browse-kill-ring+
   :ensure
-  :defer 10
   :commands browse-kill-ring)
 
-(use-package project-persist  
-  :disabled
+(use-package guide-key
   :ensure t
-  :init (project-persist-mode t)
-  :config    (projectile-global-mode t))
-
-(use-package multiple-cursors
-  :ensure t
-  :bind 
-  (("C->" . mc/mark-next-like-this)
-   ("C-<" . mc/mark-previous-like-this)
-   ("C-*" . mc/mark-all-like-this)))
+  :config  
+  (setq guide-key/guide-key-sequence t)
+  (setq guide-key/idle-delay 1.0)
+  (guide-key-mode 1))
 
 (use-package company
   :ensure t
@@ -252,7 +252,6 @@
   (use-package company-emacs-eclim
     :requires company
     :config    
-    (message " ---- company ------ ")
     (company-emacs-eclim-setup)))
 
 (require 'eclim)
@@ -272,16 +271,6 @@
   :config  
   (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
   (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords))
-
-(use-package guide-key
-  :ensure t
-  :config  
-  (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 0.3)
-  (guide-key-mode 1))
-
-(use-package exec-path-from-shell
-  :ensure t)
 
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
@@ -366,7 +355,6 @@
 
 (use-package magit
   :ensure t
-  :defer 5
   :bind ("C-c g" . magit-status))
 
 (defun do-eval-buffer ()
