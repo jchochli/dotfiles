@@ -216,7 +216,7 @@
 
 (use-package company
   :ensure t
-  :bind ("C-." . company-complete)
+  :bind ("M-/" . company-complete)
   :init
   (global-company-mode 1)
   :config
@@ -244,7 +244,7 @@
   (setq help-at-pt-timer-delay 0.1)
   (help-at-pt-set-timer)
   (global-eclim-mode)
-  (global-set-key (kbd "C-c .") 'company-complete)
+  (global-set-key (kbd "M-/") 'company-complete)
   (use-package company-emacs-eclim
     :requires company
     :config    
@@ -259,7 +259,7 @@
 (require 'company-emacs-eclim)
 (company-emacs-eclim-setup)
 (global-company-mode t)
-(global-set-key (kbd "C-c .") 'company-complete)
+(global-set-key (kbd "M-/") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
