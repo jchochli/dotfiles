@@ -411,6 +411,17 @@
          ("Capfile$" . ruby-mode)
                   ("Guardfile$" . ruby-mode)))
 
+(use-package ert-runner
+  :ensure t)
+
+(use-package overseer
+  :ensure t)
+
+(use-package undo-tree
+  :ensure t
+  :bind (("M-z" . undo-tree-undo)
+         ("M-s-z" . undo-tree-redo)))
+
 (defun do-eval-buffer ()
   (interactive)
   (call-interactively 'eval-buffer)
