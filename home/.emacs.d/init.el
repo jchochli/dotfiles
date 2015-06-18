@@ -211,7 +211,7 @@
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 1.0)
+  (setq guide-key/idle-delay 1.5)
   (guide-key-mode 1))
 
 (use-package company
