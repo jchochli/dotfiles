@@ -122,6 +122,8 @@
   :ensure t
   :init (ido-ubiquitous-mode 1))
 
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
+
 (use-package yasnippet
   :ensure t
   :init
