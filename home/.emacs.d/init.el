@@ -412,15 +412,20 @@
                   ("Guardfile$" . ruby-mode)))
 
 (use-package ert-runner
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package overseer
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package undo-tree
   :ensure t
   :bind (("M-z" . undo-tree-undo)
          ("M-s-z" . undo-tree-redo)))
+
+(use-package sqlup-mode
+  :ensure t)
 
 (defun do-eval-buffer ()
   (interactive)
@@ -439,7 +444,8 @@
            ("c" . cancel-debug-on-entry)
            ("d" . debug-on-entry)
            ("e" . toggle-debug-on-error)
-           ("f" . emacs-lisp-byte-compile-and-load)
+           ("F" . emacs-lisp-byte-compile-and-load)
+           ("f" . find-function)
            ("j" . emacs-lisp-mode)
            ("l" . find-library)
            ("m" . macrostep-expand)
