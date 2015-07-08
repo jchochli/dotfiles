@@ -122,6 +122,8 @@
   :ensure t
   :init (ido-ubiquitous-mode 1))
 
+(setq ido-vertical-define-keys 'C-n-and-C-p-only)
+
 (use-package yasnippet
   :ensure t
   :init
@@ -226,40 +228,40 @@
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
 
-(use-package eclimd  
-  :load-path "~/Development/repos/elisp/emacs-eclim"
-  ;; :ensure t
-  :commands start-eclimd)
+;; (use-package eclimd  
+;;   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
+;;   :ensure t
+;;   :commands start-eclimd)
 
-(use-package eclim
-  ;; :ensure t
-  :requires (eclim company-emacs-eclim company)
-  :load-path "~/Development/repos/elisp/emacs-eclim"
-  :mode
-  (("\\.java\\'" . eclim-mode)
-   ("\\.jspx\\'" . eclim-mode))
-  :commands (eclim-mode)
-  :config
-  (setq help-at-pt-display-when-idle t)
-  (setq help-at-pt-timer-delay 0.1)
-  (help-at-pt-set-timer)
-  (global-eclim-mode)
-  (global-set-key (kbd "M-/") 'company-complete)
-  (use-package company-emacs-eclim
-    :requires company
-    :config    
-    (company-emacs-eclim-setup)))
+;; (use-package eclim
+;;   :ensure t
+;;   :requires (eclim company-emacs-eclim company)
+;;   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
+;;   :mode
+;;   (("\\.java\\'" . eclim-mode)
+;;    ("\\.jspx\\'" . eclim-mode))
+;;   :commands (eclim-mode)
+;;   :config
+;;   (setq help-at-pt-display-when-idle t)
+;;   (setq help-at-pt-timer-delay 0.1)
+;;   (help-at-pt-set-timer)
+;;   (global-eclim-mode)
+;;   (global-set-key (kbd "M-/") 'company-complete)
+;;   (use-package company-emacs-eclim
+;;     :requires company
+;;     :config    
+;;     (company-emacs-eclim-setup)))
 
-(require 'eclim)
-(global-eclim-mode)
-(setq help-at-pt-display-when-idle t)
-(setq help-at-pt-timer-delay 0.1)
-(help-at-pt-set-timer)
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-(global-company-mode t)
-(global-set-key (kbd "M-/") 'company-complete)
+;; (require 'eclim)
+;; (global-eclim-mode)
+;; (setq help-at-pt-display-when-idle t)
+;; (setq help-at-pt-timer-delay 0.1)
+;; (help-at-pt-set-timer)
+;; (require 'company)
+;; (require 'company-emacs-eclim)
+;; (company-emacs-eclim-setup)
+;; (global-company-mode t)
+;; (global-set-key (kbd "M-/") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
@@ -367,6 +369,7 @@
   :bind ("C-c g" . magit-status))
 
 (use-package ert-runner
+  :defer t
   :ensure t)
 
 (use-package overseer
@@ -424,3 +427,4 @@
 ;; (load "server")
 ;; (unless (server-running-p)
 ;;   (server-start))
+(put 'upcase-region 'disabled nil)
