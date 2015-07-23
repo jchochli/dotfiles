@@ -27,7 +27,6 @@
     # pr = "!f() { git fetch $1 pull/$2/head:pr-$2 && git checkout pr-$2; }; f"
     pr = "!f() { git fetch $1 refs/pull/$2/head:pr/$2 && git checkout pr/$2; }; f"
     update-pr = "!f() { git fetch $1 refs/pull/$2/head:pr/$2_updated && git rebase pr/$2_updated pr/$2 && git branch -d pr/$2_updated; }; f"
-   
 
 [apply]
 	# Detect whitespace errors when applying a patch

@@ -71,7 +71,7 @@
        '(defadvice ,mode (after rename-modeline activate)
           (setq mode-name ,new-name))))
   (diminish 'isearch-mode))
-                                        
+
 (use-package ggtags :ensure t
   :commands ggtags-mode)
 
@@ -376,49 +376,6 @@
   :ensure t
   :bind ("C-c g" . magit-status))
 
-(use-package ruby-mode
-  :ensure t
-  :init
-  (progn
-    (use-package rvm
-      :ensure t
-      :init (rvm-use-default)
-      :config (setq rvm-verbose nil))
-    (use-package ruby-tools   :ensure t)
-    (use-package rhtml-mode
-      :ensure t
-      :mode (("\\.rhtml$" . rhtml-mode)
-             ("\\.html\\.erb$" . rhtml-mode)))
-    (use-package rinari
-      :ensure t
-      :init (global-rinari-mode 1)
-      :config (setq ruby-insert-encoding-magic-comment nil))
-    (use-package rspec-mode
-      :ensure t      
-      :config
-      (progn
-        (setq rspec-use-rvm t)
-        (setq rspec-use-rake-when-possible nil)
-        (defadvice rspec-compile (around rspec-compile-around activate)
-          "Use BASH shell for running the specs because of ZSH issues."
-          (let ((shell-file-name "/bin/bash"))
-            ad-do-it)))))
-  :config
-  (progn
-    (setq ruby-align-to-stmt-keywords '(begin if while unless until case for def))
-    (add-hook 'ruby-mode-hook 'rvm-activate-corresponding-ruby)
-    (setq ruby-deep-indent-paren nil))
-  :bind (("C-M-h" . backward-kill-word)
-         ("C-M-n" . scroll-up-five)
-         ("C-M-p" . scroll-down-five))
-  :mode (("\\.rake$" . ruby-mode)
-         ("\\.gemspec$" . ruby-mode)
-         ("\\.ru$" . ruby-mode)
-         ("Rakefile$" . ruby-mode)
-         ("Gemfile$" . ruby-mode)
-         ("Capfile$" . ruby-mode)
-                  ("Guardfile$" . ruby-mode)))
-
 (use-package ert-runner
   :defer t
   :ensure t
@@ -481,6 +438,49 @@
   (--each (f-directories package-user-dir)
     (unless (was-compiled-p it)
       (byte-recompile-directory it 0))))
+
+;; (use-package ruby-mode
+;;   :ensure t
+;;   :init
+;;   (progn
+;;     (use-package rvm
+;;       :ensure t
+;;       :init (rvm-use-default)
+;;       :config (setq rvm-verbose nil))
+;;     (use-package ruby-tools   :ensure t)
+;;     (use-package rhtml-mode
+;;       :ensure t
+;;       :mode (("\\.rhtml$" . rhtml-mode)
+;;              ("\\.html\\.erb$" . rhtml-mode)))
+;;     (use-package rinari
+;;       :ensure t
+;;       :init (global-rinari-mode 1)
+;;       :config (setq ruby-insert-encoding-magic-comment nil))
+;;     (use-package rspec-mode
+;;       :ensure t      
+;;       :config
+;;       (progn
+;;         (setq rspec-use-rvm t)
+;;         (setq rspec-use-rake-when-possible nil)
+;;         (defadvice rspec-compile (around rspec-compile-around activate)
+;;           "Use BASH shell for running the specs because of ZSH issues."
+;;           (let ((shell-file-name "/bin/bash"))
+;;             ad-do-it)))))
+;;   :config
+;;   (progn
+;;     (setq ruby-align-to-stmt-keywords '(begin if while unless until case for def))
+;;     (add-hook 'ruby-mode-hook 'rvm-activate-corresponding-ruby)
+;;     (setq ruby-deep-indent-paren nil))
+;;   :bind (("C-M-h" . backward-kill-word)
+;;          ("C-M-n" . scroll-up-five)
+;;          ("C-M-p" . scroll-down-five))
+;;   :mode (("\\.rake$" . ruby-mode)
+;;          ("\\.gemspec$" . ruby-mode)
+;;          ("\\.ru$" . ruby-mode)
+;;          ("Rakefile$" . ruby-mode)
+;;          ("Gemfile$" . ruby-mode)
+;;          ("Capfile$" . ruby-mode)
+;;                   ("Guardfile$" . ruby-mode)))
 
 (ensure-packages-compiled)
 
