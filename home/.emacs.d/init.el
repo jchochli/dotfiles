@@ -8,8 +8,11 @@
 (show-paren-mode t)
 (setq message-log-max 16384)
 (setq debug-on-error t)
+(setq org-log-done t)
 (add-to-list 'exec-path "/usr/local/bin")
 (global-auto-revert-mode t)
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
 ;; eldoc
 (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -45,6 +48,7 @@
   (require 'use-package))
 
 (setq use-package-verbose t)
+
 (use-package command-log-mode :ensure t :defer t)
 (use-package dash :ensure t)
 (use-package f :ensure t)
@@ -56,6 +60,8 @@
 (use-package f  :ensure t)
 (use-package s  :ensure t)
 (use-package flycheck  :ensure t)
+(use-package org-toodledo :ensure t :defer t)
+(use-package misc-cmds :ensure t)
 
 (use-package diminish
   :ensure t
@@ -217,7 +223,7 @@
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 1.5)
+  (setq guide-key/idle-delay 2.0)
   (guide-key-mode 1))
 
 (use-package company
@@ -232,40 +238,40 @@
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
 
-;; (use-package eclimd  
-;;   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
-;;   :ensure t
-;;   :commands start-eclimd)
+(use-package eclimd  
+  :load-path "~/Development/repos/elisp/emacs-eclim"
+  ;;:ensure t
+  :commands start-eclimd)
 
-;; (use-package eclim
-;;   :ensure t
-;;   :requires (eclim company-emacs-eclim company)
-;;   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
-;;   :mode
-;;   (("\\.java\\'" . eclim-mode)
-;;    ("\\.jspx\\'" . eclim-mode))
-;;   :commands (eclim-mode)
-;;   :config
-;;   (setq help-at-pt-display-when-idle t)
-;;   (setq help-at-pt-timer-delay 0.1)
-;;   (help-at-pt-set-timer)
-;;   (global-eclim-mode)
-;;   (global-set-key (kbd "M-/") 'company-complete)
-;;   (use-package company-emacs-eclim
-;;     :requires company
-;;     :config    
-;;     (company-emacs-eclim-setup)))
+(use-package eclim
+  ;;:ensure t
+  :requires (eclim company-emacs-eclim company)
+  :load-path "~/Development/repos/elisp/emacs-eclim"
+  :mode
+  (("\\.java\\'" . eclim-mode)
+   ("\\.jspx\\'" . eclim-mode))
+  :commands (eclim-mode)
+  :config
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  (global-eclim-mode)
+  (global-set-key (kbd "M-/") 'company-complete)
+  (use-package company-emacs-eclim
+    :requires company
+    :config    
+    (company-emacs-eclim-setup)))
 
-;; (require 'eclim)
-;; (global-eclim-mode)
-;; (setq help-at-pt-display-when-idle t)
-;; (setq help-at-pt-timer-delay 0.1)
-;; (help-at-pt-set-timer)
-;; (require 'company)
-;; (require 'company-emacs-eclim)
-;; (company-emacs-eclim-setup)
-;; (global-company-mode t)
-;; (global-set-key (kbd "M-/") 'company-complete)
+(require 'eclim)
+(global-eclim-mode)
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
+(global-set-key (kbd "M-/") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
@@ -390,6 +396,9 @@
 (use-package sqlup-mode
   :ensure t)
 
+(use-package elisp-lint
+  :load-path "~/Development/repos/elisp/elisp-lint")
+
 (defun do-eval-buffer ()
   (interactive)
   (call-interactively 'eval-buffer)
@@ -440,3 +449,4 @@
 ;; (unless (server-running-p)
 ;;   (server-start))
 (put 'upcase-region 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
