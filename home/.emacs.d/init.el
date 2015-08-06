@@ -105,7 +105,15 @@
   "Find file as root if necessary."
   (unless (and buffer-file-name
                (file-writable-p buffer-file-name))
-        (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+(defun sudo ()
+  "Use TRAMP to `sudo' the current buffer"
+  (interactive)
+  (when buffer-file-name
+    (find-alternate-file
+     (concat "/sudo:root@localhost:"
+             buffer-file-name))))
 
 (use-package flx-ido
   :ensure t
@@ -481,6 +489,14 @@
 ;;          ("Gemfile$" . ruby-mode)
 ;;          ("Capfile$" . ruby-mode)
 ;;                   ("Guardfile$" . ruby-mode)))
+
+(defun dos2unix (buffer)
+  "Automate M-% C-q C-m RET C-q C-j RET"
+  (interactive "*b")
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward (string ?\C-m) nil t)
+                (replace-match (string ?\C-j) nil t))))
 
 (ensure-packages-compiled)
 
