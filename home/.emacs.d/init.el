@@ -8,8 +8,11 @@
 (show-paren-mode t)
 (setq message-log-max 16384)
 (setq debug-on-error t)
+(setq org-log-done t)
 (add-to-list 'exec-path "/usr/local/bin")
 (global-auto-revert-mode t)
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
 ;; eldoc
 (autoload 'turn-on-eldoc-mode "eldoc" nil t)
@@ -33,6 +36,8 @@
 
 (require 'package)
 (add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (setq load-prefer-newer t)
 (package-initialize)
@@ -45,6 +50,7 @@
   (require 'use-package))
 
 (setq use-package-verbose t)
+
 (use-package command-log-mode :ensure t :defer t)
 (use-package dash :ensure t)
 (use-package f :ensure t)
@@ -56,6 +62,7 @@
 (use-package f  :ensure t)
 (use-package s  :ensure t)
 (use-package flycheck  :ensure t)
+(use-package misc-cmds :ensure t)
 
 (use-package diminish
   :ensure t
@@ -65,14 +72,15 @@
        '(defadvice ,mode (after rename-modeline activate)
           (setq mode-name ,new-name))))
   (diminish 'isearch-mode))
-                                        
+
 (use-package ggtags :ensure t
   :commands ggtags-mode)
 
 (use-package ido   
   :ensure t
-  :init (progn (ido-mode 1)
-               (ido-everywhere 1))
+  :init  
+  (ido-mode 1)
+  (ido-everywhere 1)
   :config
   (progn
     (setq ido-case-fold t)
@@ -99,7 +107,15 @@
   "Find file as root if necessary."
   (unless (and buffer-file-name
                (file-writable-p buffer-file-name))
-        (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+
+(defun sudo ()
+  "Use TRAMP to `sudo' the current buffer"
+  (interactive)
+  (when buffer-file-name
+    (find-alternate-file
+     (concat "/sudo:root@localhost:"
+             buffer-file-name))))
 
 (use-package flx-ido
   :ensure t
@@ -145,13 +161,12 @@
 
 (use-package clojure-mode
   :ensure t
-  :init
-  (progn 
-    (setq projectile-completion-system 'ido)
-    (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode)))
+  :init  
+  (setq projectile-completion-system 'ido)
+  (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
   :config
   (rename-modeline "clojure-mode" clojure-mode "λ")  
   (use-package align-cljlet
@@ -162,13 +177,17 @@
   :ensure t
   :init
   (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+  (add-to-list 'package-pinned-packages
+               '(clj-refactor . "melpa-stable") t)
   :config
   (cljr-add-keybindings-with-prefix "C-!"))
 
-(use-package cider  :ensure t  
-  :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
-  :config    (defalias 'cji 'cider-jack-in)
-  :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode))
+(use-package cider  :ensure t
+  :init  
+  (setq cider-words-of-inspiration '("NREPL is ready!!"))
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+  :config (defalias 'cji 'cider-jack-in))
 
 (use-package paredit  :ensure t  
   :init
@@ -214,7 +233,7 @@
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 1.5)
+  (setq guide-key/idle-delay 2.0)
   (guide-key-mode 1))
 
 (use-package company
@@ -229,40 +248,40 @@
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
 
-;; (use-package eclimd  
-;;   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
-;;   :ensure t
-;;   :commands start-eclimd)
+(use-package eclimd  
+  :load-path "~/Development/repos/elisp/emacs-eclim"
+  ;;:ensure t
+  :commands start-eclimd)
 
-;; (use-package eclim
-;;   :ensure t
-;;   :requires (eclim company-emacs-eclim company)
-;;   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
-;;   :mode
-;;   (("\\.java\\'" . eclim-mode)
-;;    ("\\.jspx\\'" . eclim-mode))
-;;   :commands (eclim-mode)
-;;   :config
-;;   (setq help-at-pt-display-when-idle t)
-;;   (setq help-at-pt-timer-delay 0.1)
-;;   (help-at-pt-set-timer)
-;;   (global-eclim-mode)
-;;   (global-set-key (kbd "M-/") 'company-complete)
-;;   (use-package company-emacs-eclim
-;;     :requires company
-;;     :config    
-;;     (company-emacs-eclim-setup)))
+(use-package eclim
+  ;;:ensure t
+  :requires (eclim company-emacs-eclim company)
+  :load-path "~/Development/repos/elisp/emacs-eclim"
+  :mode
+  (("\\.java\\'" . eclim-mode)
+   ("\\.jspx\\'" . eclim-mode))
+  :commands (eclim-mode)
+  :config
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  (global-eclim-mode)
+  (global-set-key (kbd "M-/") 'company-complete)
+  (use-package company-emacs-eclim
+    :requires company
+    :config    
+    (company-emacs-eclim-setup)))
 
-;; (require 'eclim)
-;; (global-eclim-mode)
-;; (setq help-at-pt-display-when-idle t)
-;; (setq help-at-pt-timer-delay 0.1)
-;; (help-at-pt-set-timer)
-;; (require 'company)
-;; (require 'company-emacs-eclim)
-;; (company-emacs-eclim-setup)
-;; (global-company-mode t)
-;; (global-set-key (kbd "M-/") 'company-complete)
+(require 'eclim)
+(global-eclim-mode)
+(setq help-at-pt-display-when-idle t)
+(setq help-at-pt-timer-delay 0.1)
+(help-at-pt-set-timer)
+(require 'company)
+(require 'company-emacs-eclim)
+(company-emacs-eclim-setup)
+(global-company-mode t)
+(global-set-key (kbd "M-/") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
@@ -370,49 +389,6 @@
   :ensure t
   :bind ("C-c g" . magit-status))
 
-;; (use-package ruby-mode
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (use-package rvm
-;;       :ensure t
-;;       :init (rvm-use-default)
-;;       :config (setq rvm-verbose nil))
-;;     (use-package ruby-tools   :ensure t)
-;;     (use-package rhtml-mode
-;;       :ensure t
-;;       :mode (("\\.rhtml$" . rhtml-mode)
-;;              ("\\.html\\.erb$" . rhtml-mode)))
-;;     (use-package rinari
-;;       :ensure t
-;;       :init (global-rinari-mode 1)
-;;       :config (setq ruby-insert-encoding-magic-comment nil))
-;;     (use-package rspec-mode
-;;       :ensure t      
-;;       :config
-;;       (progn
-;;         (setq rspec-use-rvm t)
-;;         (setq rspec-use-rake-when-possible nil)
-;;         (defadvice rspec-compile (around rspec-compile-around activate)
-;;           "Use BASH shell for running the specs because of ZSH issues."
-;;           (let ((shell-file-name "/bin/bash"))
-;;             ad-do-it)))))
-;;   :config
-;;   (progn
-;;     (setq ruby-align-to-stmt-keywords '(begin if while unless until case for def))
-;;     (add-hook 'ruby-mode-hook 'rvm-activate-corresponding-ruby)
-;;     (setq ruby-deep-indent-paren nil))
-;;   :bind (("C-M-h" . backward-kill-word)
-;;          ("C-M-n" . scroll-up-five)
-;;          ("C-M-p" . scroll-down-five))
-;;   :mode (("\\.rake$" . ruby-mode)
-;;          ("\\.gemspec$" . ruby-mode)
-;;          ("\\.ru$" . ruby-mode)
-;;          ("Rakefile$" . ruby-mode)
-;;          ("Gemfile$" . ruby-mode)
-;;          ("Capfile$" . ruby-mode)
-;;          ("Guardfile$" . ruby-mode)))
-
 (use-package ert-runner
   :defer t
   :ensure t
@@ -429,6 +405,9 @@
 
 (use-package sqlup-mode
   :ensure t)
+
+(use-package elisp-lint
+  :load-path "~/Development/repos/elisp/elisp-lint")
 
 (defun do-eval-buffer ()
   (interactive)
@@ -473,9 +452,19 @@
     (unless (was-compiled-p it)
       (byte-recompile-directory it 0))))
 
+
+(defun dos2unix (buffer)
+  "Automate M-% C-q C-m RET C-q C-j RET"
+  (interactive "*b")
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward (string ?\C-m) nil t)
+                (replace-match (string ?\C-j) nil t))))
+
 (ensure-packages-compiled)
 
 ;; (load "server")
 ;; (unless (server-running-p)
 ;;   (server-start))
 (put 'upcase-region 'disabled nil)
+(put 'narrow-to-region 'disabled nil)
