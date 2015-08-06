@@ -36,6 +36,8 @@
 
 (require 'package)
 (add-to-list 'package-archives
+             '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+(add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (setq load-prefer-newer t)
 (package-initialize)
@@ -60,7 +62,6 @@
 (use-package f  :ensure t)
 (use-package s  :ensure t)
 (use-package flycheck  :ensure t)
-(use-package org-toodledo :ensure t :defer t)
 (use-package misc-cmds :ensure t)
 
 (use-package diminish
@@ -77,8 +78,9 @@
 
 (use-package ido   
   :ensure t
-  :init (progn (ido-mode 1)
-               (ido-everywhere 1))
+  :init  
+  (ido-mode 1)
+  (ido-everywhere 1)
   :config
   (progn
     (setq ido-case-fold t)
@@ -159,13 +161,12 @@
 
 (use-package clojure-mode
   :ensure t
-  :init
-  (progn 
-    (setq projectile-completion-system 'ido)
-    (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
-    (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode)))
+  :init  
+  (setq projectile-completion-system 'ido)
+  (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
+  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
   :config
   (rename-modeline "clojure-mode" clojure-mode "λ")  
   (use-package align-cljlet
@@ -176,13 +177,17 @@
   :ensure t
   :init
   (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
+  (add-to-list 'package-pinned-packages
+               '(clj-refactor . "melpa-stable") t)
   :config
   (cljr-add-keybindings-with-prefix "C-!"))
 
-(use-package cider  :ensure t  
-  :init  (setq cider-words-of-inspiration '("NREPL is ready!!"))
-  :config    (defalias 'cji 'cider-jack-in)
-  :init      (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode))
+(use-package cider  :ensure t
+  :init  
+  (setq cider-words-of-inspiration '("NREPL is ready!!"))
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+  :config (defalias 'cji 'cider-jack-in))
 
 (use-package paredit  :ensure t  
   :init
@@ -447,48 +452,6 @@
     (unless (was-compiled-p it)
       (byte-recompile-directory it 0))))
 
-;; (use-package ruby-mode
-;;   :ensure t
-;;   :init
-;;   (progn
-;;     (use-package rvm
-;;       :ensure t
-;;       :init (rvm-use-default)
-;;       :config (setq rvm-verbose nil))
-;;     (use-package ruby-tools   :ensure t)
-;;     (use-package rhtml-mode
-;;       :ensure t
-;;       :mode (("\\.rhtml$" . rhtml-mode)
-;;              ("\\.html\\.erb$" . rhtml-mode)))
-;;     (use-package rinari
-;;       :ensure t
-;;       :init (global-rinari-mode 1)
-;;       :config (setq ruby-insert-encoding-magic-comment nil))
-;;     (use-package rspec-mode
-;;       :ensure t      
-;;       :config
-;;       (progn
-;;         (setq rspec-use-rvm t)
-;;         (setq rspec-use-rake-when-possible nil)
-;;         (defadvice rspec-compile (around rspec-compile-around activate)
-;;           "Use BASH shell for running the specs because of ZSH issues."
-;;           (let ((shell-file-name "/bin/bash"))
-;;             ad-do-it)))))
-;;   :config
-;;   (progn
-;;     (setq ruby-align-to-stmt-keywords '(begin if while unless until case for def))
-;;     (add-hook 'ruby-mode-hook 'rvm-activate-corresponding-ruby)
-;;     (setq ruby-deep-indent-paren nil))
-;;   :bind (("C-M-h" . backward-kill-word)
-;;          ("C-M-n" . scroll-up-five)
-;;          ("C-M-p" . scroll-down-five))
-;;   :mode (("\\.rake$" . ruby-mode)
-;;          ("\\.gemspec$" . ruby-mode)
-;;          ("\\.ru$" . ruby-mode)
-;;          ("Rakefile$" . ruby-mode)
-;;          ("Gemfile$" . ruby-mode)
-;;          ("Capfile$" . ruby-mode)
-;;                   ("Guardfile$" . ruby-mode)))
 
 (defun dos2unix (buffer)
   "Automate M-% C-q C-m RET C-q C-j RET"
