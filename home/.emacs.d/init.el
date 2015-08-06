@@ -39,11 +39,14 @@
              '("melpa-stable" . "http://stable.melpa.org/packages/") t)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
+
 (setq load-prefer-newer t)
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+
 (require 'use-package)
 
 (eval-when-compile
@@ -173,20 +176,19 @@
     :ensure t
     :bind ("C-! a a" . align-cljlet)))
 
+(add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
 (use-package clj-refactor
   :ensure t
   :init
   (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-  (add-to-list 'package-pinned-packages
-               '(clj-refactor . "melpa-stable") t)
   :config
   (cljr-add-keybindings-with-prefix "C-!"))
 
+(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 (use-package cider  :ensure t
   :init  
   (setq cider-words-of-inspiration '("NREPL is ready!!"))
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)  
   :config (defalias 'cji 'cider-jack-in))
 
 (use-package paredit  :ensure t  
