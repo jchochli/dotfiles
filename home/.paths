@@ -6,5 +6,5 @@ export JBOSS_HOME=~/Development/bin/jboss-eap-6.1
 export M2_HOME=~/Development/bin/apache-maven-3.0.5
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
-export PATH=/usr/local/bin:$PATH:$HOME/.rvm/bin:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin
+export PATH=$HOME/.evm/bin:/usr/local/bin:$PATH:$HOME/.rvm/bin:$HOME/.cask/bin:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin
 
