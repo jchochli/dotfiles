@@ -28,5 +28,5 @@ export EDITOR='emacs'
 export DOCKER_HOST=tcp://localhost:4243
 
 # Add `~/bin` and `~/.evm/bin` to the `$PATH`
-export PATH="$HOME/.evm/bin:$HOME/bin:$PATH"
+export PATH="$HOME/.cask/bin:$HOME/.evm/bin:$HOME/bin:$PATH"
 
