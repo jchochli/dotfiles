@@ -60,7 +60,6 @@
 (use-package f  :ensure t)
 (use-package s  :ensure t)
 (use-package flycheck  :ensure t)
-(use-package org-toodledo :ensure t :defer t)
 (use-package misc-cmds :ensure t)
 
 (use-package diminish
