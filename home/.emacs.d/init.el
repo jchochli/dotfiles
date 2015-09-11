@@ -274,6 +274,8 @@
     :config    
     (company-emacs-eclim-setup)))
 
+;;(setq eclim-print-debug-messages t)
+
 (require 'eclim)
 (global-eclim-mode)
 (setq help-at-pt-display-when-idle t)
@@ -349,10 +351,10 @@
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
 (use-package buffer-move :ensure t 
-  :bind (("C-c C-j" . buf-move-left)
-         ("C-c C-k" . buf-move-right)
-         ("C-c C-p" . buf-move-up)
-         ("C-c C-n" . buf-move-down)))
+  :bind (("C-c b j" . buf-move-left)
+         ("C-c b k" . buf-move-right)
+         ("C-c b p" . buf-move-up)
+         ("C-c b n" . buf-move-down)))
 
 (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
 (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)

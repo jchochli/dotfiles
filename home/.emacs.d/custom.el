@@ -14,8 +14,8 @@
    (quote
     ("e80932ca56b0f109f8545576531d3fc79487ca35a9a9693b62bf30d6d08c9aaf" "9122dfb203945f6e84b0de66d11a97de6c9edf28b3b5db772472e4beccc6b3c5" "ebd976c3d91de7c6858db3ba07c52238d545a106c8fbf05192913f6d42421621" "f1ea873350bbb910a551854d700dfa7a16f0b6e7b9e88e12e012d9f0f881d083" default)))
  '(desktop-save-mode t)
- '(eclim-eclipse-dirs (quote ("~/Development/bin/eclipse")))
- '(eclim-executable "~/Development/bin/eclipse/eclim")
+ '(eclim-eclipse-dirs (quote ("/Applications/Eclipse.app/Contents/Eclipse")))
+ '(eclim-executable "/Applications/Eclipse.app/Contents/Eclipse/eclim")
  '(erc-email-userid "jchochli@xpzen.com")
  '(erc-nick "jchochli")
  '(erc-nick-uniquifier "_")
