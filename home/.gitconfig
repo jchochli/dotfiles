@@ -27,6 +27,8 @@
     # pr = "!f() { git fetch $1 pull/$2/head:pr-$2 && git checkout pr-$2; }; f"
     pr = "!f() { git fetch $1 refs/pull/$2/head:pr/$2 && git checkout pr/$2; }; f"
     update-pr = "!f() { git fetch $1 refs/pull/$2/head:pr/$2_updated && git rebase pr/$2_updated pr/$2 && git branch -d pr/$2_updated; }; f"
+    # recursively remove .orig files
+    cleanorig = "clean -f */*.orig"
 
 [apply]
 	# Detect whitespace errors when applying a patch
@@ -43,6 +45,8 @@
 	# a line
 	whitespace = space-before-tab,indent-with-non-tab,trailing-space
 	editor = emacsclient
+	autocrlf = input
+	safecrlf = true
 
 [color]
 	# Use colors in Git commands that are capable of colored output when
@@ -88,11 +92,6 @@
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "emacsclient -nw"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	#cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    cmd = "diffmerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$(if test -f \"$BASE\"; then echo \"$BASE\"; else echo \"$LOCAL\"; fi)\" \"$REMOTE\""
 	trustExitCode = true

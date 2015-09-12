@@ -232,7 +232,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
             export PATH=$JAVA_HOME/bin:$PATH
         fi
     }
-    setjdk 1.7
+    setjdk 1.8
 else
     # Unknown.
 	: 

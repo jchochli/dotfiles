@@ -135,7 +135,7 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
     : # : is noop
 elif [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
-    alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+    : # alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 else
     # Unknown.
     :
