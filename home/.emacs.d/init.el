@@ -145,6 +145,9 @@
 
 (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
+(use-package kanban
+  :ensure t)
+
 (use-package yasnippet
   :ensure t
   :init
