@@ -4,6 +4,8 @@
 
 (setq user-full-name "James Chochlinski")
 (setq user-mail-address "jchochli@xpzen.com")
+;; disable vc-git
+(setq vc-handled-backends ())
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode t)
 (setq message-log-max 16384)
