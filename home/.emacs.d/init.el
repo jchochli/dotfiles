@@ -68,6 +68,7 @@
 (use-package s  :ensure t)
 (use-package flycheck  :ensure t)
 (use-package misc-cmds :ensure t)
+(use-package ag :ensure t)
 
 (use-package diminish
   :ensure t
