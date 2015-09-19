@@ -148,6 +148,9 @@
 (use-package kanban
   :ensure t)
 
+(use-package org-jira
+  :ensure t)
+
 (use-package yasnippet
   :ensure t
   :init
