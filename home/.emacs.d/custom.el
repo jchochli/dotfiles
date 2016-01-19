@@ -25,6 +25,7 @@
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" "build" "logs" "dist" "lib" "classes")))
  '(projectile-globally-ignored-files (quote ("TAGS")))
+ '(sr-speedbar-right-side nil)
  '(tab-width 4)
  '(use-package-verbose t)
  '(vc-annotate-background "#2B2B2B")

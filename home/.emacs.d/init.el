@@ -36,6 +36,19 @@
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+;; Enable mouse support
+(unless window-system
+  (require 'mouse)
+  (xterm-mouse-mode t)
+  (global-set-key [mouse-4] (lambda ()
+                              (interactive)
+                              (scroll-down 1)))
+  (global-set-key [mouse-5] (lambda ()
+                              (interactive)
+                              (scroll-up 1)))
+  (defun track-mouse (e))
+  (setq mouse-sel-mode t))
+
 (require 'package)
 (add-to-list 'package-archives
              '("melpa-stable" . "http://stable.melpa.org/packages/") t)
@@ -62,7 +75,6 @@
 (use-package s :ensure t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
-(use-package puppet-mode  :ensure t :defer t)
 (use-package auto-complete :ensure t)
 (use-package f  :ensure t)
 (use-package s  :ensure t)
@@ -161,12 +173,18 @@
     (setq-default yas/prompt-functions '(yas/ido-prompt))))
 
 (use-package projectile
-  :load-path "~/Development/repos/elisp/projectile"
-  ;; :ensure t
+  ;;:load-path "~/Development/repos/elisp/projectile"
+  :ensure t
   :commands projectile-global-mode
   :bind-keymap ("C-c p" . projectile-command-map)
   :config  
   (projectile-global-mode))
+
+(use-package projectile-speedbar
+  :disabled t
+  :ensure t
+  :config
+  (global-set-key (kbd "M-<f2>") 'projectile-speedbar-open-current-buffer-in-tree))
 
 (use-package switch-window  :ensure t  
   :bind ("C-x o" . switch-window))
@@ -223,13 +241,17 @@
 
 (use-package web-mode  :ensure t  
   :mode (("\\.html$" . web-mode)
-         ("\\.mustache\\'" . web-mode)))
+         ("\\.mustache\\'" . web-mode)
+         ("\\.jsx\\'" . web-mode)
+         ("\\.xsl\\'" . web-mode)))
 
-(use-package nxml  :ensure t  
-  :mode ("\\.xsl\\'" . xml-mode))
+;; JSP
+(use-package crappy-jsp-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.jsp$" . crappy-jsp-mode)))
 
-(use-package macrostep
-  :ensure t)
+(use-package nxml :ensure t)
+(use-package macrostep :ensure t)
 
 (use-package bookmark
   :ensure
@@ -240,12 +262,10 @@
   :ensure
   :commands browse-kill-ring)
 
-(use-package guide-key
+(use-package which-key
   :ensure t
-  :config  
-  (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 2.0)
-  (guide-key-mode 1))
+  :config
+  (which-key-mode))
 
 (use-package company
   :ensure t
@@ -259,15 +279,10 @@
              ("C-d" . company-show-doc-buffer)
              ("<tab>" . company-complete)))
 
-(use-package eclimd  
-  :load-path "~/Development/repos/elisp/emacs-eclim"
-  ;;:ensure t
-  :commands start-eclimd)
-
 (use-package eclim
   ;;:ensure t
   :requires (eclim company-emacs-eclim company)
-  :load-path "~/Development/repos/elisp/emacs-eclim"
+  ;;:load-path "~/Development/repos/elisp/emacs-eclim"
   :mode
   (("\\.java\\'" . eclim-mode)
    ("\\.jspx\\'" . eclim-mode))
@@ -276,25 +291,29 @@
   (setq help-at-pt-display-when-idle t)
   (setq help-at-pt-timer-delay 0.1)
   (help-at-pt-set-timer)
-  (global-eclim-mode)
   (global-set-key (kbd "M-/") 'company-complete)
   (use-package company-emacs-eclim
     :requires company
     :config    
     (company-emacs-eclim-setup)))
 
+(use-package eclimd  
+  ;;:load-path "~/Development/repos/elisp/emacs-eclim"
+  :commands start-eclimd)
+
+
 ;;(setq eclim-print-debug-messages t)
 
-(require 'eclim)
-(global-eclim-mode)
-(setq help-at-pt-display-when-idle t)
-(setq help-at-pt-timer-delay 0.1)
-(help-at-pt-set-timer)
-(require 'company)
-(require 'company-emacs-eclim)
-(company-emacs-eclim-setup)
-(global-company-mode t)
-(global-set-key (kbd "M-/") 'company-complete)
+;; (require 'eclim)
+;; ;;(global-eclim-mode)
+;; (setq help-at-pt-display-when-idle t)
+;; (setq help-at-pt-timer-delay 0.1)
+;; (help-at-pt-set-timer)
+;; (require 'company)
+;; (require 'company-emacs-eclim)
+;; (company-emacs-eclim-setup)
+;; (global-company-mode t)
+;; (global-set-key (kbd "M-/") 'company-complete)
 
 (use-package highlight-cl
   :ensure t
@@ -304,6 +323,7 @@
   (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords))
 
 (use-package guide-key
+  :disabled t
   :ensure t
   :config  
   (setq guide-key/guide-key-sequence t)
@@ -321,8 +341,8 @@
 (load custom-file 'noerror)
 
 (setq-default tab-width 4)
-(setq js-indent-level 2)
-(setq jsx-indent-level 2)
+(setq js-indent-level 4)
+(setq jsx-indent-level 4)
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq indent-tabs-mode nil)
@@ -481,3 +501,8 @@
 ;;   (server-start))
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; multiple cursors                                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(global-set-key (kbd "C-c m c") 'mc/edit-lines)
