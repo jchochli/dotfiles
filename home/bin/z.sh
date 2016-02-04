@@ -41,10 +41,10 @@ _z() {
         # $HOME isn't worth matching
         [ "$*" = "$HOME" ] && return
 
-        # don't track excluded directory trees
+        # don't track excluded dirs
         local exclude
         for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            case "$*" in "$exclude*") return;; esac
+            [ "$*" = "$exclude" ] && return
         done
 
         # maintain the data file
@@ -113,7 +113,7 @@ _z() {
                     t) local typ="recent";;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
-        esac; local last=$1; [ "$#" -gt 0 ] && shift; done
+        esac; local last=$1; shift; done
         [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
 
         # if we hit enter on a completion just go there
@@ -163,7 +163,7 @@ _z() {
                 # use a copy to escape special characters, as we want to return
                 # the original. yeah, this escaping is awful.
                 clean_short = short
-                gsub(/\[\(\)\[\]\|\]/, "\\\\&", clean_short)
+                gsub(/[\(\)\[\]\|]/, "\\\\&", clean_short)
                 for( x in matches ) if( matches[x] && x !~ clean_short ) return
                 return short
             }
@@ -206,7 +206,7 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 
 [ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
 
-if type compctl >/dev/null 2>&1; then
+if compctl >/dev/null 2>&1; then
     # zsh
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list, avoid clobbering any other precmds.
@@ -230,7 +230,7 @@ if type compctl >/dev/null 2>&1; then
         reply=(${(f)"$(_z --complete "$compl")"})
     }
     compctl -U -K _z_zsh_tab_completion _z
-elif type complete >/dev/null 2>&1; then
+elif complete >/dev/null 2>&1; then
     # bash
     # tab completion
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}

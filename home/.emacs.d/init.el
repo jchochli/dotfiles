@@ -204,7 +204,7 @@
     :ensure t
     :bind ("C-! a a" . align-cljlet)))
 
-(add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
+;;(add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
 (use-package clj-refactor
   :ensure t
   :init
@@ -212,7 +212,7 @@
   :config
   (cljr-add-keybindings-with-prefix "C-!"))
 
-(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 (use-package cider  :ensure t
   :init  
   (setq cider-words-of-inspiration '("NREPL is ready!!"))
