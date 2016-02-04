@@ -17,11 +17,11 @@
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
 ;; eldoc
-(autoload 'turn-on-eldoc-mode "eldoc" nil t)
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;; (autoload 'turn-on-eldoc-mode "eldoc" nil t)
+;; (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+;; (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+;; (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 ;; Set locale to UTF8
 (set-language-environment 'utf-8)
@@ -216,14 +216,15 @@
 (use-package cider  :ensure t
   :init  
   (setq cider-words-of-inspiration '("NREPL is ready!!"))
-  (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)  
+  ;;(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)  
   :config (defalias 'cji 'cider-jack-in))
 
 (use-package paredit  :ensure t  
-  :init
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+  ;; :init
+  ;; (add-hook 'clojure-mode-hook 'paredit-mode)
+  ;; (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  ;; (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+  )
 
 (use-package rainbow-mode  :ensure t  
   :commands rainbow-mode)
