@@ -164,13 +164,14 @@
 (use-package org-jira
   :ensure t)
 
-(use-package yasnippet
-  :ensure t
-  :init
-  (progn
-    (use-package yasnippets)
-    (yas-global-mode 1)
-    (setq-default yas/prompt-functions '(yas/ido-prompt))))
+;; (use-package yasnippet
+;;   :ensure t
+;;   :defer t
+;;   :init
+;;   (progn
+;;     (use-package yasnippets)
+;;     (yas-global-mode 1)
+;;     (setq-default yas/prompt-functions '(yas/ido-prompt))))
 
 (use-package projectile
   ;;:load-path "~/Development/repos/elisp/projectile"
