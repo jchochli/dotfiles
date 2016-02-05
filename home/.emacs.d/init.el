@@ -16,12 +16,17 @@
 (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
+(define-key input-decode-map "\e[1;5A" [C-up])
+(define-key input-decode-map "\e[1;5B" [C-down])
+(define-key input-decode-map "\e[1;5C" [C-right])
+(define-key input-decode-map "\e[1;5D" [C-left])
+
 ;; eldoc
-;; (autoload 'turn-on-eldoc-mode "eldoc" nil t)
-;; (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-;; (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-;; (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-;; (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(autoload 'turn-on-eldoc-mode "eldoc" nil t)
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 ;; Set locale to UTF8
 (set-language-environment 'utf-8)
@@ -70,9 +75,10 @@
 (setq use-package-verbose t)
 
 (use-package command-log-mode :ensure t :defer t)
-(use-package dash :ensure t)
 (use-package f :ensure t)
 (use-package s :ensure t)
+(use-package dash :ensure t)
+(use-package seq :ensure t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
 (use-package auto-complete :ensure t)
@@ -212,19 +218,18 @@
   :config
   (cljr-add-keybindings-with-prefix "C-!"))
 
+(use-package paredit  :ensure t  
+  :init
+  (add-hook 'clojure-mode-hook 'paredit-mode)
+  (add-hook 'cider-repl-mode-hook 'paredit-mode)
+  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
+
 ;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
 (use-package cider  :ensure t
   :init  
   (setq cider-words-of-inspiration '("NREPL is ready!!"))
   ;;(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)  
   :config (defalias 'cji 'cider-jack-in))
-
-(use-package paredit  :ensure t  
-  ;; :init
-  ;; (add-hook 'clojure-mode-hook 'paredit-mode)
-  ;; (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  ;; (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-  )
 
 (use-package rainbow-mode  :ensure t  
   :commands rainbow-mode)
