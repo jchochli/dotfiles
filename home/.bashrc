@@ -48,6 +48,9 @@ git config --global user.email "$GIT_AUTHOR_EMAIL"
 
 source "${HOME}/.docker_bash"
 source "${HOME}/.gradle_bash"
+if [ -f ~/.config/exercism/exercism_completion.bash ]; then
+    . ~/.config/exercism/exercism_completion.bash
+fi
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 source "$HOME/bin/z.sh"
