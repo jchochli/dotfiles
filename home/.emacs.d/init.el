@@ -12,9 +12,8 @@
 (setq debug-on-error t)
 (setq org-log-done t)
 (add-to-list 'exec-path "/usr/local/bin")
+(add-to-list 'load-path "~/.emacs.d/lisp/")
 (global-auto-revert-mode t)
-(setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
 (define-key input-decode-map "\e[1;5A" [C-up])
 (define-key input-decode-map "\e[1;5B" [C-down])
@@ -26,7 +25,7 @@
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
 (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+;;(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 
 ;; Set locale to UTF8
 (set-language-environment 'utf-8)
@@ -35,6 +34,7 @@
 (set-default-coding-systems 'utf-8)
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
+(set-default 'truncate-lines t)
 (setq magit-last-seen-setup-instructions "1.4.0")
 
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
@@ -87,6 +87,40 @@
 (use-package flycheck  :ensure t)
 (use-package misc-cmds :ensure t)
 (use-package ag :ensure t)
+(use-package puml-mode :ensure t)
+(use-package restclient :ensure t)
+(use-package ob-restclient :ensure t)
+
+(use-package org
+  :mode ("\\.org\\'" . org-mode)
+  :config
+  (require 'ob-clojure)
+  (setq org-babel-clojure-backend 'cider)
+  (setq org-src-fontify-natively t)
+  (setq org-confirm-babel-evaluate nil
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t)
+  (setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "DELEGATED")))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((clojure . t)
+     (emacs-lisp . t)
+     (ruby . t)
+     (python . t)
+     (js . t)
+     (R . t)     
+     (sh . t)
+     (sql . t))))
+
+;; Enable puml-mode for PlantUML files
+(add-to-list 'auto-mode-alist '("\\.puml\\'" . puml-mode))
+(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . puml-mode))
+
+(use-package skewer-mode
+  :commands skewer-mode
+  :ensure t
+    :config (skewer-setup))
 
 (use-package diminish
   :ensure t
@@ -164,11 +198,8 @@
 
 (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
-(use-package kanban
-  :ensure t)
-
-(use-package org-jira
-  :ensure t)
+(use-package kanban :ensure t :defer t)
+(use-package org-jira :ensure t :defer t)
 
 ;; (use-package yasnippet
 ;;   :ensure t
@@ -245,12 +276,17 @@
 (use-package yaml-mode  :ensure t  )
 (use-package groovy-mode  :ensure t  )
 (use-package undo-tree  :ensure t  )
+(use-package restclient :ensure t)
+(use-package pianobar :ensure t)
 
 (use-package web-mode  :ensure t  
   :mode (("\\.html$" . web-mode)
          ("\\.mustache\\'" . web-mode)
          ("\\.jsx\\'" . web-mode)
          ("\\.xsl\\'" . web-mode)))
+
+(setq web-mode-content-types-alist
+        '(("jsx" . "\\.js[x]?\\'")))
 
 ;; JSP
 (use-package crappy-jsp-mode
@@ -362,6 +398,14 @@
 ;; (setq tramp-default-method "ssh")
 (setq tramp-verbose 9)
 
+(add-hook 'js2-mode-hook
+          '(lambda ()
+             (local-set-key "\C-x\C-e" 'js-send-last-sexp)
+             (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
+             (local-set-key "\C-cb" 'js-send-buffer)
+             (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
+             (local-set-key "\C-cl" 'js-load-file-and-go)))
+
 (autoload 'bash-completion-dynamic-complete 
   "bash-completion"
   "BASH completion hook")
@@ -443,8 +487,17 @@
   :bind (("M-z" . undo-tree-undo)
          ("M-s-z" . undo-tree-redo)))
 
-(use-package sqlup-mode
+(use-package ejc-sql
   :ensure t)
+
+(add-hook 'sql-interactive-mode-hook
+          (lambda ()
+            (toggle-truncate-lines t)))
+
+(add-hook 'sql-mode-hook
+          (lambda ()
+            (setq-local ac-ignore-case t)
+            (auto-complete-mode)))
 
 (use-package elisp-lint
   :load-path "~/Development/repos/elisp/elisp-lint")
@@ -513,3 +566,6 @@
 ;; multiple cursors                                                       ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
+
+
+

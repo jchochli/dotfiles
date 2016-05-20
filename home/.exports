@@ -18,8 +18,19 @@ export MANPAGER="less -X"
 # Always enable colored `grep` output
 export GREP_OPTIONS="--color=auto"
 
-# Link Homebrew casks in `/Applications` rather than `~/Applications`
-export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    # Linux
+    : # : is noop
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    : # alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
+      # Link Homebrew casks in `/Applications` rather than `~/Applications`
+      export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+else
+    # Unknown.
+    :
+fi
+
 
 #rlwrap completions
 export RLWRAP_HOME="$HOME/.rlwrap"
@@ -27,6 +38,7 @@ export RLWRAP_HOME="$HOME/.rlwrap"
 
 export ALTERNATE_EDITOR=""
 export EDITOR=emacsclient
+export VISUAL=$EDITOR
 
 export DOCKER_HOST=tcp://localhost:4243
 

@@ -28,6 +28,7 @@
  '(sr-speedbar-right-side nil)
  '(tab-width 4)
  '(use-package-verbose t)
+ '(warning-suppress-types (quote ((undo discard-info))))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
