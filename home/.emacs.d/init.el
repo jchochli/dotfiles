@@ -487,6 +487,9 @@
   :bind (("M-z" . undo-tree-undo)
          ("M-s-z" . undo-tree-redo)))
 
+(use-package clomacs
+  :ensure t)
+
 (use-package ejc-sql
   :ensure t)
 
