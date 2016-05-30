@@ -327,8 +327,7 @@
   :requires (eclim company-emacs-eclim company)
   ;;:load-path "~/Development/repos/elisp/emacs-eclim"
   :mode
-  (("\\.java\\'" . eclim-mode)
-   ("\\.jspx\\'" . eclim-mode))
+  (("\\.java\\'" . eclim-mode))
   :commands (eclim-mode)
   :config
   (setq help-at-pt-display-when-idle t)
