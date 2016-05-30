@@ -1,3 +1,7 @@
+;;; init.el --- my init file
+;;; Commentary:
+;; init file
+;;; Code:
 (defconst emacs-start-time (current-time))
 (unless noninteractive
   (message "Loading %s..." load-file-name))
@@ -84,12 +88,18 @@
 (use-package auto-complete :ensure t)
 (use-package f  :ensure t)
 (use-package s  :ensure t)
-(use-package flycheck  :ensure t)
 (use-package misc-cmds :ensure t)
 (use-package ag :ensure t)
 (use-package puml-mode :ensure t)
 (use-package restclient :ensure t)
 (use-package ob-restclient :ensure t)
+
+(use-package flycheck
+  :ensure t
+  :diminish flycheck-mode
+  :defer 2  
+  :config
+    (global-flycheck-mode))
 
 (use-package org
   :mode ("\\.org\\'" . org-mode)
@@ -278,6 +288,14 @@
 (use-package undo-tree  :ensure t  )
 (use-package restclient :ensure t)
 (use-package pianobar :ensure t)
+
+;; weather from wttr.in
+(use-package wttrin
+  :ensure t
+  :commands (wttrin)
+  :init
+  (setq wttrin-default-cities '("Hartford"
+                                "Bristol")))
 
 (use-package web-mode  :ensure t  
   :mode (("\\.html$" . web-mode)
@@ -492,6 +510,16 @@
 (use-package ejc-sql
   :ensure t)
 
+(use-package nodejs-repl
+  :ensure t
+  :commands (nodejs-repl
+             nodejs-repl-send-buffer
+             nodejs-repl-switch-to-repl
+             nodejs-repl-send-region
+             nodejs-repl-send-last-sexp
+             nodejs-repl-execute
+                          nodejs-repl-load-file))
+
 (add-hook 'sql-interactive-mode-hook
           (lambda ()
             (toggle-truncate-lines t)))
@@ -569,5 +597,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (global-set-key (kbd "C-c m c") 'mc/edit-lines)
 
-
-
+;;; init.el ends here
