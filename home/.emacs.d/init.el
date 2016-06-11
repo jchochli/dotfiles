@@ -288,6 +288,7 @@
 (use-package undo-tree  :ensure t  )
 (use-package restclient :ensure t)
 (use-package pianobar :ensure t)
+(use-package 4clojure :ensure t)
 
 ;; weather from wttr.in
 (use-package wttrin
