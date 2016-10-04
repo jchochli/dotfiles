@@ -4,6 +4,7 @@ username = James Chochlinski <jchochlinski@payveris.com>
 
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
+shelve=
 
 [merge-tools]
 #emacs.executable = emacsclient

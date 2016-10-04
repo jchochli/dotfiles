@@ -40,6 +40,5 @@ export ALTERNATE_EDITOR=""
 export EDITOR=emacsclient
 export VISUAL=$EDITOR
 
-export DOCKER_HOST=tcp://localhost:4243
 
 
