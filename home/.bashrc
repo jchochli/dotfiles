@@ -46,7 +46,7 @@ git config --global user.email "$GIT_AUTHOR_EMAIL"
 # If possible, add tab completion for many more commands
 [ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
 
-source "${HOME}/.docker_bash"
+#source "${HOME}/.docker_bash"
 source "${HOME}/.gradle_bash"
 if [ -f ~/.config/exercism/exercism_completion.bash ]; then
     . ~/.config/exercism/exercism_completion.bash

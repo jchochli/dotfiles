@@ -39,7 +39,6 @@
 (set-selection-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 (set-default 'truncate-lines t)
-(setq magit-last-seen-setup-instructions "1.4.0")
 
 (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
 (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
@@ -78,104 +77,78 @@
 
 (setq use-package-verbose t)
 
-(use-package command-log-mode :ensure t :defer t)
-(use-package f :ensure t)
-(use-package s :ensure t)
-(use-package dash :ensure t)
-(use-package seq :ensure t)
+;;(use-package f :ensure t)
+;;(use-package s :ensure t)
+;;(use-package dash :ensure t)
 (use-package bug-hunter  :ensure t  :defer t)
 (use-package visual-regexp  :ensure t  :defer t)
-(use-package auto-complete :ensure t)
-(use-package f  :ensure t)
-(use-package s  :ensure t)
+;;(use-package auto-complete :ensure t)
 (use-package misc-cmds :ensure t)
 (use-package ag :ensure t)
-(use-package puml-mode :ensure t)
-(use-package restclient :ensure t)
-(use-package ob-restclient :ensure t)
 
-(use-package flycheck
-  :ensure t
-  :diminish flycheck-mode
-  :defer 2  
-  :config
-    (global-flycheck-mode))
+;; (use-package flycheck
+;;   :ensure t
+;;   :diminish flycheck-mode
+;;   :defer 2  
+;;   :config
+;;     (global-flycheck-mode))
 
-(use-package org
-  :mode ("\\.org\\'" . org-mode)
-  :config
-  (require 'ob-clojure)
-  (setq org-babel-clojure-backend 'cider)
-  (setq org-src-fontify-natively t)
-  (setq org-confirm-babel-evaluate nil
-        org-src-fontify-natively t
-        org-src-tab-acts-natively t)
-  (setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "DELEGATED")))
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((clojure . t)
-     (emacs-lisp . t)
-     (ruby . t)
-     (python . t)
-     (js . t)
-     (R . t)     
-     (sh . t)
-     (sql . t))))
+;; (use-package org
+;;   :mode ("\\.org\\'" . org-mode)
+;;   :config
+;;   (setq org-src-fontify-natively t)
+;;   (setq org-confirm-babel-evaluate nil
+;;         org-src-fontify-natively t
+;;         org-src-tab-acts-natively t)
+;;   (setq org-todo-keywords
+;;       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "DELEGATED")))
+;;   (org-babel-do-load-languages
+;;    'org-babel-load-languages
+;;    '((clojure . t)
+;;      (emacs-lisp . t)
+;;      (ruby . t)
+;;      (python . t)
+;;      (js . t)
+;;      (R . t)     
+;;      (sh . t)
+;;      (sql . t))))
 
 ;; Enable puml-mode for PlantUML files
 (add-to-list 'auto-mode-alist '("\\.puml\\'" . puml-mode))
 (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . puml-mode))
 
-(use-package skewer-mode
-  :commands skewer-mode
-  :ensure t
-    :config (skewer-setup))
+;; (use-package ido   
+;;   :ensure t
+;;   :init  
+;;   (ido-mode 1)
+;;   (ido-everywhere 1)
+;;   :config
+;;   (progn
+;;     (setq ido-case-fold t)
+;;     (setq ido-everywhere t)
+;;     (setq ido-enable-prefix nil)
+;;     (setq ido-enable-flex-matching t)
+;;     (setq ido-create-new-buffer 'always)
+;;     (setq ido-max-prospects 10)
+;;     (setq ido-use-faces nil)
+;;     (setq ido-file-extensions-order '(".el" ".java" ".js" ".rb"))
+;;     (add-to-list 'ido-ignore-files "\\.DS_Store"))
+;;     (add-hook 'ido-setup-hook
+;;             (lambda ()
+;;               ;; Go straight home
+;;               (define-key ido-file-completion-map
+;;                 (kbd "~")
+;;                 (lambda ()
+;;                   (interactive)
+;;                   (if (looking-back "/")
+;;                       (insert "~/")
+;;                     (call-interactively 'self-insert-command)))))))
 
-(use-package diminish
-  :ensure t
-  :init
-  (defmacro rename-modeline (package-name mode new-name)
-    `(eval-after-load ,package-name
-       '(defadvice ,mode (after rename-modeline activate)
-          (setq mode-name ,new-name))))
-  (diminish 'isearch-mode))
-
-(use-package ggtags :ensure t
-  :commands ggtags-mode)
-
-(use-package ido   
-  :ensure t
-  :init  
-  (ido-mode 1)
-  (ido-everywhere 1)
-  :config
-  (progn
-    (setq ido-case-fold t)
-    (setq ido-everywhere t)
-    (setq ido-enable-prefix nil)
-    (setq ido-enable-flex-matching t)
-    (setq ido-create-new-buffer 'always)
-    (setq ido-max-prospects 10)
-    (setq ido-use-faces nil)
-    (setq ido-file-extensions-order '(".el" ".java" ".js" ".rb"))
-    (add-to-list 'ido-ignore-files "\\.DS_Store"))
-    (add-hook 'ido-setup-hook
-            (lambda ()
-              ;; Go straight home
-              (define-key ido-file-completion-map
-                (kbd "~")
-                (lambda ()
-                  (interactive)
-                  (if (looking-back "/")
-                      (insert "~/")
-                    (call-interactively 'self-insert-command)))))))
-
-(defadvice ido-find-file (after find-file-sudo activate)
-  "Find file as root if necessary."
-  (unless (and buffer-file-name
-               (file-writable-p buffer-file-name))
-    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+;; (defadvice ido-find-file (after find-file-sudo activate)
+;;   "Find file as root if necessary."
+;;   (unless (and buffer-file-name
+;;                (file-writable-p buffer-file-name))
+;;     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the current buffer"
@@ -185,31 +158,28 @@
      (concat "/sudo:root@localhost:"
              buffer-file-name))))
 
-(use-package flx-ido
-  :ensure t
-  :init (flx-ido-mode 1))
+;; (use-package flx-ido
+;;   :ensure t
+;;   :init (flx-ido-mode 1))
 
-(use-package ido-vertical-mode
-  :ensure t
-  :init (ido-vertical-mode 1))
+;; (use-package ido-vertical-mode
+;;   :ensure t
+;;   :init (ido-vertical-mode 1))
 
-(use-package idomenu
-  :ensure t
-  :bind ("M-i" . idomenu))
+;; (use-package idomenu
+;;   :ensure t
+;;   :bind ("M-i" . idomenu))
 
-(use-package smex
-  :ensure t
-  :init (smex-initialize)
-    :bind ("M-x" . smex))
+;; (use-package smex
+;;   :ensure t
+;;   :init (smex-initialize)
+;;     :bind ("M-x" . smex))
 
-(use-package ido-ubiquitous
-  :ensure t
-  :init (ido-ubiquitous-mode 1))
+;; (use-package ido-ubiquitous
+;;   :ensure t
+;;   :init (ido-ubiquitous-mode 1))
 
-(setq ido-vertical-define-keys 'C-n-and-C-p-only)
-
-(use-package kanban :ensure t :defer t)
-(use-package org-jira :ensure t :defer t)
+;; (setq ido-vertical-define-keys 'C-n-and-C-p-only)
 
 ;; (use-package yasnippet
 ;;   :ensure t
@@ -237,66 +207,9 @@
 (use-package switch-window  :ensure t  
   :bind ("C-x o" . switch-window))
 
-(use-package clojure-mode
-  :ensure t
-  :init  
-  (setq projectile-completion-system 'ido)
-  (add-to-list 'auto-mode-alist '("\\.clj" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.edn$" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljx\\'" . clojure-mode))
-  (add-to-list 'auto-mode-alist '("\\.cljs$" . clojure-mode))
-  :config
-  (rename-modeline "clojure-mode" clojure-mode "λ")  
-  (use-package align-cljlet
-    :ensure t
-    :bind ("C-! a a" . align-cljlet)))
-
-;;(add-to-list 'package-pinned-packages '(clj-refactor . "melpa-stable") t)
-(use-package clj-refactor
-  :ensure t
-  :init
-  (add-hook 'clojure-mode-hook (lambda () (clj-refactor-mode 1)))
-  :config
-  (cljr-add-keybindings-with-prefix "C-!"))
-
-(use-package paredit  :ensure t  
-  :init
-  (add-hook 'clojure-mode-hook 'paredit-mode)
-  (add-hook 'cider-repl-mode-hook 'paredit-mode)
-  (add-hook 'emacs-lisp-mode-hook 'paredit-mode))
-
-;;(add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
-(use-package cider  :ensure t
-  :init  
-  (setq cider-words-of-inspiration '("NREPL is ready!!"))
-  ;;(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)  
-  :config (defalias 'cji 'cider-jack-in))
-
-(use-package rainbow-mode  :ensure t  
-  :commands rainbow-mode)
-
-(use-package ace-jump-mode
-  :ensure t
-  :commands ace-jump-mode
-  :init
-    (bind-key "C-c SPC" 'ace-jump-mode))
-
-(use-package ace-window  :ensure t )
-(use-package markdown-mode  :ensure t  )
-(use-package yaml-mode  :ensure t  )
-(use-package groovy-mode  :ensure t  )
+;;(use-package ace-window  :ensure t )
 (use-package undo-tree  :ensure t  )
-(use-package restclient :ensure t)
-(use-package pianobar :ensure t)
 (use-package 4clojure :ensure t)
-
-;; weather from wttr.in
-(use-package wttrin
-  :ensure t
-  :commands (wttrin)
-  :init
-  (setq wttrin-default-cities '("Hartford"
-                                "Bristol")))
 
 (use-package web-mode  :ensure t  
   :mode (("\\.html$" . web-mode)
@@ -324,72 +237,22 @@
   :ensure
   :commands browse-kill-ring)
 
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
+;; (use-package which-key
+;;   :ensure t
+;;   :config
+;;   (which-key-mode))
 
-(use-package company
-  :ensure t
-  :bind ("M-/" . company-complete)
-  :init
-  (global-company-mode 1)
-  :config
-  (bind-keys :map company-active-map
-             ("C-n" . company-select-next)
-             ("C-p" . company-select-previous)
-             ("C-d" . company-show-doc-buffer)
-             ("<tab>" . company-complete)))
-
-(use-package eclim
-  ;;:ensure t
-  :requires (eclim company-emacs-eclim company)
-  ;;:load-path "~/Development/repos/elisp/emacs-eclim"
-  :mode
-  (("\\.java\\'" . eclim-mode))
-  :commands (eclim-mode)
-  :config
-  (setq help-at-pt-display-when-idle t)
-  (setq help-at-pt-timer-delay 0.1)
-  (help-at-pt-set-timer)
-  (global-set-key (kbd "M-/") 'company-complete)
-  (use-package company-emacs-eclim
-    :requires company
-    :config    
-    (company-emacs-eclim-setup)))
-
-(use-package eclimd  
-  ;;:load-path "~/Development/repos/elisp/emacs-eclim"
-  :commands start-eclimd)
-
-
-;;(setq eclim-print-debug-messages t)
-
-;; (require 'eclim)
-;; ;;(global-eclim-mode)
-;; (setq help-at-pt-display-when-idle t)
-;; (setq help-at-pt-timer-delay 0.1)
-;; (help-at-pt-set-timer)
-;; (require 'company)
-;; (require 'company-emacs-eclim)
-;; (company-emacs-eclim-setup)
-;; (global-company-mode t)
-;; (global-set-key (kbd "M-/") 'company-complete)
-
-(use-package highlight-cl
-  :ensure t
-  :demand t
-  :config  
-  (add-hook 'emacs-lisp-mode-hook 'highlight-cl-add-font-lock-keywords)
-  (add-hook 'lisp-interaction-mode-hook 'highlight-cl-add-font-lock-keywords))
-
-(use-package guide-key
-  :disabled t
-  :ensure t
-  :config  
-  (setq guide-key/guide-key-sequence t)
-  (setq guide-key/idle-delay 1.0)
-  (guide-key-mode 1))
+;; (use-package company
+;;   :ensure t
+;;   :bind ("M-/" . company-complete)
+;;   :init
+;;   (global-company-mode 1)
+;;   :config
+;;   (bind-keys :map company-active-map
+;;              ("C-n" . company-select-next)
+;;              ("C-p" . company-select-previous)
+;;              ("C-d" . company-show-doc-buffer)
+;;              ("<tab>" . company-complete)))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -413,16 +276,6 @@
 (help-at-pt-set-timer)
 (setq visible-bell t)
 (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
-;; (setq tramp-default-method "ssh")
-(setq tramp-verbose 9)
-
-(add-hook 'js2-mode-hook
-          '(lambda ()
-             (local-set-key "\C-x\C-e" 'js-send-last-sexp)
-             (local-set-key "\C-\M-x" 'js-send-last-sexp-and-go)
-             (local-set-key "\C-cb" 'js-send-buffer)
-             (local-set-key "\C-c\C-b" 'js-send-buffer-and-go)
-             (local-set-key "\C-cl" 'js-load-file-and-go)))
 
 (autoload 'bash-completion-dynamic-complete 
   "bash-completion"
@@ -432,19 +285,7 @@
 (add-hook 'shell-command-complete-functions
           'bash-completion-dynamic-complete)
 
-;; keyboard bindings for lookup
-(define-key 'help-command (kbd "C-l") 'find-library)
-(define-key 'help-command (kbd "C-f") 'find-function)
-(define-key 'help-command (kbd "C-k") 'find-function-on-key)
-(define-key 'help-command (kbd "C-v") 'find-variable)
 
-(defun other-window-backward (&optional n)
-  "Select Nth previous window."
-  (interactive "P")    
-  (other-window (- (prefix-numeric-value n))))
-
-(global-set-key (kbd "C-x C-p") 'other-window-backward)
-(global-set-key (kbd "C-x C-n") 'other-window)
 (global-set-key (kbd "C-+") 'text-scale-increase)
 (global-set-key (kbd "C--") 'text-scale-decrease)
 
@@ -470,68 +311,22 @@
                   (interactive)
                   (ignore-errors (previous-line 5))))
 
-(use-package dired)
-(defun dired-back-to-top ()
-  (interactive)
-  (beginning-of-buffer)
-  (dired-next-line 4))
+;; (use-package dired)
+;; (defun dired-back-to-top ()
+;;   (interactive)
+;;   (beginning-of-buffer)
+;;   (dired-next-line 4))
 
-(define-key dired-mode-map
-  (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
+;; (define-key dired-mode-map
+;;   (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
 
-(defun dired-jump-to-bottom ()
-  (interactive)
-  (end-of-buffer)
-  (dired-next-line -1))
+;; (defun dired-jump-to-bottom ()
+;;   (interactive)
+;;   (end-of-buffer)
+;;   (dired-next-line -1))
 
-(define-key dired-mode-map
-  (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
-
-(use-package magit
-  :ensure t
-  :bind ("C-c g" . magit-status))
-
-(use-package ert-runner
-  :defer t
-  :ensure t
-  :defer t)
-
-(use-package overseer
-  :ensure t
-  :defer t)
-
-(use-package undo-tree
-  :ensure t
-  :bind (("M-z" . undo-tree-undo)
-         ("M-s-z" . undo-tree-redo)))
-
-(use-package clomacs
-  :ensure t)
-
-(use-package ejc-sql
-  :ensure t)
-
-(use-package nodejs-repl
-  :ensure t
-  :commands (nodejs-repl
-             nodejs-repl-send-buffer
-             nodejs-repl-switch-to-repl
-             nodejs-repl-send-region
-             nodejs-repl-send-last-sexp
-             nodejs-repl-execute
-                          nodejs-repl-load-file))
-
-(add-hook 'sql-interactive-mode-hook
-          (lambda ()
-            (toggle-truncate-lines t)))
-
-(add-hook 'sql-mode-hook
-          (lambda ()
-            (setq-local ac-ignore-case t)
-            (auto-complete-mode)))
-
-(use-package elisp-lint
-  :load-path "~/Development/repos/elisp/elisp-lint")
+;; (define-key dired-mode-map
+;;   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (defun do-eval-buffer ()
   (interactive)
@@ -542,23 +337,6 @@
   (interactive)
   (call-interactively 'eval-region)
   (message "Region has been evaluated"))
-
-(bind-keys :prefix-map my-lisp-devel-map
-           :prefix "C-c e"
-           ("E" . elint-current-buffer)
-           ("b" . do-eval-buffer)
-           ("c" . cancel-debug-on-entry)
-           ("d" . debug-on-entry)
-           ("e" . toggle-debug-on-error)
-           ("F" . emacs-lisp-byte-compile-and-load)
-           ("f" . find-function)
-           ("j" . emacs-lisp-mode)
-           ("l" . find-library)
-           ("m" . macrostep-expand)
-           ("p" . eval-print-last-sexp)
-           ("r" . do-eval-region)
-           ("s" . scratch)
-           ("z" . byte-recompile-directory))
 
 (defun server-shutdown ()
   "Save buffers, Quit, and Shutdown (kill) server"
@@ -576,7 +354,6 @@
     (unless (was-compiled-p it)
       (byte-recompile-directory it 0))))
 
-
 (defun dos2unix (buffer)
   "Automate M-% C-q C-m RET C-q C-j RET"
   (interactive "*b")
@@ -585,7 +362,7 @@
     (while (search-forward (string ?\C-m) nil t)
                 (replace-match (string ?\C-j) nil t))))
 
-(ensure-packages-compiled)
+;; (ensure-packages-compiled)
 
 ;; (load "server")
 ;; (unless (server-running-p)
@@ -593,9 +370,7 @@
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; multiple cursors                                                       ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(global-set-key (kbd "C-c m c") 'mc/edit-lines)
+(setq spacemacs-start-directory "~/.emacs.d/spacemacs/")
+(load-file (concat spacemacs-start-directory "init.el"))
 
 ;;; init.el ends here
