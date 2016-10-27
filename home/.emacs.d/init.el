@@ -86,33 +86,6 @@
 (use-package misc-cmds :ensure t)
 (use-package ag :ensure t)
 
-;; (use-package flycheck
-;;   :ensure t
-;;   :diminish flycheck-mode
-;;   :defer 2  
-;;   :config
-;;     (global-flycheck-mode))
-
-;; (use-package org
-;;   :mode ("\\.org\\'" . org-mode)
-;;   :config
-;;   (setq org-src-fontify-natively t)
-;;   (setq org-confirm-babel-evaluate nil
-;;         org-src-fontify-natively t
-;;         org-src-tab-acts-natively t)
-;;   (setq org-todo-keywords
-;;       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "DELEGATED")))
-;;   (org-babel-do-load-languages
-;;    'org-babel-load-languages
-;;    '((clojure . t)
-;;      (emacs-lisp . t)
-;;      (ruby . t)
-;;      (python . t)
-;;      (js . t)
-;;      (R . t)     
-;;      (sh . t)
-;;      (sql . t))))
-
 ;; Enable puml-mode for PlantUML files
 (add-to-list 'auto-mode-alist '("\\.puml\\'" . puml-mode))
 (add-to-list 'auto-mode-alist '("\\.plantuml\\'" . puml-mode))
@@ -310,23 +283,6 @@
                 (lambda ()
                   (interactive)
                   (ignore-errors (previous-line 5))))
-
-;; (use-package dired)
-;; (defun dired-back-to-top ()
-;;   (interactive)
-;;   (beginning-of-buffer)
-;;   (dired-next-line 4))
-
-;; (define-key dired-mode-map
-;;   (vector 'remap 'beginning-of-buffer) 'dired-back-to-top)
-
-;; (defun dired-jump-to-bottom ()
-;;   (interactive)
-;;   (end-of-buffer)
-;;   (dired-next-line -1))
-
-;; (define-key dired-mode-map
-;;   (vector 'remap 'end-of-buffer) 'dired-jump-to-bottom)
 
 (defun do-eval-buffer ()
   (interactive)
