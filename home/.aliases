@@ -5,7 +5,7 @@ alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias -- -="cd -"
 
-alias e="emacsclient -t"
+alias ec="emacsclient -t"
 
 # Shortcuts
 alias updatedb="sudo /usr/libexec/locate.updatedb"
