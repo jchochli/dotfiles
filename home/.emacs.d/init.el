@@ -24,13 +24,6 @@
 (define-key input-decode-map "\e[1;5C" [C-right])
 (define-key input-decode-map "\e[1;5D" [C-left])
 
-;; eldoc
-(autoload 'turn-on-eldoc-mode "eldoc" nil t)
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-;;(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-
 ;; Set locale to UTF8
 (set-language-environment 'utf-8)
 (set-terminal-coding-system 'utf-8)
@@ -77,51 +70,10 @@
 
 (setq use-package-verbose t)
 
-;;(use-package f :ensure t)
-;;(use-package s :ensure t)
-;;(use-package dash :ensure t)
 (use-package bug-hunter  :ensure t  :defer t)
-(use-package visual-regexp  :ensure t  :defer t)
-;;(use-package auto-complete :ensure t)
 (use-package misc-cmds :ensure t)
 (use-package ag :ensure t)
 
-;; Enable puml-mode for PlantUML files
-(add-to-list 'auto-mode-alist '("\\.puml\\'" . puml-mode))
-(add-to-list 'auto-mode-alist '("\\.plantuml\\'" . puml-mode))
-
-;; (use-package ido   
-;;   :ensure t
-;;   :init  
-;;   (ido-mode 1)
-;;   (ido-everywhere 1)
-;;   :config
-;;   (progn
-;;     (setq ido-case-fold t)
-;;     (setq ido-everywhere t)
-;;     (setq ido-enable-prefix nil)
-;;     (setq ido-enable-flex-matching t)
-;;     (setq ido-create-new-buffer 'always)
-;;     (setq ido-max-prospects 10)
-;;     (setq ido-use-faces nil)
-;;     (setq ido-file-extensions-order '(".el" ".java" ".js" ".rb"))
-;;     (add-to-list 'ido-ignore-files "\\.DS_Store"))
-;;     (add-hook 'ido-setup-hook
-;;             (lambda ()
-;;               ;; Go straight home
-;;               (define-key ido-file-completion-map
-;;                 (kbd "~")
-;;                 (lambda ()
-;;                   (interactive)
-;;                   (if (looking-back "/")
-;;                       (insert "~/")
-;;                     (call-interactively 'self-insert-command)))))))
-
-;; (defadvice ido-find-file (after find-file-sudo activate)
-;;   "Find file as root if necessary."
-;;   (unless (and buffer-file-name
-;;                (file-writable-p buffer-file-name))
-;;     (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
 
 (defun sudo ()
   "Use TRAMP to `sudo' the current buffer"
@@ -131,101 +83,17 @@
      (concat "/sudo:root@localhost:"
              buffer-file-name))))
 
-;; (use-package flx-ido
-;;   :ensure t
-;;   :init (flx-ido-mode 1))
-
-;; (use-package ido-vertical-mode
-;;   :ensure t
-;;   :init (ido-vertical-mode 1))
-
-;; (use-package idomenu
-;;   :ensure t
-;;   :bind ("M-i" . idomenu))
-
-;; (use-package smex
-;;   :ensure t
-;;   :init (smex-initialize)
-;;     :bind ("M-x" . smex))
-
-;; (use-package ido-ubiquitous
-;;   :ensure t
-;;   :init (ido-ubiquitous-mode 1))
-
-;; (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-
-;; (use-package yasnippet
-;;   :ensure t
-;;   :defer t
-;;   :init
-;;   (progn
-;;     (use-package yasnippets)
-;;     (yas-global-mode 1)
-;;     (setq-default yas/prompt-functions '(yas/ido-prompt))))
-
-(use-package projectile
-  ;;:load-path "~/Development/repos/elisp/projectile"
-  :ensure t
-  :commands projectile-global-mode
-  :bind-keymap ("C-c p" . projectile-command-map)
-  :config  
-  (projectile-global-mode))
-
-(use-package projectile-speedbar
-  :disabled t
-  :ensure t
-  :config
-  (global-set-key (kbd "M-<f2>") 'projectile-speedbar-open-current-buffer-in-tree))
-
 (use-package switch-window  :ensure t  
   :bind ("C-x o" . switch-window))
 
 ;;(use-package ace-window  :ensure t )
-(use-package undo-tree  :ensure t  )
 (use-package 4clojure :ensure t)
-
-(use-package web-mode  :ensure t  
-  :mode (("\\.html$" . web-mode)
-         ("\\.mustache\\'" . web-mode)
-         ("\\.jsx\\'" . web-mode)
-         ("\\.xsl\\'" . web-mode)))
-
-(setq web-mode-content-types-alist
-        '(("jsx" . "\\.js[x]?\\'")))
 
 ;; JSP
 (use-package crappy-jsp-mode
   :config
   (add-to-list 'auto-mode-alist '("\\.jsp$" . crappy-jsp-mode)))
 
-(use-package nxml :ensure t)
-(use-package macrostep :ensure t)
-
-(use-package bookmark
-  :ensure
-  :config
-  (use-package bookmark+))
-
-(use-package browse-kill-ring+
-  :ensure
-  :commands browse-kill-ring)
-
-;; (use-package which-key
-;;   :ensure t
-;;   :config
-;;   (which-key-mode))
-
-;; (use-package company
-;;   :ensure t
-;;   :bind ("M-/" . company-complete)
-;;   :init
-;;   (global-company-mode 1)
-;;   :config
-;;   (bind-keys :map company-active-map
-;;              ("C-n" . company-select-next)
-;;              ("C-p" . company-select-previous)
-;;              ("C-d" . company-show-doc-buffer)
-;;              ("<tab>" . company-complete)))
 
 (use-package exec-path-from-shell
   :ensure t
@@ -318,11 +186,6 @@
     (while (search-forward (string ?\C-m) nil t)
                 (replace-match (string ?\C-j) nil t))))
 
-;; (ensure-packages-compiled)
-
-;; (load "server")
-;; (unless (server-running-p)
-;;   (server-start))
 (put 'upcase-region 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
