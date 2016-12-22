@@ -43,10 +43,12 @@ values."
      emacs-lisp
      ;; git
      ;; markdown
+     clojure
      org
      html
      javascript
      react
+     sml
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -303,6 +305,7 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (setq eclim-eclipse-dirs "/Users/jameschochlinski/Development/bin/jee-neon"
         eclim-executable "/Users/jameschochlinski/.p2/pool/plugins/org.eclim_2.6.0/bin")
+  (setq projectile-mode-line "Projectile")
   )
 
 ;; todos
