@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     csv
+     sql
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -41,11 +43,12 @@ values."
      better-defaults
      smex
      emacs-lisp
-     ;; git
+     ;; git     
      ;; markdown
      clojure
      org
      html
+     java
      javascript
      react
      sml
@@ -60,7 +63,7 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages '(ahg)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -192,7 +195,7 @@ values."
    ;; file stored in the cache directory and `nil' to disable auto-saving.
    ;; (default 'cache)
    dotspacemacs-auto-save-file-location 'cache
-   ;; Maximum number of rollback slots to keep in the cache. (default 5)
+   ;; Mximum number of rollback slots to keep in the cache. (default 5)
    dotspacemacs-max-rollback-slots 5
    ;; If non nil, `helm' will try to minimize the space it uses. (default nil)
    dotspacemacs-helm-resize nil
@@ -303,8 +306,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq eclim-eclipse-dirs "/Users/jameschochlinski/Development/bin/jee-neon"
-        eclim-executable "/Users/jameschochlinski/.p2/pool/plugins/org.eclim_2.6.0/bin")
+  (setq eclim-eclipse-dirs "/Users/jameschochlinski/Development/bin/jee-neon")
   (setq projectile-mode-line "Projectile")
   )
 
