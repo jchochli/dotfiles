@@ -5,6 +5,7 @@ merge = emacsclient
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
 shelve=
+rebase =
 
 [merge-tools]
 emacs.executable = emacsclient

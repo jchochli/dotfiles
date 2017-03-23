@@ -38,7 +38,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ivy
+     ;; ivy
      auto-completion
      better-defaults
      smex
@@ -52,9 +52,9 @@ values."
      javascript
      react
      sml
-     ;; (shell :variables
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom)
      ;; spell-checking
      ;; syntax-checking
      ;; version-control
@@ -104,7 +104,7 @@ values."
    ;; use different package directories for different Emacs versions, set this
    ;; to `emacs-version'.
    dotspacemacs-elpa-subdirectory nil
-   ;; One of `vim', `emacs' or `hybrid'.
+   ;; One of `vim', `emacs' or `hybrid'
    ;; `hybrid' is like `vim' except that `insert state' is replaced by the
    ;; `hybrid state' with `emacs' key bindings. The value can also be a list
    ;; with `:variables' keyword (similar to layers). Check the editing styles
@@ -306,28 +306,187 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+  (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+  (setq user-full-name "James Chochlinski")
+  (setq user-mail-address "jchochli@xpzen.com")
+
   (setq eclim-eclipse-dirs "/Users/jameschochlinski/Development/bin/jee-neon")
   (setq projectile-mode-line "Projectile")
+
+  ;; disable vc-git
+  (setq vc-handled-backends ())
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (show-paren-mode t)
+  (setq message-log-max 16384)
+  (setq debug-on-error t)
+  (setq org-log-done t)
+  (add-to-list 'exec-path "/usr/local/bin")
+  (add-to-list 'load-path "~/.emacs.d/lisp/")
+  (global-auto-revert-mode t)
+
+  (define-key input-decode-map "\e[1;5A" [C-up])
+  (define-key input-decode-map "\e[1;5B" [C-down])
+  (define-key input-decode-map "\e[1;5C" [C-right])
+  (define-key input-decode-map "\e[1;5D" [C-left])
+
+  ;; Set locale to UTF8
+  (set-language-environment 'utf-8)
+  (set-terminal-coding-system 'utf-8)
+  (setq locale-coding-system 'utf-8)
+  (set-default-coding-systems 'utf-8)
+  (set-selection-coding-system 'utf-8)
+  (prefer-coding-system 'utf-8)
+  (set-default 'truncate-lines t)
+
+  ;; todos
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
+
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED" ("CANCELLED" . t))
+                ("WAITING" ("WAITING" . t))
+                ("HOLD" ("WAITING") ("HOLD" . t))
+                (done ("WAITING") ("HOLD"))
+                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
+                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+  (add-hook 'Buffer-menu-mode-hook 
+            (lambda ()
+              (setq-local revert-buffer-function
+                          (lambda (&rest args)))))
+
+  ;; Enable mouse support
+  (unless window-system
+    (require 'mouse)
+    (xterm-mouse-mode t)
+    (global-set-key [mouse-4] (lambda ()
+                                (interactive)
+                                (scroll-down 1)))
+    (global-set-key [mouse-5] (lambda ()
+                                (interactive)
+                                (scroll-up 1)))
+    (defun track-mouse (e))
+    (setq mouse-sel-mode t))
+
+  (defun sudo ()
+    "Use TRAMP to `sudo' the current buffer"
+    (interactive)
+    (when buffer-file-name
+      (find-alternate-file
+       (concat "/sudo:root@localhost:"
+               buffer-file-name))))
+
+  (setq custom-file "~/.emacs.d/custom.el")
+  (load custom-file 'noerror)
+
+  (setq-default tab-width 4)
+  (setq js-indent-level 4)
+  (setq jsx-indent-level 4)
+  (setq c-basic-indent 4)
+  (setq tab-width 4)
+  (setq indent-tabs-mode nil)
+  (winner-mode 1)
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  (setq visible-bell t)
+  (setq speedbar-directory-unshown-regexp "^\\(CVS\\|RCS\\|SCCS\\|\\.\\.*$\\)\\'")
+
+  ;; (autoload 'bash-completion-dynamic-complete 
+  ;;   "bash-completion"
+  ;;   "BASH completion hook")
+  ;; (add-hook 'shell-dynamic-complete-functions
+  ;;           'bash-completion-dynamic-complete)
+  ;; (add-hook 'shell-command-complete-functions
+  ;;           'bash-completion-dynamic-complete)
+
+  (global-set-key (kbd "C-c SPC") 'avy-goto-char-2)
+  (global-set-key (kbd "C-+") 'text-scale-increase)
+  (global-set-key (kbd "C--") 'text-scale-decrease)
+
+  (global-set-key (kbd "C-S-<left>") 'shrink-window-horizontally)
+  (global-set-key (kbd "C-S-<right>") 'enlarge-window-horizontally)
+  (global-set-key (kbd "C-S-<down>") 'shrink-window)
+  (global-set-key (kbd "C-S-<up>") 'enlarge-window)
+
+  ;; Move more quickly
+  (global-set-key (kbd "M-n")
+                  (lambda ()
+                    (interactive)
+                    (ignore-errors (next-line 5))))
+
+  (global-set-key (kbd "M-p")
+                  (lambda ()
+                    (interactive)
+                    (ignore-errors (previous-line 5))))
+
+  (defun do-eval-buffer ()
+    (interactive)
+    (call-interactively 'eval-buffer)
+    (message "Buffer has been evaluated"))
+
+  (defun do-eval-region ()
+    (interactive)
+    (call-interactively 'eval-region)
+    (message "Region has been evaluated"))
+
+  (defun server-shutdown ()
+    "Save buffers, Quit, and Shutdown (kill) server"
+    (interactive)
+    (save-some-buffers)
+    (kill-emacs))
+
+  (defun was-compiled-p (path)
+    "Does the directory at PATH contain any .elc files?"
+    (--any-p (f-ext? it "elc") (f-files path)))
+
+  (defun ensure-packages-compiled ()
+    "If any packages installed with package.el aren't compiled yet, compile them."
+    (--each (f-directories package-user-dir)
+      (unless (was-compiled-p it)
+        (byte-recompile-directory it 0))))
+
+  (defun dos2unix (buffer)
+    "Automate M-% C-q C-m RET C-q C-j RET"
+    (interactive "*b")
+    (save-excursion
+      (goto-char (point-min))
+      (while (search-forward (string ?\C-m) nil t)
+        (replace-match (string ?\C-j) nil t))))
+
+  ;; -*- lexical-binding: t -*-
+  (defun ora-ediff-files ()
+    (interactive)
+    (let ((files (dired-get-marked-files))
+          (wnd (current-window-configuration)))
+      (if (<= (length files) 2)
+          (let ((file1 (car files))
+                (file2 (if (cdr files)
+                           (cadr files)
+                         (read-file-name
+                          "file: "
+                          (dired-dwim-target-directory)))))
+            (if (file-newer-than-file-p file1 file2)
+                (ediff-files file2 file1)
+              (ediff-files file1 file2))
+            (add-hook 'ediff-after-quit-hook-internal
+                      (lambda ()
+                        (setq ediff-after-quit-hook-internal nil)
+                        (set-window-configuration wnd))))
+        (error "no more than 2 files should be marked"))))
+
+  (define-key dired-mode-map "e" 'ora-ediff-files)
+
+  (put 'upcase-region 'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
+
   )
-
-;; todos
-(setq org-todo-keywords
-      (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-              (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
-
-(setq org-todo-state-tags-triggers
-      (quote (("CANCELLED" ("CANCELLED" . t))
-              ("WAITING" ("WAITING" . t))
-              ("HOLD" ("WAITING") ("HOLD" . t))
-              (done ("WAITING") ("HOLD"))
-              ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-              ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-
-(add-hook 'Buffer-menu-mode-hook 
-          (lambda ()
-            (setq-local revert-buffer-function
-                        (lambda (&rest args)))))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
