@@ -43,7 +43,7 @@ values."
      better-defaults
      smex
      emacs-lisp
-     ;; git     
+     git
      ;; markdown
      clojure
      org
@@ -313,6 +313,7 @@ you should place your code here."
 
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
+  (setq jiralib-url "https://payveris.atlassian.net")
 
   (setq eclim-eclipse-dirs "/Users/jameschochlinski/Development/bin/jee-neon")
   (setq projectile-mode-line "Projectile")
@@ -341,6 +342,8 @@ you should place your code here."
   (set-selection-coding-system 'utf-8)
   (prefer-coding-system 'utf-8)
   (set-default 'truncate-lines t)
+  (put 'upcase-region 'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
 
   ;; todos
   (setq org-todo-keywords
@@ -374,13 +377,13 @@ you should place your code here."
     (defun track-mouse (e))
     (setq mouse-sel-mode t))
 
-  (defun sudo ()
-    "Use TRAMP to `sudo' the current buffer"
-    (interactive)
-    (when buffer-file-name
-      (find-alternate-file
-       (concat "/sudo:root@localhost:"
-               buffer-file-name))))
+  ;; (defun sudo ()
+  ;;   "Use TRAMP to `sudo' the current buffer"
+  ;;   (interactive)
+  ;;   (when buffer-file-name
+  ;;     (find-alternate-file
+  ;;      (concat "/sudo:root@localhost:"
+  ;;              buffer-file-name))))
 
   (setq custom-file "~/.emacs.d/custom.el")
   (load custom-file 'noerror)
@@ -431,26 +434,11 @@ you should place your code here."
     (call-interactively 'eval-buffer)
     (message "Buffer has been evaluated"))
 
-  (defun do-eval-region ()
-    (interactive)
-    (call-interactively 'eval-region)
-    (message "Region has been evaluated"))
-
   (defun server-shutdown ()
     "Save buffers, Quit, and Shutdown (kill) server"
     (interactive)
     (save-some-buffers)
     (kill-emacs))
-
-  (defun was-compiled-p (path)
-    "Does the directory at PATH contain any .elc files?"
-    (--any-p (f-ext? it "elc") (f-files path)))
-
-  (defun ensure-packages-compiled ()
-    "If any packages installed with package.el aren't compiled yet, compile them."
-    (--each (f-directories package-user-dir)
-      (unless (was-compiled-p it)
-        (byte-recompile-directory it 0))))
 
   (defun dos2unix (buffer)
     "Automate M-% C-q C-m RET C-q C-j RET"
@@ -482,10 +470,6 @@ you should place your code here."
         (error "no more than 2 files should be marked"))))
 
   (define-key dired-mode-map "e" 'ora-ediff-files)
-
-  (put 'upcase-region 'disabled nil)
-  (put 'narrow-to-region 'disabled nil)
-
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -497,7 +481,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
+    (smeargle orgit magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
