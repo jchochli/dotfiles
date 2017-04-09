@@ -37,7 +37,7 @@ export RLWRAP_HOME="$HOME/.rlwrap"
 
 export ALTERNATE_EDITOR=""
 export EDITOR=emacsclient
-export HGMERGE=emacsclient
+#export HGMERGE=emacsclient
 export VISUAL=$EDITOR
 
 

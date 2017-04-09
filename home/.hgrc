@@ -1,6 +1,7 @@
 [ui]
 username = James Chochlinski <jchochlinski@payveris.com>
-merge = emacsclient
+#merge = emacsclient
+#merge = diffmerge
 
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
@@ -8,9 +9,7 @@ shelve=
 rebase =
 
 [merge-tools]
-emacs.executable = emacsclient
-#emacs.args = -q --eval "(require 'ediff)" --eval "(setq ediff-window-setup-function 'ediff-setup-windows-plain)" --eval "(add-hook 'ediff-quit-hook 'save-buffers-kill-emacs)" --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
-#emacs.premerge = False
-emacs.args = --eval "(ediff-merge-with-ancestor \"$local\" \"$other\" \"$base\" nil \"$output\")"
-
-
+emacsclient.priority = 10
+emacsclient.args = -q --eval "(require 'ediff)" --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
+diffmerge.args = -merge -result=$output -t1="Local Version" -t2=$output -t3="Other Version" -caption=$output $local $base $other
+diffmerge.gui = True
