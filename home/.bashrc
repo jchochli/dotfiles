@@ -13,6 +13,10 @@ shopt -s nocaseglob
 
 # Append to the Bash history file, rather than overwriting it
 shopt -s histappend
+shopt -s histreedit
+shopt -s histverify
+HISTCONTROL='ignoreboth'
+PROMPT_COMMAND="history -a;history -c; history -r; $PROMPT_COMMAND"
 
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell
@@ -56,3 +60,4 @@ source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 source "$HOME/bin/z.sh"
 
 homeshick --quiet refresh
+{ eval `ssh-agent`; ssh-add -A; } &>/dev/null

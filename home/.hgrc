@@ -1,15 +1,17 @@
 [ui]
 username = James Chochlinski <jchochlinski@payveris.com>
 #merge = emacsclient
-#merge = diffmerge
+merge = diffmerge
 
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
-shelve=
+shelve =
 rebase =
+strip =
+# hgext.hgview =
 
 [merge-tools]
-emacsclient.priority = 10
-emacsclient.args = -q --eval "(require 'ediff)" --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
 diffmerge.args = -merge -result=$output -t1="Local Version" -t2=$output -t3="Other Version" -caption=$output $local $base $other
 diffmerge.gui = True
+emacsclient.priority = 10
+emacsclient.args = -q --eval "(require 'ediff)" --eval "(ediff-merge-with-ancestor \""$local"\" \""$other"\" \""$base"\" nil \""$output"\")"
