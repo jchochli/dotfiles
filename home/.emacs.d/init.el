@@ -24,26 +24,6 @@
 (eval-when-compile
   (require 'use-package))
 
-;; (setq use-package-verbose t)
-;; (use-package bug-hunter  :ensure t  :defer t)
-
-(use-package switch-window  :ensure t  
-  :bind ("C-x o" . switch-window))
-
-;; JSP
-;; (use-package crappy-jsp-mode
-;;   :config
-;;   (add-to-list 'auto-mode-alist '("\\.jsp$" . crappy-jsp-mode)))
-
-
-(use-package exec-path-from-shell
-  :ensure t
-  :demand t
-  :config
-  (when (memq window-system '(mac ns))
-    (exec-path-from-shell-initialize)))
-
-
 (setq spacemacs-start-directory "~/.emacs.d/spacemacs/")
 (load-file (concat spacemacs-start-directory "init.el"))
 

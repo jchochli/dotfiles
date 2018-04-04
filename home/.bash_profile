@@ -13,3 +13,5 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 
+eval "$(jenv init -)"
+export PATH="$HOME/.jenv/bin:$PATH"
