@@ -1,5 +1,3 @@
-#export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.7.0_79.jdk/Contents/Home"
-#export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home"
 #export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home"
 export PP_HOME=~/Development/workspace/billpay/
 export JBOSS_HOME=~/Development/bin/jboss-eap-6.4
@@ -7,5 +5,5 @@ export JBOSS_HOME=~/Development/bin/jboss-eap-6.4
 export M2_HOME=~/Development/bin/apache-maven-3.0.5
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
-export ECLIPSE_HOME=~/Development/bin/jee-neon.2/Eclipse.app/Contents/Eclipse
+export ECLIPSE_HOME=/Applications/Eclipse/Eclipse.app/Contents/Eclipse
 export PATH=/usr/local/bin:$PATH:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin:$ECLIPSE_HOME

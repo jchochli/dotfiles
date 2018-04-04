@@ -7,11 +7,11 @@
  '(bmkp-last-as-first-bookmark-file "~/.emacs.d/bookmarks")
  '(browse-kill-ring-highlight-current-entry t)
  '(browse-kill-ring-highlight-inserted-item t)
-;; '(desktop-save-mode t)
  '(dired-listing-switches "-alh")
  '(erc-email-userid "jchochli@xpzen.com")
  '(erc-nick "jchochli")
  '(erc-nick-uniquifier "_")
+ '(httpd-port 8081)
  '(indent-tabs-mode nil)
  '(package-selected-packages
    (quote
