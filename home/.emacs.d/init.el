@@ -26,13 +26,9 @@
 
 ;; (setq use-package-verbose t)
 ;; (use-package bug-hunter  :ensure t  :defer t)
-;; (use-package ag :ensure t)
 
 (use-package switch-window  :ensure t  
   :bind ("C-x o" . switch-window))
-
-;;(use-package ace-window  :ensure t )
-(use-package 4clojure :ensure t)
 
 ;; JSP
 ;; (use-package crappy-jsp-mode
@@ -46,13 +42,6 @@
   :config
   (when (memq window-system '(mac ns))
     (exec-path-from-shell-initialize)))
-
-(use-package buffer-move :ensure t 
-  :bind (("C-c b j" . buf-move-left)
-         ("C-c b k" . buf-move-right)
-         ("C-c b p" . buf-move-up)
-         ("C-c b n" . buf-move-down)))
-
 
 
 (setq spacemacs-start-directory "~/.emacs.d/spacemacs/")
