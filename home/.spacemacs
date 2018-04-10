@@ -31,7 +31,7 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ;;4clojure 
+     ;;4clojure
      markdown
      ansible
      yaml
@@ -310,7 +310,7 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-
+  (setq powerline-default-separator 'arrow)
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
@@ -321,7 +321,7 @@ you should place your code here."
 
   (setq eclim-eclipse-dirs "/Applications/Eclipse")
   (setq projectile-mode-line "Projectile")
-  
+
   ;; disable vc-git
   (setq vc-handled-backends ())
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -498,7 +498,7 @@ you should place your code here."
 ;;   (when (memq window-system '(mac ns))
 ;;     (exec-path-from-shell-initialize)))
 
-;; (use-package buffer-move :ensure t 
+;; (use-package buffer-move :ensure t
 ;;   :bind (("C-c b j" . buf-move-left)
 ;;          ("C-c b k" . buf-move-right)
 ;;          ("C-c b p" . buf-move-up)
