@@ -6,4 +6,4 @@ export M2_HOME=~/Development/bin/apache-maven-3.0.5
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 export ECLIPSE_HOME=/Applications/Eclipse/Eclipse.app/Contents/Eclipse
-export PATH=/usr/local/bin:$PATH:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin:$ECLIPSE_HOME
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin:$ECLIPSE_HOME
