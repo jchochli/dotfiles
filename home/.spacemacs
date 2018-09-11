@@ -32,42 +32,52 @@ values."
    dotspacemacs-configuration-layers
    '(
      ;;4clojure
-     markdown
-     ansible
-     yaml
-     csv
-     sql
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; ivy
+     ansible
      auto-completion
      better-defaults
-     smex
-     emacs-lisp
-     git
-     markdown
      clojure
+     csv
+     docker
+     emacs-lisp
+     emoji
      erc
+     games
+     git
+     helm
      html
-     java
+     (java :variables java-backend 'eclim)
      javascript
+     markdown
+     (org :variables
+          org-enable-reveal-js-support t)
+     plantuml
      react
+     smex
      sml
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      spell-checking
+     sql
      syntax-checking
-     version-control
+     themes-megapack
+     ;; version-control
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(ag)
+   dotspacemacs-additional-packages
+   '(
+     ag
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -130,7 +140,7 @@ values."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
+   dotspacemacs-startup-lists '((recents . 10)
                                 (projects . 7))
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
@@ -140,7 +150,18 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+                         spacemacs-light
+                         afternoon)
+
+   ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
+   ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
+   ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
+   ;; `vanilla' is default Emacs mode-line. `custom' is a user defined themes,
+   ;; refer to the DOCUMENTATION.org for more info on how to create your own
+   ;; spaceline theme. Value can be a symbol or list with additional properties.
+   ;; (default '(spacemacs :separator wave :separator-scale 1.5))
+   dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -148,8 +169,7 @@ values."
    dotspacemacs-default-font '("Source Code Pro"
                                :size 13
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+                               :width normal)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -310,15 +330,12 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq powerline-default-separator 'arrow)
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
-  (setq jiralib-url "https://payveris.atlassian.net")
-
   (setq eclim-eclipse-dirs "/Applications/Eclipse")
   (setq projectile-mode-line "Projectile")
 
@@ -348,6 +365,7 @@ you should place your code here."
   (set-default 'truncate-lines t)
   (put 'upcase-region 'disabled nil)
   (put 'narrow-to-region 'disabled nil)
+  (setq org-reveal-root "/Users/jameschochlinski/Development/repos/reveal.js")
 
   ;; todos
   (setq org-todo-keywords
@@ -436,6 +454,14 @@ you should place your code here."
                     (interactive)
                     (ignore-errors (previous-line 5))))
 
+  (defun other-window-backward (&optional n)
+    "Select Nth previous window."
+    (interactive "P")
+    (other-window (- (prefix-numeric-value n))))
+
+  (global-set-key (kbd "C-x C-p") 'other-window-backward)
+  (global-set-key (kbd "C-x C-n") 'other-window)
+
   (defun do-eval-buffer ()
     (interactive)
     (call-interactively 'eval-buffer)
@@ -456,27 +482,6 @@ you should place your code here."
         (replace-match (string ?\C-j) nil t))))
 
   ;; -*- lexical-binding: t -*-
-  (defun ora-ediff-files ()
-    (interactive)
-    (let ((files (dired-get-marked-files))
-          (wnd (current-window-configuration)))
-      (if (<= (length files) 2)
-          (let ((file1 (car files))
-                (file2 (if (cdr files)
-                           (cadr files)
-                         (read-file-name
-                          "file: "
-                          (dired-dwim-target-directory)))))
-            (if (file-newer-than-file-p file1 file2)
-                (ediff-files file2 file1)
-              (ediff-files file1 file2))
-            (add-hook 'ediff-after-quit-hook-internal
-                      (lambda ()
-                        (setq ediff-after-quit-hook-internal nil)
-                        (set-window-configuration wnd))))
-        (error "no more than 2 files should be marked"))))
-
-  (define-key dired-mode-map "e" 'ora-ediff-files)
   )
 
 ;; (setq use-package-verbose t)
@@ -514,7 +519,7 @@ you should place your code here."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ag org-mime orgit org-category-capture org-present ghub let-alist org-plus-contrib erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks yaml-mode xterm-color web-mode web-beautify tagedit sql-indent slim-mode shell-pop scss-mode sass-mode pug-mode alert log4e gntp org-download ob-sml sml-mode mwim multi-term mmm-mode markdown-toc markdown-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jinja2-mode htmlize hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode gnuplot gh-md flycheck eshell-z eshell-prompt-extras esh-help emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-emacs-eclim eclim company-ansible company coffee-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg cider-eval-sexp-fu cider seq queue clojure-mode auto-yasnippet yasnippet ansible-doc ansible ahg ace-jump-helm-line ac-ispell auto-complete winum unfill fuzzy git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip diff-hl auto-dictionary smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
+    (org-mime orgit org-category-capture org-present ghub let-alist org-plus-contrib erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks yaml-mode xterm-color web-mode web-beautify tagedit sql-indent slim-mode shell-pop scss-mode sass-mode pug-mode alert log4e gntp org-download ob-sml sml-mode mwim multi-term mmm-mode markdown-toc markdown-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jinja2-mode htmlize hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode gnuplot gh-md flycheck eshell-z eshell-prompt-extras esh-help emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-emacs-eclim eclim company-ansible company coffee-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg cider-eval-sexp-fu cider seq queue clojure-mode auto-yasnippet yasnippet ansible-doc ansible ahg ace-jump-helm-line ac-ispell auto-complete winum unfill fuzzy git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip diff-hl auto-dictionary smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
