@@ -30,8 +30,9 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     ;;4clojure
+   '(asciidoc
+     php
+     ruby
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -52,10 +53,10 @@ values."
      helm
      html
      (java :variables java-backend 'eclim)
+     ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
      markdown
-     (org :variables
-          org-enable-reveal-js-support t)
+     (org :variables org-enable-reveal-js-support t)
      plantuml
      react
      smex
@@ -77,6 +78,9 @@ values."
    dotspacemacs-additional-packages
    '(
      ag
+     nodejs-repl
+     4clojure
+     elmacro
      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -151,7 +155,8 @@ values."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
                          spacemacs-light
-                         afternoon)
+                         afternoon
+                         hickey)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -334,10 +339,26 @@ you should place your code here."
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode))
+
+  ;; nodejs-repl
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ne" 'nodejs-repl-send-last-expression)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nj" 'nodejs-repl-send-line)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nr" 'nodejs-repl-send-region)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nl" 'nodejs-repl-load-file)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "n'" 'nodejs-repl-switch-to-repl)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ns" 'nodejs-repl-switch-to-repl)
+
+  (setq-default js2-basic-offset 2)
+  (setq-default js-indent-level 2)
+
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
   (setq eclim-eclipse-dirs "/Applications/Eclipse")
   (setq projectile-mode-line "Projectile")
+  (setq httpd-port 8000)
+  (skewer-setup)
+  (setq auth-sources '("~/.authinfo.gpg"))
 
   ;; disable vc-git
   (setq vc-handled-backends ())
@@ -347,6 +368,7 @@ you should place your code here."
   (setq debug-on-error t)
   (setq org-log-done t)
   (add-to-list 'exec-path "/usr/local/bin")
+  (add-to-list 'exec-path "/usr/local/npm_packages/bin")
   (add-to-list 'load-path "~/.emacs.d/lisp/")
   (global-auto-revert-mode t)
 
@@ -538,7 +560,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets symon string-inflection spaceline-all-the-icons rjsx-mode prettier-js password-generator overseer nameless mvn meghanada maven-test-mode magit-svn json-navigator hierarchy impatient-mode helm-xref helm-purpose window-purpose imenu-list helm-git-grep groovy-mode groovy-imports pcache gradle-mode gitignore-templates evil-lion evil-goggles evil-cleverparens ensime sbt-mode scala-mode editorconfig doom-modeline eldoc-eval shrink-path all-the-icons memoize clojure-cheatsheet sesman centered-cursor-mode browse-at-remote font-lock+ dotenv-mode ag org-mime orgit org-category-capture org-present ghub let-alist org-plus-contrib erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks yaml-mode xterm-color web-mode web-beautify tagedit sql-indent slim-mode shell-pop scss-mode sass-mode pug-mode alert log4e gntp org-download ob-sml sml-mode mwim multi-term mmm-mode markdown-toc markdown-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jinja2-mode htmlize hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode gnuplot gh-md flycheck eshell-z eshell-prompt-extras esh-help emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-emacs-eclim eclim company-ansible company coffee-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg cider-eval-sexp-fu cider seq queue clojure-mode auto-yasnippet yasnippet ansible-doc ansible ahg ace-jump-helm-line ac-ispell auto-complete winum unfill fuzzy git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip diff-hl auto-dictionary smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
+    (4clojure org-mime orgit org-category-capture org-present ghub let-alist org-plus-contrib erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks yaml-mode xterm-color web-mode web-beautify tagedit sql-indent slim-mode shell-pop scss-mode sass-mode pug-mode alert log4e gntp org-download ob-sml sml-mode mwim multi-term mmm-mode markdown-toc markdown-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jinja2-mode htmlize hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode gnuplot gh-md flycheck eshell-z eshell-prompt-extras esh-help emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-emacs-eclim eclim company-ansible company coffee-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg cider-eval-sexp-fu cider seq queue clojure-mode auto-yasnippet yasnippet ansible-doc ansible ahg ace-jump-helm-line ac-ispell auto-complete winum unfill fuzzy git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip diff-hl auto-dictionary smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
