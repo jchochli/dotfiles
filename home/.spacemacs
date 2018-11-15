@@ -355,7 +355,7 @@ you should place your code here."
 
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
-  (setq eclim-eclipse-dirs "/Applications/Eclipse.app")
+  (setq eclim-eclipse-dirs '("/Applications/Eclipse"))
 
   (setq projectile-mode-line "Projectile")
   (setq httpd-port 8000)
