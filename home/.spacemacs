@@ -355,7 +355,7 @@ you should place your code here."
 
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
-  (setq eclim-eclipse-dirs '("/Applications/Eclipse"))
+  (setq eclim-eclipse-dirs '("/Applications/Eclipse/Eclipse.app/Contents/Eclipse"))
 
   (setq projectile-mode-line "Projectile")
   (setq httpd-port 8000)
@@ -371,6 +371,7 @@ you should place your code here."
   (setq org-log-done t)
   (add-to-list 'exec-path "/usr/local/bin")
   (add-to-list 'exec-path "/usr/local/npm_packages/bin")
+  (add-to-list 'exec-path "~/.npm-packages/bin")
   (add-to-list 'load-path "~/.emacs.d/lisp/")
   (global-auto-revert-mode t)
 
