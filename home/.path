@@ -6,4 +6,13 @@ export M2_HOME=~/Development/bin/apache-maven-3.0.5
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
 export ECLIPSE_HOME=/Applications/Eclipse/Eclipse.app/Contents/Eclipse
-export PATH=$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin:$ECLIPSE_HOME
+# this is the root folder where all globally installed node packages will  go
+export NPM_PACKAGES="${HOME}/.npm-packages"
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+# add to PATH
+export PATH="$NPM_PACKAGES/bin:$PATH"
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+    PATH="$HOME/bin:$PATH"
+fi
+export PATH=$HOME/.jenv/bin:$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin:$ECLIPSE_HOME
