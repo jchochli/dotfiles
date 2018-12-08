@@ -31,43 +31,60 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ;;4clojure
-     markdown
-     ansible
-     yaml
-     csv
-     sql
+     asciidoc
+     php
+     ruby
+
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; ivy
+     ansible
      auto-completion
      better-defaults
-     smex
-     emacs-lisp
-     git
-     markdown
      clojure
+     csv
+     docker
+     emacs-lisp
+     emoji
      erc
+     games
+     git
+     helm
      html
-     java
+     (java :variables java-backend 'eclim)
+     ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
+     markdown
+     (org :variables org-enable-reveal-js-support t)
+     plantuml
      react
+     smex
      sml
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
      spell-checking
+     sql
      syntax-checking
-     version-control
+     themes-megapack
+     ;; version-control
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(ag)
+   dotspacemacs-additional-packages
+   '(
+     ag
+     nodejs-repl
+     4clojure
+     elmacro
+     crappy-jsp-mode
+     )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -130,7 +147,7 @@ values."
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((recents . 5)
+   dotspacemacs-startup-lists '((recents . 10)
                                 (projects . 7))
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
@@ -140,7 +157,19 @@ values."
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light)
+                         spacemacs-light
+                         afternoon
+                         hickey)
+
+   ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
+   ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
+   ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
+   ;; `vanilla' is default Emacs mode-line. `custom' is a user defined themes,
+   ;; refer to the DOCUMENTATION.org for more info on how to create your own
+   ;; spaceline theme. Value can be a symbol or list with additional properties.
+   ;; (default '(spacemacs :separator wave :separator-scale 1.5))
+   dotspacemacs-mode-line-theme '(spacemacs :separator arrow :separator-scale 1.5)
+
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
@@ -148,8 +177,7 @@ values."
    dotspacemacs-default-font '("Source Code Pro"
                                :size 13
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
+                               :width normal)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -310,17 +338,29 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq powerline-default-separator 'arrow)
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
+  ;; nodejs-repl
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ne" 'nodejs-repl-send-last-expression)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nj" 'nodejs-repl-send-line)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nr" 'nodejs-repl-send-region)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "nl" 'nodejs-repl-load-file)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "n'" 'nodejs-repl-switch-to-repl)
+  (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ns" 'nodejs-repl-switch-to-repl)
+
+  (setq-default js2-basic-offset 2)
+  (setq-default js-indent-level 2)
+
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
-  (setq jiralib-url "https://payveris.atlassian.net")
+  (setq eclim-eclipse-dirs '("/Applications/Eclipse/Eclipse.app/Contents/Eclipse"))
 
-  (setq eclim-eclipse-dirs "/Applications/Eclipse")
   (setq projectile-mode-line "Projectile")
+  (setq httpd-port 8000)
+  (skewer-setup)
+  (setq auth-sources '("~/.authinfo.gpg"))
 
   ;; disable vc-git
   (setq vc-handled-backends ())
@@ -330,6 +370,8 @@ you should place your code here."
   (setq debug-on-error t)
   (setq org-log-done t)
   (add-to-list 'exec-path "/usr/local/bin")
+  (add-to-list 'exec-path "/usr/local/npm_packages/bin")
+  (add-to-list 'exec-path "~/.npm-packages/bin")
   (add-to-list 'load-path "~/.emacs.d/lisp/")
   (global-auto-revert-mode t)
 
@@ -348,6 +390,7 @@ you should place your code here."
   (set-default 'truncate-lines t)
   (put 'upcase-region 'disabled nil)
   (put 'narrow-to-region 'disabled nil)
+  (setq org-reveal-root "/Users/jameschochlinski/Development/repos/reveal.js")
 
   ;; todos
   (setq org-todo-keywords
@@ -436,6 +479,15 @@ you should place your code here."
                     (interactive)
                     (ignore-errors (previous-line 5))))
 
+  (defun other-window-backward (&optional n)
+    "Select Nth previous window."
+    (interactive "P")
+    (other-window (- (prefix-numeric-value n))))
+
+  (global-set-key (kbd "C-x C-p") 'other-window-backward)
+  (global-set-key (kbd "C-x C-n") 'other-window)
+  (global-set-key (kbd "C-x C-.") 'spacemacs/java-eclim-completing-dot)
+
   (defun do-eval-buffer ()
     (interactive)
     (call-interactively 'eval-buffer)
@@ -456,27 +508,6 @@ you should place your code here."
         (replace-match (string ?\C-j) nil t))))
 
   ;; -*- lexical-binding: t -*-
-  (defun ora-ediff-files ()
-    (interactive)
-    (let ((files (dired-get-marked-files))
-          (wnd (current-window-configuration)))
-      (if (<= (length files) 2)
-          (let ((file1 (car files))
-                (file2 (if (cdr files)
-                           (cadr files)
-                         (read-file-name
-                          "file: "
-                          (dired-dwim-target-directory)))))
-            (if (file-newer-than-file-p file1 file2)
-                (ediff-files file2 file1)
-              (ediff-files file1 file2))
-            (add-hook 'ediff-after-quit-hook-internal
-                      (lambda ()
-                        (setq ediff-after-quit-hook-internal nil)
-                        (set-window-configuration wnd))))
-        (error "no more than 2 files should be marked"))))
-
-  (define-key dired-mode-map "e" 'ora-ediff-files)
   )
 
 ;; (setq use-package-verbose t)
@@ -521,3 +552,23 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (zenburn-theme zen-and-art-theme yasnippet-snippets white-sand-theme underwater-theme ujelly-theme typit mmt twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme tao-theme tangotango-theme tango-plus-theme tango-2-theme symon sunny-day-theme sudoku sublime-themes subatomic256-theme subatomic-theme string-inflection spaceline-all-the-icons spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme seti-theme seeing-is-believing rvm ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocop rspec-mode robe rjsx-mode reverse-theme rebecca-theme rbenv rake railscasts-theme purple-haze-theme professional-theme prettier-js plantuml-mode planet-theme phpunit phpcbf php-extras php-auto-yasnippets phoenix-dark-pink-theme phoenix-dark-mono-theme password-generator pacmacs ox-reveal overseer organic-green-theme org-projectile org-pomodoro org-brain omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme nodejs-repl noctilux-theme naquadah-theme nameless mvn mustang-theme monokai-theme monochrome-theme molokai-theme moe-theme minitest minimal-theme meghanada maven-test-mode material-theme majapahit-theme magit-svn madhat2r-theme lush-theme light-soap-theme kaolin-themes json-navigator hierarchy jbeans-theme jazz-theme ir-black-theme inkpot-theme impatient-mode heroku-theme hemisu-theme helm-xref helm-purpose window-purpose imenu-list helm-git-grep hc-zenburn-theme gruvbox-theme gruber-darker-theme groovy-mode groovy-imports pcache grandshell-theme gradle-mode gotham-theme gitignore-templates gandalf-theme flatui-theme flatland-theme farmhouse-theme eziam-theme exotica-theme evil-org treepy graphql evil-lion evil-goggles evil-cleverparens espresso-theme ensime sbt-mode scala-mode emojify ht emoji-cheat-sheet-plus elmacro editorconfig drupal-mode dracula-theme doom-themes doom-modeline eldoc-eval shrink-path all-the-icons memoize dockerfile-mode docker tablist docker-tramp django-theme darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme crappy-jsp-mode company-php ac-php-core xcscope php-mode company-emoji color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized clues-theme clojure-cheatsheet sesman chruby cherry-blossom-theme centered-cursor-mode busybee-theme bundler inf-ruby bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes ag afternoon-theme adoc-mode markup-faces 4clojure 2048-game font-lock+ dotenv-mode org-mime orgit org-category-capture org-present ghub let-alist org-plus-contrib erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks yaml-mode xterm-color web-mode web-beautify tagedit sql-indent slim-mode shell-pop scss-mode sass-mode pug-mode alert log4e gntp org-download ob-sml sml-mode mwim multi-term mmm-mode markdown-toc markdown-mode livid-mode skewer-mode simple-httpd less-css-mode json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jinja2-mode htmlize hide-comnt helm-themes helm-swoop helm-projectile helm-mode-manager helm-flx helm-descbinds helm-css-scss helm-company helm-c-yasnippet helm-ag haml-mode gnuplot gh-md flycheck eshell-z eshell-prompt-extras esh-help emmet-mode csv-mode company-web web-completion-data company-tern dash-functional tern company-statistics company-emacs-eclim eclim company-ansible company coffee-mode clojure-snippets clj-refactor inflections edn multiple-cursors paredit peg cider-eval-sexp-fu cider seq queue clojure-mode auto-yasnippet yasnippet ansible-doc ansible ahg ace-jump-helm-line ac-ispell auto-complete winum unfill fuzzy git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip diff-hl auto-dictionary smeargle magit-gitflow helm-gitignore gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link evil-magit magit magit-popup git-commit with-editor ws-butler window-numbering which-key wgrep volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spaceline powerline smex restart-emacs request rainbow-delimiters popwin persp-mode pcre2el paradox spinner org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint ivy-hydra info+ indent-guide ido-vertical-mode hydra hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation help-fns+ helm-make helm helm-core google-translate golden-ratio flx-ido flx fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state smartparens evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-args evil-anzu anzu evil goto-chg undo-tree eval-sexp-fu highlight elisp-slime-nav dumb-jump popup f s diminish define-word counsel-projectile projectile pkg-info epl counsel swiper ivy column-enforce-mode clean-aindent-mode bind-map bind-key auto-highlight-symbol auto-compile packed dash async aggressive-indent adaptive-wrap ace-window ace-link avy quelpa package-build spacemacs-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+)
