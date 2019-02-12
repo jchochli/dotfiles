@@ -3,6 +3,9 @@ username = James Chochlinski <jchochlinski@payveris.com>
 #merge = emacsclient
 merge = diffmerge
 
+[alias]
+blame = annotate --line-number --user --number
+
 [extensions]
 prompt = ~/Development/repos/hg-prompt/prompt.py
 shelve =
