@@ -47,20 +47,6 @@ GIT_AUTHOR_EMAIL="jchochli@xpzen.com"
 GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 git config --global user.email "$GIT_AUTHOR_EMAIL"
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-
-# this is the root folder where all globally installed node packages will  go
-export NPM_PACKAGES="/usr/local/npm_packages"
-export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
-# add to PATH
-export PATH="$NPM_PACKAGES/bin:$PATH"
-
 # If possible, add tab completion for many more commands
 [ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
 
@@ -69,6 +55,8 @@ source "${HOME}/.gradle_bash"
 if [ -f ~/.config/exercism/exercism_completion.bash ]; then
     . ~/.config/exercism/exercism_completion.bash
 fi
+
+eval "$(jenv init -)"
 
 source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
