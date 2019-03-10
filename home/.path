@@ -2,8 +2,8 @@
 export PP_HOME=~/Development/workspace/billpay/
 export JBOSS_HOME=~/Development/bin/jboss-eap-6.4
 #export JAVA_OPTS="-Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n -Dpp.home=$PP_HOME -server -Xms64m -Xmx512m -XX:MaxPermSize=512m -Djava.net.preferIPv4Stack=true -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true"
-export M2_HOME=~/Development/bin/apache-maven-3.0.5
+export M2_HOME=~/Development/bin/maven
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
-export ECLIPSE_HOME=/Applications/Eclipse/Eclipse.app/Contents/Eclipse
+export ECLIPSE_HOME=/opt/eclipse/
 export PATH=$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:$M2:/usr/local/mysql/bin:$ECLIPSE_HOME
