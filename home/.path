@@ -5,7 +5,7 @@ export JBOSS_HOME=~/Development/bin/jboss-eap-6.4
 export M2_HOME=~/Development/bin/maven
 export M2=$M2_HOME/bin
 export MAVEN_OPTS="-Xms256m -Xmx512m"
-export ECLIPSE_HOME=/Applications/Eclipse/Eclipse.app/Contents/Eclipse
+export ECLIPSE_HOME=/opt/eclipse
 # this is the root folder where all globally installed node packages will  go
 export NPM_PACKAGES="${HOME}/.npm-packages"
 export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
