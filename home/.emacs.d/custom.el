@@ -21,6 +21,7 @@
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" "build" "logs" "dist" "lib" "classes")))
  '(projectile-globally-ignored-files (quote ("TAGS")))
+ '(sh-basic-offset 2)
  '(sr-speedbar-right-side nil)
  '(tab-width 4)
  '(warning-suppress-types (quote ((undo discard-info)))))
