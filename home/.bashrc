@@ -68,3 +68,7 @@ source "$HOME/bin/z.sh"
 
 homeshick --quiet refresh
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/jchochli/.sdkman"
+[[ -s "/home/jchochli/.sdkman/bin/sdkman-init.sh" ]] && source "/home/jchochli/.sdkman/bin/sdkman-init.sh"
