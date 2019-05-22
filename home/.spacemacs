@@ -60,6 +60,7 @@ values."
      javascript
      markdown
      org
+     parinfer
      plantuml
      react
      smex
@@ -71,7 +72,7 @@ values."
      sql
      syntax-checking
      themes-megapack
-     ;; version-control
+     version-control
      yaml
 )
 
@@ -392,6 +393,7 @@ you should place your code here."
   (put 'upcase-region 'disabled nil)
   (put 'narrow-to-region 'disabled nil)
   (setq org-reveal-root "/Users/jameschochlinski/Development/repos/reveal.js")
+  (require 'org-tempo)
 
   ;; todos
   (setq org-todo-keywords
