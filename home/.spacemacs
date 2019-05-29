@@ -72,8 +72,7 @@ values."
      sql
      syntax-checking
      themes-megapack
-     treemacs
-     ;; version-control
+     version-control
      yaml
      )
 
@@ -395,6 +394,7 @@ you should place your code here."
   (put 'upcase-region 'disabled nil)
   (put 'narrow-to-region 'disabled nil)
   (setq org-reveal-root "/Users/jameschochlinski/Development/repos/reveal.js")
+  (require 'org-tempo)
 
   ;; todos
   (setq org-todo-keywords
@@ -409,6 +409,13 @@ you should place your code here."
                 ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+
+  (add-hook 'org-mode-hook (lambda ()
+                             "Beautify Org Checkbox Symbol"
+                             (push '("[ ]" .  "☐") prettify-symbols-alist)
+                             (push '("[X]" . "☑" ) prettify-symbols-alist)
+                             (push '("[-]" . "❍" ) prettify-symbols-alist)
+                             (prettify-symbols-mode)))
 
   (add-hook 'Buffer-menu-mode-hook 
             (lambda ()
