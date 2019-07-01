@@ -74,7 +74,7 @@ values."
      themes-megapack
      version-control
      yaml
-)
+     )
 
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -85,6 +85,7 @@ values."
      ag
      nodejs-repl
      4clojure
+     flycheck-clj-kondo
      elmacro
      crappy-jsp-mode
      )
@@ -524,34 +525,40 @@ you should place your code here."
     (interactive)
     (occur "[^[:ascii:]]"))
 
+  (use-package clojure-mode
+    :ensure t
+    :config
+    (require 'flycheck-clj-kondo))
+
+  ;; (setq use-package-verbose t)
+  ;; (use-package bug-hunter  :ensure t  :defer t)
+
+  ;; (use-package switch-window  :ensure t
+  ;;   :bind ("C-x o" . switch-window))
+
+  ;; JSP
+  (use-package crappy-jsp-mode
+    :config
+    (add-to-list 'auto-mode-alist '("\\.jspx\\'" . crappy-jsp-mode)))
+
+
+  ;; (use-package exec-path-from-shell
+  ;;   :ensure t
+  ;;   :demand t
+  ;;   :config
+  ;;   (when (memq window-system '(mac ns))
+  ;;     (exec-path-from-shell-initialize)))
+
+  ;; (use-package buffer-move :ensure t
+  ;;   :bind (("C-c b j" . buf-move-left)
+  ;;          ("C-c b k" . buf-move-right)
+  ;;          ("C-c b p" . buf-move-up)
+  ;;          ("C-c b n" . buf-move-down)))
+
+
+
   ;; -*- lexical-binding: t -*-
   )
-
-;; (setq use-package-verbose t)
-;; (use-package bug-hunter  :ensure t  :defer t)
-
-;; (use-package switch-window  :ensure t
-;;  :bind ("C-x o" . switch-window))
-
-;; JSP
-;; (use-package crappy-jsp-mode
-;;   :config
-;;   (add-to-list 'auto-mode-alist '("\\.jsp$" . crappy-jsp-mode)))
-
-
-;; (use-package exec-path-from-shell
-;;   :ensure t
-;;   :demand t
-;;   :config
-;;   (when (memq window-system '(mac ns))
-;;     (exec-path-from-shell-initialize)))
-
-;; (use-package buffer-move :ensure t
-;;   :bind (("C-c b j" . buf-move-left)
-;;          ("C-c b k" . buf-move-right)
-;;          ("C-c b p" . buf-move-up)
-;;          ("C-c b n" . buf-move-down)))
-
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
