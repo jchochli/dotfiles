@@ -56,6 +56,10 @@ if [ -f ~/.config/exercism/exercism_completion.bash ]; then
     . ~/.config/exercism/exercism_completion.bash
 fi
 
+if [ -f ~/.git-flow-completion.bash ]; then
+  . ~/.git-flow-completion.bash
+fi
+
 if [ -f /usr/local/bin/aws_completer ]; then
   complete -C '/usr/local/bin/aws_completer' aws
 fi

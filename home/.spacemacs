@@ -31,7 +31,7 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(windows-scripts
      asciidoc
      php
      ruby
@@ -538,9 +538,8 @@ you should place your code here."
 
   ;; JSP
   (use-package crappy-jsp-mode
-    :config
-    (add-to-list 'auto-mode-alist '("\\.jspx\\'" . crappy-jsp-mode)))
-
+    :mode (("\\.jspx\\'" . crappy-jsp-mode)
+           ("\\.tagx\\'" . crappy-jsp-mode)))
 
   ;; (use-package exec-path-from-shell
   ;;   :ensure t
