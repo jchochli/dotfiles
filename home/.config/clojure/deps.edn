@@ -2,6 +2,8 @@
 {:mvn/repos {"sonatype" {:url "https://oss.sonatype.org/content/repositories/snapshots/"}}
  :aliases
  {;; pull in specific versions of Clojure:
+  :1.0 {:override-deps {org.clojure/clojure {:mvn/version "1.0.0"}}}
+  :1.1 {:override-deps {org.clojure/clojure {:mvn/version "1.1.0"}}}
   :1.2 {:override-deps {org.clojure/clojure {:mvn/version "1.2.1"}}}
   :1.3 {:override-deps {org.clojure/clojure {:mvn/version "1.3.0"}}}
   :1.4 {:override-deps {org.clojure/clojure {:mvn/version "1.4.0"}}}
@@ -30,8 +32,10 @@
              :main-opts ["-m" "eastwood.lint" "{:source-paths,[\"src\"],:test-paths,[\"test\"]}"]}
 
   ;; - see https://github.com/clojure-expectations/expectations
+  ;; - and https://github.com/clojure-expectations/clojure-test
   ;; - run your expectations: clj -A:test:expect:runner
-  :expect {:extra-deps {expectations {:mvn/version "RELEASE"}}}
+  :expect {:extra-deps {expectations {:mvn/version "RELEASE"}
+                        expectations/clojure-test {:mvn/version "RELEASE"}}}
   ;; - see https://github.com/hugoduncan/criterium/
   ;; - (require '[criterium.core :refer [bench]])
   ;; - (bench (your-expression))
@@ -41,7 +45,7 @@
   ;; - (mm/measure (your-expression))
   :measure {:extra-deps {com.clojure-goes-fast/clj-memory-meter {:mvn/version "RELEASE"}}}
   ;; - see https://github.com/Olical/depot
-  :outdated {:extra-deps {olical/depot {:mvn/version "RELEASE"}}
+  :outdated {:extra-deps {olical/depot {:mvn/version "1.8.4"}}
              :main-opts ["-m" "depot.outdated.main"]}
 
   ;; REPL-related tools:
@@ -63,18 +67,20 @@
   :rebel {:extra-deps {com.bhauman/rebel-readline {:mvn/version "RELEASE"}}
           :main-opts ["-m" "rebel-readline.main"]}
   ;; - see https://github.com/stuarthalloway/reflector
-  ;; - my fork includes this https://github.com/stuarthalloway/reflector/pull/1
   :reflect
   {:extra-deps {com.stuarthalloway/reflector
-                {:git/url "https://github.com/seancorfield/reflector"
-                 :sha "67d81dbdcab64956abffc128f47b837a2d707b58"}}}
+                {:git/url "https://github.com/stuarthalloway/reflector"
+                 :sha "93a0c19b4526c1180959e940202928d35e5c3cef"}}}
   ;; - see https://github.com/bbatsov/compliment
   :comp {:extra-deps {compliment {:mvn/version "RELEASE"}}}
   ;; - see https://github.com/cognitect-labs/REBL-distro
   ;; - you need to download the REBL JAR (and update the local/root below)
   ;; - you need to be using Clojure 1.10 and either
-  ;; - - Oracle JDK 8 -- use :rebl-8
+  ;; - - Oracle JDK 8/Zulu OpenJDK 8 w/JavaFX -- use :rebl-8
   ;; - - OpenJDK 11 -- use :rebl-11
+  ;; - - on Windows, use the -win versions of these aliases
+  ;; - - (assumes you have REBL as /Developer/REBL/latest/REBL.jar
+  ;; - - on macOS/Linux and C:\Developer\REBL\latest\REBL.jar on Windows)
   :rebl-8
   {:extra-deps {org.clojure/core.async {:mvn/version "0.4.490"}
                 ;; deps for file datafication (0.9.149 or later)
@@ -83,7 +89,7 @@
                 org.yaml/snakeyaml {:mvn/version "1.23"}
                 com.cognitect/rebl
                 ;; adjust to match your install location
-                {:local/root "/home/jchochli/Development/bin/REBL-0.9.172/REBL-0.9.172.jar"}}
+                {:local/root "/home/jchochli/Development/bin/REBL-0.9.220/REBL.jar"}}
    :main-opts ["-m" "cognitect.rebl"]}
   :rebl-11
   {:extra-deps {org.clojure/core.async {:mvn/version "0.4.490"}
@@ -93,7 +99,34 @@
                 org.yaml/snakeyaml {:mvn/version "1.23"}
                 com.cognitect/rebl
                 ;; adjust to match your install location
-                {:local/root "/home/jchochli/Development/bin/REBL-0.9.172/REBL-0.9.172.jar"}
+                {:local/root "/home/jchochli/Development/bin/REBL-0.9.220/REBL.jar"}
+                org.openjfx/javafx-fxml     {:mvn/version "11.0.1"}
+                org.openjfx/javafx-controls {:mvn/version "11.0.1"}
+                org.openjfx/javafx-graphics {:mvn/version "11.0.1"}
+                org.openjfx/javafx-media    {:mvn/version "11.0.1"}
+                org.openjfx/javafx-swing    {:mvn/version "11.0.1"}
+                org.openjfx/javafx-base     {:mvn/version "11.0.1"}
+                org.openjfx/javafx-web      {:mvn/version "11.0.1"}}
+   :main-opts ["-m" "cognitect.rebl"]}
+  :rebl-8-win
+  {:extra-deps {org.clojure/core.async {:mvn/version "0.4.490"}
+                ;; deps for file datafication (0.9.149 or later)
+                org.clojure/data.csv {:mvn/version "0.1.4"}
+                org.clojure/data.json {:mvn/version "0.2.3"}
+                org.yaml/snakeyaml {:mvn/version "1.23"}
+                com.cognitect/rebl
+                ;; adjust to match your install location
+                {:local/root "C:\\Developer\\REBL\\latest\\REBL.jar"}}
+   :main-opts ["-m" "cognitect.rebl"]}
+  :rebl-11-win
+  {:extra-deps {org.clojure/core.async {:mvn/version "0.4.490"}
+                ;; deps for file datafication (0.9.149 or later)
+                org.clojure/data.csv {:mvn/version "0.1.4"}
+                org.clojure/data.json {:mvn/version "0.2.3"}
+                org.yaml/snakeyaml {:mvn/version "1.23"}
+                com.cognitect/rebl
+                ;; adjust to match your install location
+                {:local/root "C:\\Developer\\REBL\\latest\\REBL.jar"}
                 org.openjfx/javafx-fxml     {:mvn/version "11.0.1"}
                 org.openjfx/javafx-controls {:mvn/version "11.0.1"}
                 org.openjfx/javafx-graphics {:mvn/version "11.0.1"}
@@ -116,11 +149,11 @@
   ;; (load-master 'clojure/tools.trace)
   {:extra-deps {org.clojure/tools.deps.alpha
                 {:git/url "https://github.com/clojure/tools.deps.alpha"
-                 :sha "e160f184f051f120014244679831a9bccb37c9de"}}}
+                 :sha "148cab8f154711f8495bd632ebdc53a14dff7f09"}}}
   :spec2 ; to get access to the latest spec-alpha2
   {:extra-deps {org.clojure/spec-alpha2
                 {:git/url "https://github.com/clojure/spec-alpha2"
-                 :sha "29a73a3e5fef8329c14dd44a0b151e90b86c0854"}}}
+                 :sha "2a0a7c49c86e31b528be857ed004a4931a0c2551"}}}
   ;; start the Liquid Clojure editor
   ;; - see https://github.com/mogenslund/liquid
   :liquid

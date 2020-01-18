@@ -37,14 +37,12 @@
         (setq load-path load-path-backup)))
     (configuration-layer/load-lock-file)
     (spacemacs/init)
-    (configuration-layer/stable-elpa-download-tarball)
+    (configuration-layer/stable-elpa-init)
+    ;; (configuration-layer/stable-elpa-download-tarball)
     (configuration-layer/load)
     (spacemacs-buffer/display-startup-note)
     (spacemacs/setup-startup-hook)
-    (spacemacs|unless-dumping
-      (global-font-lock-mode)
-      (global-undo-tree-mode t)
-      (winner-mode t))
+    (spacemacs/dump-eval-delayed-functions)
     (when (and dotspacemacs-enable-server (not (spacemacs-is-dumping-p)))
       (require 'server)
       (when dotspacemacs-server-socket-dir
@@ -52,11 +50,6 @@
       (unless (server-running-p)
         (message "Starting a server...")
         (server-start)))
-    (spacemacs|when-dumping-strict
-      (setq load-path-backup load-path)
-      ;; disable undo-tree to prevent from segfaulting when loading the dump
-      (global-undo-tree-mode -1)
-      (setq spacemacs-dump-mode 'dumped)
-      (garbage-collect))))
+    ))
 
 ;;; init.el ends here

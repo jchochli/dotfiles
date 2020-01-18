@@ -3,7 +3,7 @@ export JBOSS_HOME=~/Development/bin/jboss-eap-6.4
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   # Linux
-  export ECLIPSE_HOME=/opt/eclipse
+  export ECLIPSE_HOME=$HOME/Development/bin/eclipse
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   export ECLIPSE_HOME=/Users/jchochli/Development/bin/eclipse/Eclipse.app/Contents/Eclipse
@@ -19,4 +19,8 @@ export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
-export PATH=$HOME/.jenv/bin:$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:/usr/local/mysql/bin:$ECLIPSE_HOME
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
+
+export PATH=$HOME/.jenv/bin:$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/home/linuxbrew/.linuxbrew/bin:$PATH:/usr/local/heroku/bin:/usr/local/mysql/bin:$ECLIPSE_HOME
