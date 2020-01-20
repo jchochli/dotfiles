@@ -64,8 +64,8 @@ if [ -f /usr/local/bin/aws_completer ]; then
   complete -C '/usr/local/bin/aws_completer' aws
 fi
 
-if [ -f ~/.config/exercism/exercism_completion.bash ]; then
-    source ~/.config/exercism/exercism_completion.bash
+if [ -f ~/.config/exercism/shell/exercism_completion.bash ]; then
+    source ~/.config/exercism/shell/exercism_completion.bash
 fi
 
 eval "$(jenv init -)"
