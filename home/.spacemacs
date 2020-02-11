@@ -32,10 +32,6 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     asciidoc
-     php
-     ruby
-
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -54,7 +50,7 @@ values."
      git
      helm
      html
-     (java :variables java-backend 'eclim)
+     (java :variables java-backend 'lsp)
      ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
      markdown
@@ -63,7 +59,6 @@ values."
      plantuml
      react
      smex
-     sml
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -71,9 +66,7 @@ values."
      sql
      syntax-checking
      themes-megapack
-     version-control
      yaml)
-   
 
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -84,11 +77,10 @@ values."
      ag
      nodejs-repl
      4clojure
-     eww
      ;; flycheck-clj-kondo
      elmacro
      crappy-jsp-mode)
-   
+
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
