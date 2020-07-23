@@ -60,7 +60,6 @@ values."
      python
      react
      smex
-     sml
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -68,7 +67,6 @@ values."
      sql
      syntax-checking
      themes-megapack
-     version-control
      yaml)
 
    ;; List of additional packages that will be installed without being
@@ -80,7 +78,6 @@ values."
      ag
      nodejs-repl
      4clojure
-     eww
      ;; flycheck-clj-kondo
      elmacro
      crappy-jsp-mode
