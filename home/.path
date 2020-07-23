@@ -1,20 +1,25 @@
 export PP_HOME=~/Development/workspace/billpay/
 export JBOSS_HOME=~/Development/bin/jboss-eap-6.4
 
+# this is the root folder where all globally installed node packages will  go
+export NPM_PACKAGES="${HOME}/.npm-packages"
+export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
+export LDFLAGS="-L/usr/local/opt/libffi/lib"
+export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
+
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   # Linux
   export ECLIPSE_HOME=$HOME/Development/bin/eclipse
+  PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   export ECLIPSE_HOME=/Users/jchochli/Development/bin/eclipse/Eclipse.app/Contents/Eclipse
+  PATH="/usr/local/opt/python/libexec/bin:$PATH"
 else
   # Unknown.
   : # : is noop
 fi
 
-# this is the root folder where all globally installed node packages will  go
-export NPM_PACKAGES="${HOME}/.npm-packages"
-export NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -22,5 +27,4 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
-
-export PATH=$HOME/.jenv/bin:$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:/home/linuxbrew/.linuxbrew/bin:$PATH:/usr/local/heroku/bin:/usr/local/mysql/bin:$ECLIPSE_HOME
+export PATH=$HOME/.jenv/bin:$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:/usr/local/mysql/bin:$ECLIPSE_HOME
