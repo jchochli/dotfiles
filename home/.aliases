@@ -149,3 +149,4 @@ else
     # Unknown.
     :
 fi
+alias agent=eval "$(ssh-agent -s)"

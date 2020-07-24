@@ -61,4 +61,3 @@ git config --global user.email "$GIT_AUTHOR_EMAIL"
 eval "$(jenv init -)"
 
 homeshick --quiet refresh
-{ eval `ssh-agent`; ssh-add -A; } &>/dev/null
