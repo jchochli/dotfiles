@@ -7,7 +7,6 @@ merge = emacsclient
 blame = annotate --line-number --user --number
 
 [extensions]
-prompt = ~/Development/repos/hg-prompt/prompt.py
 shelve =
 rebase =
 strip =

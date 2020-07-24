@@ -23,6 +23,7 @@ elif [[ "$OSTYPE" == "darwin"* ]]; then
     : # alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
       # Link Homebrew casks in `/Applications` rather than `~/Applications`
       export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+      export BASH_SILENCE_DEPRECATION_WARNING=1
 else
     # Unknown.
     :

@@ -50,13 +50,14 @@ values."
      git
      helm
      html
-     (java :variables java-backend 'lsp)
+     (java :variables java-backend 'lsp lsp-file-watch-threshold 50000)
      ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
      markdown
      org
      parinfer
      plantuml
+     python
      react
      smex
      (shell :variables
@@ -79,7 +80,8 @@ values."
      4clojure
      ;; flycheck-clj-kondo
      elmacro
-     crappy-jsp-mode)
+     crappy-jsp-mode
+     cl-lib)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -171,7 +173,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 24
+                               :size 16
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -347,9 +349,6 @@ you should place your code here."
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode "n'" 'nodejs-repl-switch-to-repl)
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ns" 'nodejs-repl-switch-to-repl)
 
-  (setq-default js2-basic-offset 2)
-  (setq-default js-indent-level 2)
-
   (setq user-full-name "James Chochlinski")
   (setq user-mail-address "jchochli@xpzen.com")
   (setq projectile-mode-line "Projectile")
@@ -387,6 +386,8 @@ you should place your code here."
   (put 'narrow-to-region 'disabled nil)
   (setq org-reveal-root "/Users/jameschochlinski/Development/repos/reveal.js")
   (require 'org-tempo)
+  (require 'cl)
+  (require 'cl-lib)
 
   ;; todos
   (setq org-todo-keywords
@@ -526,7 +527,8 @@ you should place your code here."
   ;; JSP
   (use-package crappy-jsp-mode
     :config
-    (add-to-list 'auto-mode-alist '("\\.jspx\\'" . crappy-jsp-mode)))
+    (add-to-list 'auto-mode-alist '("\\.jspx\\'" . crappy-jsp-mode))
+    (add-to-list 'auto-mode-alist '("\\.tagx\\'" . crappy-jsp-mode)))
 
 
   ;; (use-package exec-path-from-shell
@@ -541,7 +543,6 @@ you should place your code here."
   ;;          ("C-c b k" . buf-move-right)
   ;;          ("C-c b p" . buf-move-up)
   ;;          ("C-c b n" . buf-move-down)))
-
 
 
   ;; -*- lexical-binding: t -*-
