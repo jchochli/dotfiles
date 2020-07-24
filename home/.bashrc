@@ -6,7 +6,7 @@
 for file in ~/.{path,bash_prompt,exports,aliases,functions,extra}; do
 	[ -r "$file" ] && [ -f "$file" ] && source "$file"
 done
-unset file 
+unset file
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -51,24 +51,14 @@ git config --global user.email "$GIT_AUTHOR_EMAIL"
 [ -f /usr/local/etc/bash_completion ] && source /usr/local/etc/bash_completion
 
 #source "${HOME}/.docker_bash"
-source "${HOME}/.gradle_bash"
-if [ -f ~/.config/exercism/exercism_completion.bash ]; then
-    . ~/.config/exercism/exercism_completion.bash
-fi
-
-if [ -f /usr/local/bin/aws_completer ]; then
-  complete -C '/usr/local/bin/aws_completer' aws
-fi
-
-if [ -f ~/.config/exercism/shell/exercism_completion.bash ]; then
-    source ~/.config/exercism/shell/exercism_completion.bash
-fi
+[ -f "${HOME}/.gradle_bash" ] && source "${HOME}/.gradle_bash"
+[ -f "${HOME}/.config/exercism/exercism_completion.bash" ] && source "{HOME}/.config/exercism/exercism_completion.bash"
+[ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ] && source "$HOME/.homesick/repos/homeshick/homeshick.sh"
+[ -f "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash" ] && source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
+[ -f "$HOME/bin/z.sh" ] && source "$HOME/bin/z.sh"
+[ -f /usr/local/bin/aws_completer ] && complete -C '/usr/local/bin/aws_completer' aws
 
 eval "$(jenv init -)"
-
-source "$HOME/.homesick/repos/homeshick/homeshick.sh"
-source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
-source "$HOME/bin/z.sh"
 
 homeshick --quiet refresh
 { eval `ssh-agent`; ssh-add -A; } &>/dev/null
