@@ -45,8 +45,6 @@ values."
      csv
      docker
      emacs-lisp
-     erc
-     games
      git
      helm
      html
@@ -340,6 +338,8 @@ you should place your code here."
   (if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
   (if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
   (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+  (setq-default bidi-paragraph-direction 'left-to-right)
 
   ;; nodejs-repl
   (spacemacs/set-leader-keys-for-major-mode 'js2-mode "ne" 'nodejs-repl-send-last-expression)
