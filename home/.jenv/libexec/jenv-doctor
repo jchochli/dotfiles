@@ -1,0 +1,114 @@
+#!/usr/bin/env bash
+#
+# Summary: Show information about which command will be executed
+#
+# Usage: jenv doctor <command>
+#
+
+# Display colorized information output
+function cinfo() {
+  COLOR='\033[01;32m' # bold green
+  RESET='\033[00;00m' # normal white
+  echo -e "${COLOR}[OK]\t$*${RESET}"
+}
+
+# Display colorized warning output
+function cwarn() {
+  COLOR='\033[01;31m' # bold red
+  RESET='\033[00;00m' # normal white
+  echo -e "${COLOR}[ERROR]\t$*${RESET}"
+}
+
+function cfix() {
+  COLOR='\033[01;34m' # bold red
+  RESET='\033[00;00m' # normal white
+  echo -e "${COLOR}\t$*${RESET}"
+}
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) "$1"
+}
+
+set -e
+[ -n "$JENV_DEBUG" ] && set -x
+
+exportedValues=""
+
+exportVariable(){
+echo $exportedValues
+ #  echo $1, $2, $3
+   exportedValues="$exportedValues:$1"
+   export $1="$2 $3 $4 $5 $6 $7 $8 $9"
+
+}
+
+# Provide jenv completions
+#if [ "$1" = "--complete" ]; then
+#  exec jenv shims --short
+#fi
+
+
+if [[ ! -z "$JAVA_HOME" ]] ; then
+  if [[ -z "$JENV_FORCEJAVAHOME" ]] ; then
+    cwarn "JAVA_HOME variable already set, scripts that use it directly could not use java version set by jenv"
+  else
+    cinfo "JAVA_HOME variable probably set by jenv PROMPT"
+  fi
+else
+    cinfo "No JAVA_HOME set"
+fi
+
+JAVA_BIN=`command -v java`
+
+EXPECTED_JAVA="$JENV_ROOT/shims/java"
+
+
+
+if [ "$EXPECTED_JAVA" = "$JAVA_BIN" ] ; then
+  cinfo "Java binaries in path are jenv shims"
+else
+  cwarn "Java binary in path is not in the jenv shims."
+  cwarn "Please check your path, or try using `jenv add /path/to/java/home`."
+  cfix "PATH : $PATH"
+
+fi
+
+if [ "$JENV_LOADED" = "1" ]; then
+  cinfo "Jenv is correctly loaded"
+
+else
+  shell="$(basename "$SHELL")"
+
+  case "$shell" in
+    bash )
+      profile="$HOME/.bash_profile"
+      ;;
+    zsh )
+      profile="$HOME/.zshrc"
+      ;;
+    ksh )
+      profile="$HOME/.profile"
+      ;;
+    * )
+      profile='your profile'
+      ;;
+  esac
+
+  cwarn "Jenv is not loaded in your $shell"
+  cwarn 'To fix : \techo eval "$(jenv init -)" >>' $profile
+
+
+
+
+fi
+
+
+	for plugin in "${JENV_ROOT}"/plugins/*; do    
+    pluginName=$(basename $plugin) 
+  	targetLink=$(resolve_link $plugin)
+    if [[ ! $targetLink == $JENV_INSTALL_DIR* ]]; then
+          cwarn "Plugin $pluginName is linked to older jenv installation"
+          cfix "Please execute : jenv disable-plugin $pluginName && jenv enable-plugin $pluginName"
+    fi
+      
+	done   

@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Summary: List hook scripts for a given jenv command
+# Usage: jenv hooks <command>
+
+set -e
+[ -n "$JENV_DEBUG" ] && set -x
+
+# Provide jenv completions
+if [ "$1" = "--complete" ]; then
+  echo exec
+  echo rehash
+  echo which
+  exit
+fi
+
+JENV_COMMAND="$1"
+if [ -z "$JENV_COMMAND" ]; then
+  jenv-help --usage hooks >&2
+  exit 1
+fi
+
+shell="$2"
+if [ -z $shell ]; then
+  shell="bash"
+fi
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) $1
+}
+
+realpath() {
+  local cwd="$(pwd)"
+  local base="$(basename $1)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  echo "$(pwd)/$base"
+  cd "$cwd"
+}
+
+shopt -s nullglob
+for path in ${JENV_HOOK_PATH//:/$'\n'}; do
+
+  case "$shell" in
+  bash )
+    for script in $path/"$JENV_COMMAND"/*.bash; do
+    echo $(realpath $script)
+    done
+    ;;
+  zsh )
+    for script in $path/"$JENV_COMMAND"/*.zsh; do
+    echo $(realpath $script)
+    done 
+    ;;
+  fish )
+    for script in $path/"$JENV_COMMAND"/*.fish; do
+    echo $(realpath $script)
+    done
+    ;;
+esac
+
+  
+done
+shopt -u nullglob
