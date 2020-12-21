@@ -363,7 +363,6 @@ you should place your code here."
   (setq projectile-mode-line "Projectile")
   (setq httpd-port 8000)
   (skewer-setup)
-  (setq auth-sources '("~/.authinfo.gpg"))
 
   ;; disable vc-git
   (setq vc-handled-backends ())
@@ -375,7 +374,6 @@ you should place your code here."
   (add-to-list 'exec-path "/usr/local/bin")
   (add-to-list 'exec-path "/usr/local/npm_packages/bin")
   (add-to-list 'exec-path "~/.npm-packages/bin")
-  (add-to-list 'exec-path "~/Development/bin/eclipse/Eclipse.app/Contents/Eclipse/")
   (global-auto-revert-mode t)
 
   (define-key input-decode-map "\e[1;5A" [C-up])
