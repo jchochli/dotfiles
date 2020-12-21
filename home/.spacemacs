@@ -41,7 +41,8 @@ values."
      ansible
      auto-completion
      better-defaults
-     clojure
+     (clojure :variables
+              clojure-enable-linters 'clj-kondo)
      csv
      docker
      emacs-lisp
@@ -51,7 +52,8 @@ values."
      git
      helm
      html
-     (java :variables java-backend 'lsp lsp-file-watch-threshold 50000)
+     (java :variables
+           java-backend 'lsp lsp-file-watch-threshold 50000)
      ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
      dap

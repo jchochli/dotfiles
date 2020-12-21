@@ -52,7 +52,7 @@ git config --global user.email "$GIT_AUTHOR_EMAIL"
 
 #source "${HOME}/.docker_bash"
 [ -f "${HOME}/.gradle_bash" ] && source "${HOME}/.gradle_bash"
-[ -f "${HOME}/.config/exercism/exercism_completion.bash" ] && source "{HOME}/.config/exercism/exercism_completion.bash"
+[ -f "${HOME}/.config/exercism/shell/exercism_completion.bash" ] && source "${HOME}/.config/exercism/shell/exercism_completion.bash"
 [ -f "$HOME/.homesick/repos/homeshick/homeshick.sh" ] && source "$HOME/.homesick/repos/homeshick/homeshick.sh"
 [ -f "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash" ] && source "$HOME/.homesick/repos/homeshick/completions/homeshick-completion.bash"
 [ -f "$HOME/bin/z.sh" ] && source "$HOME/bin/z.sh"
