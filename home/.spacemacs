@@ -42,6 +42,7 @@ values."
      auto-completion
      better-defaults
      (clojure :variables
+              clojure-backend 'cider
               clojure-enable-linters 'clj-kondo)
      csv
      docker
@@ -52,8 +53,7 @@ values."
      git
      helm
      html
-     (java :variables
-           java-backend 'lsp lsp-file-watch-threshold 50000)
+     (java :variables java-backend 'lsp lsp-file-watch-threshold 50000)
      ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
      dap
@@ -65,6 +65,7 @@ values."
      python
      react
      smex
+     (shell-scripts :variables shell-scripts-backend 'lsp)
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -536,6 +537,11 @@ you should place your code here."
     (add-to-list 'auto-mode-alist '("\\.jspx\\'" . crappy-jsp-mode))
     (add-to-list 'auto-mode-alist '("\\.tagx\\'" . crappy-jsp-mode)))
 
+  (add-to-list 'auto-mode-alist
+               (cons (concat "\\." (regexp-opt
+                                    '("xml" "xsd" "sch"
+                                      "rng" "xslt" "svg" "rss") t)
+                             "\\'") 'nxml-mode))
 
   ;; (use-package exec-path-from-shell
   ;;   :ensure t
