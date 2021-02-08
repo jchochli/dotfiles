@@ -413,7 +413,7 @@ you should place your code here."
 
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol"
-                             (push '("[ ]" .  "☐") prettify-symbols-alist)
+                             (push '("[ ]" . "☐") prettify-symbols-alist)
                              (push '("[X]" . "☑" ) prettify-symbols-alist)
                              (push '("[-]" . "❍" ) prettify-symbols-alist)
                              (prettify-symbols-mode)))
