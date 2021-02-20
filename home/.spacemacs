@@ -51,8 +51,7 @@ values."
      git
      helm
      html
-     (java :variables
-           java-backend 'lsp lsp-file-watch-threshold 50000)
+     (java :variables java-backend 'lsp lsp-file-watch-threshold 50000)
      ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
      dap
@@ -64,6 +63,7 @@ values."
      python
      react
      smex
+     (shell-scripts :variables shell-scripts-backend 'lsp)
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
@@ -411,7 +411,7 @@ you should place your code here."
 
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol"
-                             (push '("[ ]" .  "☐") prettify-symbols-alist)
+                             (push '("[ ]" . "☐") prettify-symbols-alist)
                              (push '("[X]" . "☑" ) prettify-symbols-alist)
                              (push '("[-]" . "❍" ) prettify-symbols-alist)
                              (prettify-symbols-mode)))
@@ -540,7 +540,6 @@ you should place your code here."
                                     '("xml" "xsd" "sch"
                                       "rng" "xslt" "svg" "rss") t)
                              "\\'") 'nxml-mode))
-
 
   ;; (use-package exec-path-from-shell
   ;;   :ensure t
