@@ -42,13 +42,12 @@ values."
      auto-completion
      better-defaults
      (clojure :variables
+              clojure-backend 'cider
               clojure-enable-linters 'clj-kondo)
      csv
      docker
      emacs-lisp
-     epub
      erc
-     games
      git
      helm
      html
@@ -535,6 +534,12 @@ you should place your code here."
     :config
     (add-to-list 'auto-mode-alist '("\\.jspx\\'" . crappy-jsp-mode))
     (add-to-list 'auto-mode-alist '("\\.tagx\\'" . crappy-jsp-mode)))
+
+  (add-to-list 'auto-mode-alist
+               (cons (concat "\\." (regexp-opt
+                                    '("xml" "xsd" "sch"
+                                      "rng" "xslt" "svg" "rss") t)
+                             "\\'") 'nxml-mode))
 
 
   ;; (use-package exec-path-from-shell
