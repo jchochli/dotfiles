@@ -37,7 +37,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; ivy
+     ivy
      ansible
      auto-completion
      better-defaults
@@ -49,7 +49,7 @@ values."
      emacs-lisp
      erc
      git
-     helm
+     ;; helm
      html
      (java :variables java-backend 'lsp lsp-file-watch-threshold 50000)
      ;; (javascript :variables javascript-disable-tern-port-files nil)
