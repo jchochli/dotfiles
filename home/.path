@@ -10,21 +10,23 @@ export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig"
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
   # Linux
   export ECLIPSE_HOME=$HOME/Development/bin/eclipse
-  PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+  [ -d "/home/linuxbrew/.linuxbrew/bin" ] && PATH="/home/linuxbrew/.linuxbrew/bin:$PATH"
 elif [[ "$OSTYPE" == "darwin"* ]]; then
   # Mac OSX
   export ECLIPSE_HOME=/Users/jchochli/Development/bin/eclipse/Eclipse.app/Contents/Eclipse
-  PATH="/usr/local/opt/python/libexec/bin:$PATH"
+  [ -d "/usr/local/opt/python/libexec/bin" ] && PATH="/usr/local/opt/python/libexec/bin:$PATH"
+  [ -d "/opt/homebrew/bin" ] && PATH="/opt/homebrew/bin:$PATH"
 else
   # Unknown.
   : # : is noop
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-fi
-export PATH=$HOME/.jenv/bin:$HOME/.npm-packages/bin:/usr/local/sbin:/usr/local/bin:$PATH:/usr/local/heroku/bin:/usr/local/mysql/bin:$ECLIPSE_HOME
+[ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
+[ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
+[ -d "$HOME/.jenv/bin" ] && PATH="$HOME/.jenv/bin:$PATH"
+[ -d "$HOME/.npm-packages/bin" ] && PATH="$HOME/.npm-packages/bin:$PATH"
+[ -d "/usr/local/heroku/bin" ] && PATH="/usr/local/heroku/bin:$PATH"
+[ -d "/usr/local/mysql/bin" ] && PATH="/usr/local/mysql/bin:$PATH"
+
+export PATH=/usr/local/sbin:/usr/local/bin:$PATH
