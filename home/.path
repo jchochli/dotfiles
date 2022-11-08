@@ -24,9 +24,9 @@ fi
 # set PATH so it includes user's private bin if it exists
 [ -d "$HOME/bin" ] && PATH="$HOME/bin:$PATH"
 [ -d "$HOME/.local/bin" ] && PATH="$HOME/.local/bin:$PATH"
-[ -d "$HOME/.jenv/bin" ] && PATH="$HOME/.jenv/bin:$PATH"
 [ -d "$HOME/.npm-packages/bin" ] && PATH="$HOME/.npm-packages/bin:$PATH"
 [ -d "/usr/local/heroku/bin" ] && PATH="/usr/local/heroku/bin:$PATH"
 [ -d "/usr/local/mysql/bin" ] && PATH="/usr/local/mysql/bin:$PATH"
+# [ -d "$HOME/.jenv/bin" ] && PATH="$HOME/.jenv/bin:$PATH"
 
-export PATH=/usr/local/sbin:/usr/local/bin:$PATH
+export PATH=$PATH:/usr/local/sbin:/usr/local/bin

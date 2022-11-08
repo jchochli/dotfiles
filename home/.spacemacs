@@ -31,14 +31,14 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
+   '(ansible
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ivy
-     ansible
+     ;; ansible
      auto-completion
      better-defaults
      (clojure :variables
@@ -51,10 +51,13 @@ values."
      git
      ;; helm
      html
-     (java :variables java-backend 'lsp lsp-file-watch-threshold 50000)
+     (java :variables java-backend 'lsp
+           lsp-file-watch-threshold 50000
+           lsp-java-autobuild-enabled nil
+           lsp-java-vmargs (list "-noverify" "-Xmx2G" "-XX:+UseStringDeduplication"))
      ;; (javascript :variables javascript-disable-tern-port-files nil)
      javascript
-     dap
+     ;; dap
      kubernetes
      markdown
      org
@@ -62,6 +65,7 @@ values."
      plantuml
      python
      react
+     ruby
      smex
      (shell-scripts :variables shell-scripts-backend 'lsp)
      (shell :variables
@@ -81,13 +85,13 @@ values."
    '(
      ag
      nodejs-repl
-     4clojure
      ;; flycheck-clj-kondo
      elmacro
      crappy-jsp-mode
      cl-lib
-     dap-mode
-     dap-java)
+     ;; dap-mode
+     ;; dap-java
+     )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -361,14 +365,19 @@ you should place your code here."
   (setq user-mail-address "jchochli@xpzen.com")
   (setq projectile-mode-line "Projectile")
   (setq httpd-port 8000)
-  (skewer-setup)
+  ;; (skewer-setup)
+
+  ;; ag
+  (setq ag-reuse-window 't)
+  (setq ag-reuse-buffers 't)
+  (setq ag-arguments (list "--smart-case" "--stats" "--skip-vcs-ignores" "--ignore-case"))
 
   ;; disable vc-git
   (setq vc-handled-backends ())
   (fset 'yes-or-no-p 'y-or-n-p)
   (show-paren-mode t)
   (setq message-log-max 16384)
-  (setq debug-on-error t)
+  (setq debug-on-error nil)
   (setq org-log-done t)
   (add-to-list 'exec-path "/usr/local/bin")
   (add-to-list 'exec-path "/usr/local/npm_packages/bin")
@@ -398,16 +407,7 @@ you should place your code here."
   ;; todos
   (setq org-todo-keywords
         (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
-                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)"))))
-
-  (setq org-todo-state-tags-triggers
-        (quote (("CANCELLED" ("CANCELLED" . t))
-                ("WAITING" ("WAITING" . t))
-                ("HOLD" ("WAITING") ("HOLD" . t))
-                (done ("WAITING") ("HOLD"))
-                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+                (sequence "WAITING(w@/!)"))))
 
   (add-hook 'org-mode-hook (lambda ()
                              "Beautify Org Checkbox Symbol"
@@ -490,6 +490,8 @@ you should place your code here."
                   (lambda ()
                     (interactive)
                     (ignore-errors (previous-line 5))))
+
+  (setq debug-on-quit nil)
 
   (defun other-window-backward (&optional n)
     "Select Nth previous window."

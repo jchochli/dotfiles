@@ -196,6 +196,8 @@ function removeFromPath() {
     export PATH=$(echo $PATH | sed -E -e "s;:$1;;" -e "s;$1:?;;")
 }
 
+function dy { dig +noall +answer +additional "$1" @dns.toys; }
+
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
     # Linux
     : # : is noop
